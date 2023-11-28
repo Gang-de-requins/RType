@@ -1,0 +1,56 @@
+name: Main workflow
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  MIRROR_URL: "git@github.com:EpitechPromo2026/B-CPP-500-PAR-5-2-rtype-ethan.saux.git"
+
+jobs:
+
+  # check if there are no invalid files
+  check_repository_cleanliness:
+    name: "Check repository cleanliness"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check .o files
+        run: |
+          if [ -n "$(find . -name '*.o')" ]; then
+            echo "There are .o files in the repository"
+            exit 1
+          fi
+      - name: Check .gcno files
+        run: |
+          if [ -n "$(find . -name '*.gcno')" ]; then
+            echo "There are .gcno files in the repository"
+            exit 1
+          fi
+      - name: Check .gcda files
+        run: |
+          if [ -n "$(find . -name '*.gcda')" ]; then
+            echo "There are .gcda files in the repository"
+            exit 1
+          fi
+      - name: Check .gcov files
+        run: |
+          if [ -n "$(find . -name '*.gcov')" ]; then
+            echo "There are .gcov files in the repository"
+            exit 1
+          fi
+
+  push_to_mirror:
+    name: Push to Epitech repository
+    needs: check_repository_cleanliness
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Push
+        uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url: ${{ env.MIRROR_URL }}
+          ssh_private_key: ${{ secrets.MIRROR_KEY }}
