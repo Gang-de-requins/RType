@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Build
+build/*
+vcpkg/*
+vcpkg_installed/*
+vcpkg.zip
