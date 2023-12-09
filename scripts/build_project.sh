@@ -10,13 +10,9 @@ if [ ! -d "build" ]; then
   mkdir build
 fi
 
-cd build
+cmake --preset=Linux
 
-cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
-
-cmake --build .
-
-cd ..
+cmake --build build
 
 cp build/$PROJECT_CLIENT_DIR/$PROJECT_CLIENT_NAME .
 cp build/$PROJECT_SERVER_DIR/$PROJECT_SERVER_NAME .

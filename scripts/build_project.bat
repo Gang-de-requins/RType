@@ -8,13 +8,9 @@ set PROJECT_SERVER_NAME=r-type_server
 
 if not exist "build" mkdir build
 
-cd build
+cmake --preset=Windows
 
-cmake .. -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release
-
-nmake
-
-cd ..
+cmake --build build
 
 copy build\%PROJECT_CLIENT_DIR%\%PROJECT_CLIENT_NAME% .
 copy build\%PROJECT_SERVER_DIR%\%PROJECT_SERVER_NAME% .
