@@ -10,7 +10,7 @@ if [ ! -d "build" ]; then
   mkdir build
 fi
 
-cmake --preset=Linux
+cmake --preset=linux
 
 cmake --build build
 
