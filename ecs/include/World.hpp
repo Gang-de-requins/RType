@@ -38,11 +38,11 @@ namespace ecs {
                 }
 
                 std::shared_ptr<Archetype> newArchetype = this->_archetypes.at(newArchetypeId);
-                newArchetype->_numEntities++;
+                newArchetype->addEntity(entity);
 
                 if (oldArchetypeId.any()) {
                     std::shared_ptr<Archetype> oldArchetype = this->_archetypes.at(oldArchetypeId);
-                    oldArchetype->_numEntities--;
+                    oldArchetype->removeEntity(entity);
                     oldArchetype->transferComponents(entity, newArchetype);
                 }
 

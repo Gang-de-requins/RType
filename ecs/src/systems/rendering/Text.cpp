@@ -1,7 +1,7 @@
 #include "systems/rendering/Text.hpp"
 
 namespace ecs {
-    void RenderTextSystem::update() {
+    void RenderTextSystem::update(World &world) {
         for (std::shared_ptr<ecs::Archetype> archetype : this->_archetypes) {
             std::vector<Position> &positions = archetype->getComponentVector<Position>();
             std::vector<Text> &texts = archetype->getComponentVector<Text>();

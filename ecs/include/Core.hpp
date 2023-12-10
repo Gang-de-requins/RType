@@ -12,11 +12,13 @@
 #include "components/Sprite.hpp"
 #include "components/Text.hpp"
 #include "components/Velocity.hpp"
+#include "components/Animation.hpp"
 
 /* Systems */
 #include "systems/Movement.hpp"
 #include "systems/rendering/Text.hpp"
 #include "systems/rendering/Sprite.hpp"
+#include "systems/rendering/AnimationSprite.hpp"
 
 #include "World.hpp"
 

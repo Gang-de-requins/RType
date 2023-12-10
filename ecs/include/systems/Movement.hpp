@@ -11,7 +11,7 @@
 namespace ecs {
     class MovementSystem : public System {
         public:
-            void update() override;
+            void update(World &world) override;
     };
 }
 
