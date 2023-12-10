@@ -40,3 +40,8 @@ build/*
 vcpkg/*
 vcpkg_installed/*
 vcpkg.zip
+
+# Executables
+r-type_client
+r-type_server
+tests/ecs/tests_ecs
