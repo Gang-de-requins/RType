@@ -18,6 +18,7 @@ int main(void)
     std::shared_ptr<ecs::MovementSystem> movementSystem = engine.addSystem<ecs::MovementSystem>();
     std::shared_ptr<ecs::RenderSpriteSystem> renderSpriteSystem = engine.addSystem<ecs::RenderSpriteSystem>();
     std::shared_ptr<ecs::RenderTextSystem> renderTextSystem = engine.addSystem<ecs::RenderTextSystem>();
+    std::shared_ptr<ecs::RenderAnimationSystem> renderAnimationSystem = engine.addSystem<ecs::RenderAnimationSystem>();
 
     // Register components to MovementSystem
     engine.addComponentToSystem<ecs::MovementSystem, ecs::Position>();
@@ -27,7 +28,11 @@ int main(void)
     engine.addComponentToSystem<ecs::RenderSpriteSystem, ecs::Position>();
     engine.addComponentToSystem<ecs::RenderSpriteSystem, ecs::Sprite>();
     engine.addComponentToSystem<ecs::RenderSpriteSystem, ecs::Scale>();
-    engine.addComponentToSystem<ecs::RenderSpriteSystem, ecs::Rect>();
+    // engine.addComponentToSystem<ecs::RenderSpriteSystem, ecs::Rect>();
+
+    // Register components to RenderAnimationSystem
+    engine.addComponentToSystem<ecs::RenderAnimationSystem, ecs::Sprite>();
+    engine.addComponentToSystem<ecs::RenderAnimationSystem, ecs::Animation>();
 
     // Register components to RenderTextSystem
     engine.addComponentToSystem<ecs::RenderTextSystem, ecs::Position>();
@@ -40,8 +45,8 @@ int main(void)
     engine.addComponentToEntity(entity, ecs::Position { 200.0f, 200.0f });
     engine.addComponentToEntity(entity, ecs::Velocity { .x = 0.0f, .y = 0.0f });
     engine.addComponentToEntity(entity, ecs::Scale { .x = 1.0f, .y = 1.0f });
-    engine.addComponentToEntity(entity, ecs::Rect { .x = 0.0f, .y = 0.0f, .width = 32.0f, .height = 16.0f });
-    engine.addComponentToEntity(entity, ecs::Sprite { .texture = LoadTexture("characters.gif"), .source = { 0.0f, 0.0f, 32.0f, 16.0f }, .origin = { 0.0f, 0.0f } });
+    engine.addComponentToEntity(entity, ecs::Sprite { .texture = LoadTexture("assets/characters.gif"), .source = { 0.0f, 0.0f, 32.0f, 16.0f }, .origin = { 0.0f, 0.0f } });
+    engine.addComponentToEntity(entity, ecs::Animation { .offset = { 0.0f, 0.0f, 32.0f, 0.0f }, .frames = 3, .currentFrame = 0, .chrono = std::chrono::steady_clock::now(), .elapsedTime = 300 });
 
     EntityID entity2 = engine.createEntity();
 
@@ -73,9 +78,10 @@ int main(void)
 
         ClearBackground(BLACK);
 
-        movementSystem->update();
-        renderSpriteSystem->update();
-        renderTextSystem->update();
+        movementSystem->update(engine);
+        renderAnimationSystem->update(engine);
+        renderSpriteSystem->update(engine);
+        renderTextSystem->update(engine);
 
         EndDrawing();
     }

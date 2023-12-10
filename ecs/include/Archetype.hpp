@@ -4,6 +4,8 @@
 #include <iostream>
 #include <unordered_map>
 #include <memory>
+#include <vector>
+#include <algorithm>
 #include "ComponentsVector.hpp"
 #include "Macros.hpp"
 
@@ -13,8 +15,12 @@ namespace ecs {
             Archetype(ArchetypeID archetypeId) noexcept;
 
             friend class World;
-            
+
+            ArchetypeID getArchetypeId() const noexcept;
+
             size_t getNumEntities() const noexcept;
+
+            std::vector<EntityID> &getEntities() noexcept;
 
             template<typename T>
             std::vector<T> &getComponentVector() noexcept
@@ -24,9 +30,14 @@ namespace ecs {
                 return std::static_pointer_cast<ComponentVector<T>>(this->_componentVectors.at(componentTypeName))->getVector();
             }
 
+            void addEntity(const EntityID &entity) noexcept;
+
+            void removeEntity(const EntityID &entity) noexcept;
+
         private:
             ArchetypeID _archetypeId;
             size_t _numEntities;
+            std::vector<EntityID> _entities;
             std::unordered_map<const char *, std::shared_ptr<IComponentVector>> _componentVectors;
 
             void removeComponent(const EntityID &entity, const char *&componentTypeName) noexcept;

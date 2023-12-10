@@ -15,6 +15,7 @@ set(SRC
     src/systems/Movement.cpp
     src/systems/rendering/Sprite.cpp
     src/systems/rendering/Text.cpp
+    src/systems/rendering/AnimationSprite.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${SRC})

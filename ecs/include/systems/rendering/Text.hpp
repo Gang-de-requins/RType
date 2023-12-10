@@ -14,7 +14,7 @@
 namespace ecs {
     class RenderTextSystem : public System {
         public:
-            void update() override;
+            void update(World &world) override;
     };
 }
 
