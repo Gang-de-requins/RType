@@ -1,65 +1,19 @@
 #include <gtest/gtest.h>
+#include "StdoutCapture.hpp"
+#include "StderrCapture.hpp"
 #include "Core.hpp"
 
-class StdoutCaptureTest : public ::testing::Test {
-    protected:
-        void SetUp() override {
-            this->stdoutBuffer = std::cout.rdbuf();
-            std::cout.rdbuf(this->capturedStdout.rdbuf());
-        }
+TEST(WorldTest, CreateWorld) {
+    StdoutCaptureTest stdoutCaptureTest;
 
-        void TearDown() override {
-            std::cout.rdbuf(this->stdoutBuffer);
-        }
+    stdoutCaptureTest.capture();
+    ecs::World world;
 
-        std::streambuf *stdoutBuffer;
-        std::stringstream capturedStdout;
-    
-    public:
-        void reset() {
-            this->capturedStdout.str("");
-        }
+    std::string expected = "New world created.\n";
+    std::string actual = stdoutCaptureTest.get();
 
-        std::string get() {
-            return this->capturedStdout.str();
-        }
-
-        void capture() {
-            std::cout.rdbuf(this->capturedStdout.rdbuf());
-        }
-};
-
-class StderrCaptureTest : public ::testing::Test {
-    protected:
-        void SetUp() override {
-            this->stderrBuffer = std::cerr.rdbuf();
-            std::cerr.rdbuf(this->capturedStderr.rdbuf());
-        }
-
-        void TearDown() override {
-            std::cerr.rdbuf(this->stderrBuffer);
-        }
-
-        void TestBody() override {
-            std::cerr.rdbuf(this->capturedStderr.rdbuf());
-        }
-
-        std::streambuf *stderrBuffer;
-        std::stringstream capturedStderr;
-    
-    public:
-        void reset() {
-            this->capturedStderr.str("");
-        }
-
-        std::string get() {
-            return this->capturedStderr.str();
-        }
-
-        void capture() {
-            std::cerr.rdbuf(this->capturedStderr.rdbuf());
-        }
-};
+    EXPECT_EQ(actual, expected);
+}
 
 TEST(WorldTest, CreateEntity) {
     ecs::World world;
