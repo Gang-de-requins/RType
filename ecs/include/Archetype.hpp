@@ -34,6 +34,14 @@ namespace ecs {
 
             void removeEntity(const EntityID &entity) noexcept;
 
+            template<typename T>
+            T &getComponent(const EntityID &entity) noexcept
+            {
+                const char *componentTypeName = typeid(T).name();
+
+                return std::static_pointer_cast<ComponentVector<T>>(this->_componentVectors.at(componentTypeName))->getComponent(entity);
+            }
+
         private:
             ArchetypeID _archetypeId;
             size_t _numEntities;

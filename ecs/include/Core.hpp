@@ -13,6 +13,7 @@
 #include "components/Text.hpp"
 #include "components/Velocity.hpp"
 #include "components/Animation.hpp"
+#include "components/Acceleration.hpp"
 
 /* Systems */
 #include "systems/Movement.hpp"
