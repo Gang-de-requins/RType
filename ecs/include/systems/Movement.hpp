@@ -5,6 +5,7 @@
 #include <vector>
 #include "components/Position.hpp"
 #include "components/Velocity.hpp"
+#include "components/Acceleration.hpp"
 #include "Archetype.hpp"
 #include "System.hpp"
 

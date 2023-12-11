@@ -184,6 +184,28 @@ namespace ecs {
 
                 return std::dynamic_pointer_cast<S>(this->_systems.at(typeName));
             }
+
+            template<typename C>
+            C getComponentFromEntity(const EntityID &entity) noexcept
+            {
+                const char *typeName = typeid(C).name();
+
+                if (this->_componentTypes.find(typeName) == this->_componentTypes.end()) {
+                    std::cerr << "Component type not registered." << std::endl;
+                    return C();
+                }
+
+                ArchetypeID archetypeId = this->_entityToArchetypeMap.at(entity);
+
+                if (this->_archetypes.find(archetypeId) == this->_archetypes.end()) {
+                    std::cerr << "Archetype does not exist." << std::endl;
+                    return C();
+                }
+
+                std::shared_ptr<Archetype> archetype = this->_archetypes.at(archetypeId);
+
+                return archetype->getComponent<C>(entity);
+            }
     };
 }
 

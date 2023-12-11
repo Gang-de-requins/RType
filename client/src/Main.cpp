@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 #include "raylib.h"
 #include "Core.hpp"
 
@@ -23,6 +24,7 @@ int main(void)
     // Register components to MovementSystem
     engine.addComponentToSystem<ecs::MovementSystem, ecs::Position>();
     engine.addComponentToSystem<ecs::MovementSystem, ecs::Velocity>();
+    engine.addComponentToSystem<ecs::MovementSystem, ecs::Acceleration>();
 
     // Register components to RenderSystem
     engine.addComponentToSystem<ecs::RenderSpriteSystem, ecs::Position>();
@@ -43,7 +45,8 @@ int main(void)
     EntityID entity = engine.createEntity();
 
     engine.addComponentToEntity(entity, ecs::Position { 200.0f, 200.0f });
-    engine.addComponentToEntity(entity, ecs::Velocity { .x = 0.0f, .y = 0.0f });
+    engine.addComponentToEntity(entity, ecs::Velocity { .x = 0.0f, .y = 0.0f, .speed = 0.0f });
+    engine.addComponentToEntity(entity, ecs::Acceleration { .x = 0.0f, .y = 0.0f, .maxSpeed = 5.0f });
     engine.addComponentToEntity(entity, ecs::Scale { .x = 1.0f, .y = 1.0f });
     engine.addComponentToEntity(entity, ecs::Sprite { .texture = LoadTexture("assets/characters.gif"), .source = { 0.0f, 0.0f, 32.0f, 16.0f }, .origin = { 0.0f, 0.0f } });
     engine.addComponentToEntity(entity, ecs::Animation { .offset = { 0.0f, 0.0f, 32.0f, 0.0f }, .frames = 3, .currentFrame = 0, .chrono = std::chrono::steady_clock::now(), .elapsedTime = 300 });
@@ -51,27 +54,35 @@ int main(void)
     EntityID entity2 = engine.createEntity();
 
     engine.addComponentToEntity(entity2, ecs::Position { 180.0f, 180.0f });
-    engine.addComponentToEntity(entity2, ecs::Velocity { 0.0f, 0.0f });
+    engine.addComponentToEntity(entity2, ecs::Velocity { 0.0f, 0.0f, .speed = 0.0f });
+    engine.addComponentToEntity(entity2, ecs::Acceleration { 0.0f, 0.0f, .maxSpeed = 0.0f });
     engine.addComponentToEntity(entity2, ecs::Text { "Player 1" });
     engine.addComponentToEntity(entity2, ecs::myColor { .r = 255, .g = 255, .b = 255, .a = 255 });
     engine.addComponentToEntity(entity2, ecs::FontSize { .size = 20.0f });
 
     while (!WindowShouldClose()) {
         if (IsKeyDown(KEY_UP)) {
-            engine.updateComponentToEntity(entity, ecs::Velocity { 0.0f, -2.0f });
-            engine.updateComponentToEntity(entity2, ecs::Velocity { 0.0f, -2.0f });
+            engine.updateComponentToEntity(entity, ecs::Acceleration { 0.0f, -0.3f, .maxSpeed = 4.0f });
+            engine.updateComponentToEntity(entity2, ecs::Acceleration { 0.0f, -0.3f, .maxSpeed = 4.0f });
         } else if (IsKeyDown(KEY_DOWN)) {
-            engine.updateComponentToEntity(entity, ecs::Velocity { 0.0f, 2.0f });
-            engine.updateComponentToEntity(entity2, ecs::Velocity { 0.0f, 2.0f });
+            engine.updateComponentToEntity(entity, ecs::Acceleration { 0.0f, 0.3f, .maxSpeed = 4.0f });
+            engine.updateComponentToEntity(entity2, ecs::Acceleration { 0.0f, 0.3f, .maxSpeed = 4.0f });
         } else if (IsKeyDown(KEY_LEFT)) {
-            engine.updateComponentToEntity(entity, ecs::Velocity { -2.0f, 0.0f });
-            engine.updateComponentToEntity(entity2, ecs::Velocity { -2.0f, 0.0f });
+            engine.updateComponentToEntity(entity, ecs::Acceleration { -0.3f, 0.0f, .maxSpeed = 4.0f });
+            engine.updateComponentToEntity(entity2, ecs::Acceleration { -0.3f, 0.0f, .maxSpeed = 4.0f });
         } else if (IsKeyDown(KEY_RIGHT)) {
-            engine.updateComponentToEntity(entity, ecs::Velocity { 2.0f, 0.0f });
-            engine.updateComponentToEntity(entity2, ecs::Velocity { 2.0f, 0.0f });
+            engine.updateComponentToEntity(entity, ecs::Acceleration { 0.3f, 0.0f, .maxSpeed = 4.0f });
+            engine.updateComponentToEntity(entity2, ecs::Acceleration { 0.3f, 0.0f, .maxSpeed = 4.0f });
         } else {
-            engine.updateComponentToEntity(entity, ecs::Velocity { 0.0f, 0.0f });
-            engine.updateComponentToEntity(entity2, ecs::Velocity { 0.0f, 0.0f });
+            auto acceleration = engine.getComponentFromEntity<ecs::Acceleration>(entity);
+
+            acceleration.x *= -1;
+            acceleration.y *= -1;
+
+            acceleration.maxSpeed -= 0.1f;
+            acceleration.maxSpeed = acceleration.maxSpeed < 0.0f ? 0.0f : acceleration.maxSpeed;
+            engine.updateComponentToEntity(entity, acceleration);
+            engine.updateComponentToEntity(entity2, acceleration);
         }
 
         BeginDrawing();
