@@ -20,6 +20,8 @@ enable_testing()
 add_executable(
     ${PROJECT_NAME}
     src/WorldTest.cpp
+    src/ArchetypeTest.cpp
+    src/ComponentsVectorTest.cpp
 )
 
 target_link_libraries(
@@ -33,10 +35,11 @@ gtest_discover_tests(${PROJECT_NAME})
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/../../ecs/include
+    ${CMAKE_SOURCE_DIR}/include
 )
 
 add_custom_command(
     TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy
-            ${PROJECT_NAME} ${CMAKE_SOURCE_DIR}
+    ${PROJECT_NAME} ${CMAKE_SOURCE_DIR}
 )
