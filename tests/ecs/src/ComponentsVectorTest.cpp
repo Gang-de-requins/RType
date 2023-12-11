@@ -89,55 +89,55 @@ TEST(ComponentsVectorTest, RemoveInvalidComponent) {
     EXPECT_EQ(actual, expected);
 }
 
-// TEST(ComponentsVectorTest, GetVector) {
-//     ComponentVector<ecs::Position> componentsVector;
+TEST(ComponentsVectorTest, GetVector) {
+    ComponentVector<ecs::Position> componentsVector;
 
-//     EntityID entity = 0;
-//     ecs::Position position { 0, 0 };
+    EntityID entity = 0;
+    ecs::Position position { 0, 0 };
 
-//     componentsVector.addComponent(entity, position);
+    componentsVector.addComponent(entity, position);
 
-//     ASSERT_EQ(componentsVector.getVector().size(), 1);
-// }
+    ASSERT_EQ(componentsVector.getVector().size(), 1);
+}
 
-// TEST(ComponentsVectorTest, GetComponent) {
-//     ComponentVector<ecs::Position> componentsVector;
+TEST(ComponentsVectorTest, GetComponent) {
+    ComponentVector<ecs::Position> componentsVector;
 
-//     EntityID entity = 0;
-//     ecs::Position position { 0, 0 };
+    EntityID entity = 0;
+    ecs::Position position { 0, 0 };
 
-//     componentsVector.addComponent(entity, position);
+    componentsVector.addComponent(entity, position);
 
-//     ASSERT_EQ(componentsVector.getComponent(entity).x, 0);
-//     ASSERT_EQ(componentsVector.getComponent(entity).y, 0);
-// }
+    ASSERT_EQ(componentsVector.getComponent(entity).x, 0);
+    ASSERT_EQ(componentsVector.getComponent(entity).y, 0);
+}
 
-// TEST(ComponentsVectorTest, GetComponentInvalid) {
-//     try {
-//         ComponentVector<ecs::Position> componentsVector;
+TEST(ComponentsVectorTest, GetComponentInvalid) {
+    try {
+        ComponentVector<ecs::Position> componentsVector;
 
-//         EntityID entity = 0;
-//         ecs::Position position { 0, 0 };
+        EntityID entity = 0;
+        ecs::Position position { 0, 0 };
 
-//         componentsVector.addComponent(entity, position);
+        componentsVector.addComponent(entity, position);
 
-//         componentsVector.getComponent(1);
-//     } catch (std::out_of_range &e) {
-//         ASSERT_STREQ(e.what(), "Attempting to retrieve component that does not exist.");
-//     }
-// }
+        componentsVector.getComponent(1);
+    } catch (std::out_of_range &e) {
+        ASSERT_STREQ(e.what(), "Attempting to retrieve component that does not exist.");
+    }
+}
 
-// TEST(ComponentsVectorTest, EntityDestroyed) {
-//     ComponentVector<ecs::Position> componentsVector;
+TEST(ComponentsVectorTest, EntityDestroyed) {
+    ComponentVector<ecs::Position> componentsVector;
 
-//     EntityID entity = 0;
-//     ecs::Position position { 0, 0 };
+    EntityID entity = 0;
+    ecs::Position position { 0, 0 };
 
-//     componentsVector.addComponent(entity, position);
-//     componentsVector.entityDestroyed(entity);
+    componentsVector.addComponent(entity, position);
+    componentsVector.entityDestroyed(entity);
 
-//     ASSERT_EQ(componentsVector.getVector().size(), 0);
-// }
+    ASSERT_EQ(componentsVector.getVector().size(), 0);
+}
 
 // TEST(ComponentsVectorTest, CreateEmptyClone) {
 //     ComponentVector<ecs::Position> componentsVector;
