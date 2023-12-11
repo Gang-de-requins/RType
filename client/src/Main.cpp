@@ -10,6 +10,7 @@ int main(void)
     const int screenWidth = 800;
     const int screenHeight = 450;
 
+    InitAudioDevice();
     InitWindow(screenWidth, screenHeight, "Project Client");
 
     SetTargetFPS(60);
@@ -20,6 +21,7 @@ int main(void)
     std::shared_ptr<ecs::RenderSpriteSystem> renderSpriteSystem = engine.addSystem<ecs::RenderSpriteSystem>();
     std::shared_ptr<ecs::RenderTextSystem> renderTextSystem = engine.addSystem<ecs::RenderTextSystem>();
     std::shared_ptr<ecs::RenderAnimationSystem> renderAnimationSystem = engine.addSystem<ecs::RenderAnimationSystem>();
+    std::shared_ptr<ecs::MusicSystem> musicSystem = engine.addSystem<ecs::MusicSystem>();
 
     // Register components to MovementSystem
     engine.addComponentToSystem<ecs::MovementSystem, ecs::Position>();
@@ -39,8 +41,11 @@ int main(void)
     // Register components to RenderTextSystem
     engine.addComponentToSystem<ecs::RenderTextSystem, ecs::Position>();
     engine.addComponentToSystem<ecs::RenderTextSystem, ecs::Text>();
-    engine.addComponentToSystem<ecs::RenderTextSystem, ecs::myColor>();
+    engine.addComponentToSystem<ecs::RenderTextSystem, ecs::Color>();
     engine.addComponentToSystem<ecs::RenderTextSystem, ecs::FontSize>();
+
+    // Register components to MusicSystem
+    engine.addComponentToSystem<ecs::MusicSystem, ecs::Music>();
 
     EntityID entity = engine.createEntity();
 
@@ -57,9 +62,14 @@ int main(void)
     engine.addComponentToEntity(entity2, ecs::Velocity { 0.0f, 0.0f, .speed = 0.0f });
     engine.addComponentToEntity(entity2, ecs::Acceleration { 0.0f, 0.0f, .maxSpeed = 0.0f });
     engine.addComponentToEntity(entity2, ecs::Text { "Player 1" });
-    engine.addComponentToEntity(entity2, ecs::myColor { .r = 255, .g = 255, .b = 255, .a = 255 });
+    engine.addComponentToEntity(entity2, ecs::Color { .color = WHITE });
     engine.addComponentToEntity(entity2, ecs::FontSize { .size = 20.0f });
 
+    EntityID music = engine.createEntity();
+
+    engine.addComponentToEntity(music, ecs::Music { .music = LoadMusicStream("assets/mini1111.xm") });
+
+    PlayMusicStream(engine.getComponentFromEntity<ecs::Music>(music).music);
     while (!WindowShouldClose()) {
         if (IsKeyDown(KEY_UP)) {
             engine.updateComponentToEntity(entity, ecs::Acceleration { 0.0f, -0.3f, .maxSpeed = 4.0f });
@@ -89,6 +99,7 @@ int main(void)
 
         ClearBackground(BLACK);
 
+        musicSystem->update(engine);
         movementSystem->update(engine);
         renderAnimationSystem->update(engine);
         renderSpriteSystem->update(engine);
@@ -96,6 +107,9 @@ int main(void)
 
         EndDrawing();
     }
+
+    CloseAudioDevice();
+    CloseWindow();
 
     return EXIT_SUCCESS;
 }
