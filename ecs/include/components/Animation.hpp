@@ -1,7 +1,6 @@
 #ifndef ANIMATION_COMPONENT_HPP
 #define ANIMATION_COMPONENT_HPP
 
-// chrono
 #include <chrono>
 #include "raylib.h"
 
