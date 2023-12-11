@@ -22,6 +22,7 @@ add_executable(
     src/WorldTest.cpp
     src/ArchetypeTest.cpp
     src/ComponentsVectorTest.cpp
+    src/CustomExceptionsTest.cpp
 )
 
 target_link_libraries(
