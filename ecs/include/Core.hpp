@@ -14,12 +14,14 @@
 #include "components/Velocity.hpp"
 #include "components/Animation.hpp"
 #include "components/Acceleration.hpp"
+#include "components/Music.hpp"
 
 /* Systems */
 #include "systems/Movement.hpp"
 #include "systems/rendering/Text.hpp"
 #include "systems/rendering/Sprite.hpp"
 #include "systems/rendering/AnimationSprite.hpp"
+#include "systems/Music.hpp"
 
 #include "World.hpp"
 
