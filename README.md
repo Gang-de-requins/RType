@@ -14,7 +14,7 @@
   - [Supported Platforms](###Supported-platforms )
 - [Installation](##Installation)
   - [Clone the project](###Clone-the-project)
-  - [Launch the scipt](###Launch-the-scipt)
+  - [Launch the script](###Launch-the-scipt)
     - [Linux](####Linux)
     - [Windows](####Windows)
 - [Usage](##Usage)
@@ -50,7 +50,7 @@ R-tpye is composed of two parts: the server and the client, both in C++.
 
 ### Librairies
 - Graphical : Raylib.
-- Network : Boost::asio
+- Network : asio
 
 
 ## 🔮 Installation 🔮
@@ -152,7 +152,7 @@ You have 3 hp if an enemy shoots at you you lose 1, so if you have no more hp yo
 
 ### Protocol documentation
 
-[Check RFC]()
+[Check RFC](server/RFC.md)
 
 ### Game Engine documentation
 
