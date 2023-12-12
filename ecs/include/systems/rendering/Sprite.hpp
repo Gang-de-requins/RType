@@ -7,7 +7,7 @@
 #include "components/Position.hpp"
 #include "components/Sprite.hpp"
 #include "components/Scale.hpp"
-#include "components/Rect.hpp"
+#include "components/Rectangle.hpp"
 #include "Archetype.hpp"
 #include "System.hpp"
 
