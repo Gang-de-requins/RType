@@ -1,21 +1,25 @@
 #include "systems/rendering/Sprite.hpp"
+#include "World.hpp"
 
 namespace ecs {
-    void RenderSpriteSystem::update(World &world) {
-        for (std::shared_ptr<Archetype> archetype : this->_archetypes) {
-            std::vector<Position>& positions = archetype->getComponentVector<Position>();
-            std::vector<Sprite>& sprites = archetype->getComponentVector<Sprite>();
-            std::vector<Scale>& scales = archetype->getComponentVector<Scale>();
-            // std::vector<Rect>& rects = archetype->getComponentVector<Rect>();
+    void SpriteSystem::update(World &world) {
+        auto entities = world.view<Position, Sprite, Scale, Rotation>();
 
-            for (std::size_t i = 0; i < positions.size(); ++i) {
-                DrawTexturePro(sprites[i].texture,
-                    { sprites[i].source.x, sprites[i].source.y, sprites[i].source.width, sprites[i].source.height },
-                    { positions[i].x, positions[i].y, sprites[i].source.width * scales[i].x, sprites[i].source.height * scales[i].y },
-                    sprites[i].origin,
-                    0.0f,
-                    WHITE);
-            }
+        for (auto entity : entities) {
+            auto &position = world.get<Position>(*entity);
+            auto &sprite = world.get<Sprite>(*entity);
+            auto &scale = world.get<Scale>(*entity);
+            auto &rotation = world.get<Rotation>(*entity);
+            auto &texture = world.getTexture(sprite.path);
+
+            DrawTexturePro(
+                texture,
+                ::Rectangle{ sprite.source.x, sprite.source.y, sprite.source.width, sprite.source.height },
+                ::Rectangle{ position.x, position.y, sprite.source.width * scale.x, sprite.source.height * scale.y },
+                ::Vector2{ sprite.origin.x, sprite.origin.y },
+                rotation.angle,
+                WHITE
+            );
         }
     }
 }

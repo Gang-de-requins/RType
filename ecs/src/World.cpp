@@ -1,91 +1,30 @@
 #include "World.hpp"
 
 namespace ecs {
-    World::World() noexcept :
-    _nextEntity { 0 },
-    _nextComponentType { 0 },
-    _entityToArchetypeMap { },
-    _archetypes { }
-    {
-        std::cout << "New world created.\n";
+    Entity &World::createEntity() {
+        this->m_entities.emplace_back(Entity{this->m_nextEntityId++, {}});
+        return this->m_entities.back();
     }
 
-    EntityID World::createEntity() noexcept
-    {
-        EntityID newEntity = this->_nextEntity;
-
-        this->_entityToArchetypeMap.insert({ newEntity, ArchetypeID() });
-        this->_nextEntity++;
-        return newEntity;
+    void World::destroyEntity(Entity &entity) {
+        this->m_entities.erase(std::remove_if(this->m_entities.begin(), this->m_entities.end(), [&entity](const Entity &e) {
+            return e.id == entity.id;
+        }), this->m_entities.end());
     }
 
-    void World::destroyEntity(const EntityID &entity) noexcept
-    {
-        if (this->_entityToArchetypeMap.at(entity).any()) {
-            std::shared_ptr<Archetype> archetype = this->_archetypes.at(this->_entityToArchetypeMap.at(entity));
-            archetype->entityDestroyed(entity);
-            this->_entityToArchetypeMap.erase(entity);
+    Texture2D &World::getTexture(std::string_view path) {
+        if (this->m_textures.find(path) == this->m_textures.end()) {
+            this->m_textures.insert({path, LoadTexture(path.data())});
         }
+
+        return this->m_textures.at(path);
     }
 
-    /* -------------------- Private functions -------------------- */
-
-    void World::addComponentType(const char *&typeName) noexcept
-    {
-        if (this->_nextComponentType >= MAX_COMPONENTS) {
-            std::cerr << "Too many component types registered.\n";
-            return;
+    ::Music &World::getMusic(std::string_view path) {
+        if (this->m_musics.find(path) == this->m_musics.end()) {
+            this->m_musics.insert({path, LoadMusicStream(path.data())});
         }
 
-        this->_componentTypes.insert({ typeName, this->_nextComponentType });
-        this->_nextComponentType++;
-    }
-
-    ArchetypeID World::updateEntityArchetypeID(const EntityID &entity, const ComponentTypeID &componentType, const bool &isSet)
-    {
-        ArchetypeID entityArchetype = this->_entityToArchetypeMap.at(entity);
-
-        if (isSet) {
-            if (entityArchetype.test(componentType)) {
-                throw DuplicateComponentTypeException("Component type added to same entity more than once.");
-            }
-        }
-
-        entityArchetype.set(componentType, isSet);
-        this->_entityToArchetypeMap.at(entity) = entityArchetype;
-
-        return entityArchetype;
-    }
-
-    void World::createArchetype(const ArchetypeID &archetypeId) noexcept
-    {
-        if (this->_archetypes.find(archetypeId) != this->_archetypes.end()) {
-            std::cerr << "Added archetype more than once.\n";
-            return;
-        }
-
-        std::shared_ptr<Archetype> newArchetype = std::make_shared<Archetype>(archetypeId);
-
-        this->_archetypes.insert({ archetypeId, newArchetype });
-
-        for (std::pair<const char *, std::shared_ptr<System>> pair : this->_systems) {
-            if ((pair.second->archetypeId & archetypeId) == pair.second->archetypeId) {
-                pair.second->_archetypes.push_back(this->_archetypes.at(archetypeId));
-            }
-        }
-    }
-
-    void World::updateSystemArchetype(const char *&systemTypeName, ArchetypeID &systemArchetypeId) noexcept
-    {
-        std::shared_ptr<System> system = this->_systems.at(systemTypeName);
-
-        system->_archetypes.clear();
-        system->archetypeId = systemArchetypeId;
-
-        for (std::pair<ArchetypeID, std::shared_ptr<Archetype>> pair : this->_archetypes) {
-            if ((pair.first & systemArchetypeId) == systemArchetypeId) {
-                system->_archetypes.push_back(pair.second);
-            }
-        }
+        return this->m_musics.at(path);
     }
 }

@@ -1,11 +1,13 @@
 #ifndef SPRITE_COMPONENT_HPP
 #define SPRITE_COMPONENT_HPP
 
-#include "raylib.h"
+#include <string_view>
+#include "Rectangle.hpp"
+#include "Vector2.hpp"
 
 namespace ecs {
     struct Sprite {
-        Texture2D texture;
+        std::string_view path;
         Rectangle source;
         Vector2 origin;
     };
