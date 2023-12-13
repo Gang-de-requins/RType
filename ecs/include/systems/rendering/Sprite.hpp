@@ -1,18 +1,18 @@
 #ifndef SPRITE_SYSTEM_HPP
 #define SPRITE_SYSTEM_HPP
 
-#include <memory>
 #include <vector>
 #include "raylib.h"
 #include "components/Position.hpp"
 #include "components/Sprite.hpp"
 #include "components/Scale.hpp"
-#include "components/Rect.hpp"
-#include "Archetype.hpp"
-#include "System.hpp"
+#include "components/Rotation.hpp"
+#include "systems/ISystem.hpp"
 
 namespace ecs {
-    class RenderSpriteSystem : public System {
+    class World;
+
+    class SpriteSystem : public ISystem {
         public:
             void update(World &world) override;
     };

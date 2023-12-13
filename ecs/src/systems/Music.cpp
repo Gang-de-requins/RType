@@ -1,11 +1,17 @@
 #include "systems/Music.hpp"
+#include "World.hpp"
 
 namespace ecs {
-    void MusicSystem::update(World &world) {
-        for (std::shared_ptr<Archetype> archetype : this->_archetypes) {
-            std::vector<Music> &musics = archetype->getComponentVector<Music>();
+    class World;
 
-            UpdateMusicStream(musics[0].music);
+    void MusicSystem::update(World &world) {
+        auto entities = world.view<Music>();
+
+        for (auto &entity : entities) {
+            auto &music = world.get<Music>(*entity);
+            auto &musicData = world.getMusic(music.path);
+
+            IsMusicStreamPlaying(musicData) ? UpdateMusicStream(musicData) : PlayMusicStream(musicData);
         }
     }
 }

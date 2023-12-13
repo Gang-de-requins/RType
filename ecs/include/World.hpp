@@ -1,210 +1,69 @@
 #ifndef WORLD_HPP
 #define WORLD_HPP
 
-#include <iostream>
+#include <unordered_map>
 #include <string_view>
 #include <vector>
-#include <memory>
-#include <unordered_map>
-#include "CustomExceptions.hpp"
-#include "Archetype.hpp"
-#include "System.hpp"
+#include <algorithm>
+#include <typeinfo>
+#include "raylib.h"
+#include "Entity.hpp"
 #include "Macros.hpp"
 
 namespace ecs {
     class World {
-        EntityID _nextEntity;
-        ComponentTypeID _nextComponentType;
-        std::unordered_map<EntityID, ArchetypeID> _entityToArchetypeMap;
-        std::unordered_map<ArchetypeID, std::shared_ptr<Archetype>> _archetypes;
-        std::unordered_map<const char*, ComponentTypeID> _componentTypes;
-        std::unordered_map<const char*, ArchetypeID> _systemToArchetypeMap;
-        std::unordered_map<const char*, std::shared_ptr<System>> _systems;
-
-        private:
-            void addComponentType(const char *&typeName) noexcept;
-            ArchetypeID updateEntityArchetypeID(const EntityID &entity, const ComponentTypeID &componentType, const bool &isSet);
-            void createArchetype(const ArchetypeID &archetypeId) noexcept;
-            void updateSystemArchetype(const char *&systemTypeName, ArchetypeID &systemArchetypeId) noexcept;
-
-            template<typename C>
-            void addComponentToEntityArchetype(const EntityID &entity, C &component, const ComponentTypeID &componentType) noexcept
-            {
-                ArchetypeID oldArchetypeId = this->_entityToArchetypeMap.at(entity);
-                ArchetypeID newArchetypeId = this->updateEntityArchetypeID(entity, componentType, true);
-
-                if (this->_archetypes.find(newArchetypeId) == this->_archetypes.end()) {
-                    this->createArchetype(newArchetypeId);
-                }
-
-                std::shared_ptr<Archetype> newArchetype = this->_archetypes.at(newArchetypeId);
-                newArchetype->addEntity(entity);
-
-                if (oldArchetypeId.any()) {
-                    std::shared_ptr<Archetype> oldArchetype = this->_archetypes.at(oldArchetypeId);
-                    oldArchetype->removeEntity(entity);
-                    oldArchetype->transferComponents(entity, newArchetype);
-                }
-
-                newArchetype->addComponent(entity, component);
-            }
-
-            template<typename C>
-            void updateComponentEntityArchetype(const EntityID &entity, C &component) noexcept
-            {
-                ArchetypeID archetypeId = this->_entityToArchetypeMap.at(entity);
-
-                if (this->_archetypes.find(archetypeId) == this->_archetypes.end()) {
-                    std::cerr << "Archetype does not exist." << std::endl;
-                    return;
-                }
-
-                std::shared_ptr<Archetype> archetype = this->_archetypes.at(archetypeId);
-
-                archetype->updateComponent(entity, component);
-            }
+        std::vector<Entity> m_entities;
+        std::size_t m_nextEntityId;
+        std::unordered_map<std::string_view, Texture2D> m_textures;
+        std::unordered_map<std::string_view, ::Music> m_musics;
 
         public:
-            World() noexcept;
-            EntityID createEntity() noexcept;
-            void destroyEntity(const EntityID &entity) noexcept;
-
-            template<typename C>
-            void addComponentToEntity(EntityID entity, C component) noexcept
-            {
-                const char *typeName = typeid(C).name();
-
-                if (this->_componentTypes.find(typeName) == this->_componentTypes.end()) {
-                    this->addComponentType(typeName);
-                }
-
-                ComponentTypeID componentTypeId = this->_componentTypes.at(typeName);
-
-                this->addComponentToEntityArchetype(entity, component, componentTypeId);
+            World() : m_nextEntityId(0), m_textures() {
+                this->m_entities.reserve(DEFAULT_NB_ENTITIES);
             }
 
-            template<typename C>
-            void updateComponentToEntity(EntityID entity, C component) noexcept
-            {
-                const char *typeName = typeid(C).name();
+            ~World() {
+                this->m_entities.clear();
+            }
+            Entity &createEntity();
+            void destroyEntity(Entity &entity);
 
-                if (this->_componentTypes.find(typeName) == this->_componentTypes.end()) {
-                    std::cerr << "Component type not registered." << std::endl;
-                    return;
-                }
-
-                this->updateComponentEntityArchetype(entity, component);
+            template<typename Component>
+            void assign(Entity &entity, Component &component) {
+                entity.components[typeid(Component).name()] = &component;
             }
 
-            template<typename S>
-            std::shared_ptr<S> addSystem() noexcept
-            {
-                const char *typeName = typeid(S).name();
-
-                if (this->_systems.find(typeName) != this->_systems.end()) {
-                    std::cerr << "Added system more than once." << std::endl;
-                    return nullptr;
-                }
-
-                std::shared_ptr<S> system = std::make_shared<S>();
-
-                this->_systems.insert({typeName, system});
-
-                this->_systemToArchetypeMap.insert({typeName, ArchetypeID()});
-
-                return system;
+            template<typename Component>
+            void remove(Entity &entity) {
+                entity.components.erase(typeid(Component).name());
             }
 
-            template<typename S, typename C>
-            void addComponentToSystem() noexcept
-            {
-                const char *systemTypeName = typeid(S).name();
-                const char *componentTypeName = typeid(C).name();
-
-                if (this->_systems.find(systemTypeName) == this->_systems.end()) {
-                    std::cerr << "System not registered." << std::endl;
-                    return;
-                }
-                
-                if (this->_componentTypes.find(componentTypeName) == this->_componentTypes.end()) {
-                    this->addComponentType(componentTypeName);
-                }
-
-                ComponentTypeID componentTypeId = this->_componentTypes.at(componentTypeName);
-                ArchetypeID systemArchetypeId = this->_systemToArchetypeMap.at(systemTypeName).set(componentTypeId, true);
-
-                this->updateSystemArchetype(systemTypeName, systemArchetypeId);
+            template<typename Component>
+            Component &get(Entity &entity) {
+                return *static_cast<Component *>(entity.components[typeid(Component).name()]);
             }
 
-            template<typename S, typename C>
-            void removeComponentFromSystem() noexcept
-            {
-                const char *systemTypeName = typeid(S).name();
-                const char *componentTypeName = typeid(C).name();
+            template<typename... Components>
+            auto view() {
+                std::vector<Entity *> matchingEntities;
 
-                if (this->_systems.find(systemTypeName) == this->_systems.end()) {
-                    std::cerr << "System not registered." << std::endl;
-                    return;
-                }
-                
-                if (this->_componentTypes.find(componentTypeName) == this->_componentTypes.end()) {
-                    std::cerr << "Component type not registered." << std::endl;
-                    return;
+                for (auto &entity : this->m_entities) {
+                    if (hasComponents<Components...>(entity)) {
+                        matchingEntities.push_back(&entity);
+                    }
                 }
 
-                ComponentTypeID componentTypeId = this->_componentTypes.at(componentTypeName);
-                ArchetypeID systemArchetypeId = this->_systemToArchetypeMap.at(systemTypeName).set(componentTypeId, false);
-
-                this->updateSystemArchetype(systemTypeName, systemArchetypeId);
+                return matchingEntities;
             }
 
-            template<typename S>
-            void removeSystem() noexcept
-            {
-                const char *typeName = typeid(S).name();
+            Texture2D &getTexture(std::string_view path);
 
-                if (this->_systems.find(typeName) == this->_systems.end()) {
-                    std::cerr << "System not registered." << std::endl;
-                    return;
-                }
+            ::Music &getMusic(std::string_view path);
 
-                this->_systems.erase(typeName);
-                this->_systemToArchetypeMap.erase(typeName);
-            }
-
-            template<typename S>
-            std::shared_ptr<S> getSystem() noexcept
-            {
-                const char *typeName = typeid(S).name();
-
-                if (this->_systems.find(typeName) == this->_systems.end()) {
-                    std::cerr << "System not registered." << std::endl;
-                    return nullptr;
-                }
-
-                return std::dynamic_pointer_cast<S>(this->_systems.at(typeName));
-            }
-
-            template<typename C>
-            C getComponentFromEntity(const EntityID &entity) noexcept
-            {
-                const char *typeName = typeid(C).name();
-
-                if (this->_componentTypes.find(typeName) == this->_componentTypes.end()) {
-                    std::cerr << "Component type not registered." << std::endl;
-                    return C();
-                }
-
-                ArchetypeID archetypeId = this->_entityToArchetypeMap.at(entity);
-
-                if (this->_archetypes.find(archetypeId) == this->_archetypes.end()) {
-                    std::cerr << "Archetype does not exist." << std::endl;
-                    return C();
-                }
-
-                std::shared_ptr<Archetype> archetype = this->_archetypes.at(archetypeId);
-
-                return archetype->getComponent<C>(entity);
+        private:
+            template<typename... Components>
+            bool hasComponents(Entity &entity) {
+                return ((entity.components.find(typeid(Components).name()) != entity.components.end()) && ...);
             }
     };
 }

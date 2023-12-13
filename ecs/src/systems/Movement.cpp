@@ -1,29 +1,23 @@
 #include "systems/Movement.hpp"
+#include "World.hpp"
 
 namespace ecs {
     void MovementSystem::update(World &world) {
-        for (std::shared_ptr<Archetype> archetype : this->_archetypes) {
-            std::vector<Position> &positions = archetype->getComponentVector<Position>();
-            std::vector<Velocity> &velocities = archetype->getComponentVector<Velocity>();
-            std::vector<Acceleration> &accelerations = archetype->getComponentVector<Acceleration>();
+        std::vector<Entity *> entities = world.view<Position, Velocity, Acceleration>();
 
-            for (std::size_t i = 0; i < positions.size(); ++i) {
-                velocities[i].x += accelerations[i].x;
-                velocities[i].y += accelerations[i].y;
+        for (auto &entity : entities) {
+            Position &position = world.get<Position>(*entity);
+            Velocity &velocity = world.get<Velocity>(*entity);
+            Acceleration &acceleration = world.get<Acceleration>(*entity);
 
-                if (velocities[i].x > accelerations[i].maxSpeed)
-                    velocities[i].x = accelerations[i].maxSpeed;
-                else if (velocities[i].x < -accelerations[i].maxSpeed)
-                    velocities[i].x = -accelerations[i].maxSpeed;
+            velocity.dx += acceleration.ddx;
+            velocity.dy += acceleration.ddy;
 
-                if (velocities[i].y > accelerations[i].maxSpeed)
-                    velocities[i].y = accelerations[i].maxSpeed;
-                else if (velocities[i].y < -accelerations[i].maxSpeed)
-                    velocities[i].y = -accelerations[i].maxSpeed;
+            velocity.dx = std::clamp(velocity.dx, -acceleration.maxSpeed, acceleration.maxSpeed);
+            velocity.dy = std::clamp(velocity.dy, -acceleration.maxSpeed, acceleration.maxSpeed);
 
-                positions[i].x += velocities[i].x;
-                positions[i].y += velocities[i].y;
-            }
+            position.x += velocity.dx;
+            position.y += velocity.dy;
         }
     }
 }

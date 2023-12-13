@@ -1,115 +1,97 @@
 #include <iostream>
-#include <cmath>
 #include "raylib.h"
-#include "Core.hpp"
+#include "GameEngine.hpp"
 
 int main(void)
 {
-    std::cout << "Project Client" << std::endl;
+    ecs::World world;
 
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+    ecs::MovementSystem movementSystem;
+    ecs::ControllableSystem controllableSystem;
+    ecs::SpriteSystem spriteSystem;
+    ecs::AnimationSystem animationSystem;
+    ecs::MusicSystem musicSystem;
+    ecs::TextSystem textSystem;
+
+    ecs::Entity &entity = world.createEntity();
+    ecs::Position position{200, 200};
+    ecs::Velocity velocity{0, 0};
+    ecs::Sprite sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}};
+    ecs::Acceleration acceleration{0, 0, 4};
+    ecs::Controllable controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT};
+    ecs::Scale scale{1, 1};
+    ecs::Rotation rotation{0};
+    ecs::Animation animation{ecs::Rectangle{0, 0, 32, 0}, 4, 0, 200, std::chrono::steady_clock::now()};
+
+    world.assign(entity, position);
+    world.assign(entity, velocity);
+    world.assign(entity, sprite);
+    world.assign(entity, acceleration);
+    world.assign(entity, controllable);
+    world.assign(entity, scale);
+    world.assign(entity, rotation);
+    world.assign(entity, animation);
+
+    ecs::Entity &entity1 = world.createEntity();
+    ecs::Position position1{180, 180};
+    ecs::Velocity velocity1{0, 0};
+    ecs::Text text{"Player 1"};
+    ecs::Acceleration acceleration1{0, 0, 4};
+    ecs::Controllable controllable1{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT};
+    ecs::Color color{GE_WHITE};
+    ecs::FontSize fontSize{ 20 };
+
+    world.assign(entity1, position1);
+    world.assign(entity1, velocity1);
+    world.assign(entity1, text);
+    world.assign(entity1, acceleration1);
+    world.assign(entity1, controllable1);
+    world.assign(entity1, color);
+    world.assign(entity1, fontSize);
+
+    ecs::Entity &entity2 = world.createEntity();
+    ecs::Position position2{400, 200};
+    ecs::Velocity velocity2{0, 0};
+    ecs::Sprite sprite2{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}};
+    ecs::Acceleration acceleration2{0, 0, 4};
+    ecs::Controllable controllable2{KEY_W, KEY_S, KEY_A, KEY_D};
+    ecs::Scale scale2{1, 1};
+    ecs::Rotation rotation2{0};
+
+    world.assign(entity2, position2);
+    world.assign(entity2, velocity2);
+    world.assign(entity2, sprite2);
+    world.assign(entity2, acceleration2);
+    world.assign(entity2, controllable2);
+    world.assign(entity2, scale2);
+    world.assign(entity2, rotation2);
+
+    ecs::Entity &entity3 = world.createEntity();
+    ecs::Music music{"assets/mini1111.xm"};
+
+    world.assign(entity3, music);
 
     InitAudioDevice();
-    InitWindow(screenWidth, screenHeight, "Project Client");
-
+    InitWindow(800, 450, "rtype");
     SetTargetFPS(60);
 
-    ecs::World engine;
-
-    std::shared_ptr<ecs::MovementSystem> movementSystem = engine.addSystem<ecs::MovementSystem>();
-    std::shared_ptr<ecs::RenderSpriteSystem> renderSpriteSystem = engine.addSystem<ecs::RenderSpriteSystem>();
-    std::shared_ptr<ecs::RenderTextSystem> renderTextSystem = engine.addSystem<ecs::RenderTextSystem>();
-    std::shared_ptr<ecs::RenderAnimationSystem> renderAnimationSystem = engine.addSystem<ecs::RenderAnimationSystem>();
-    std::shared_ptr<ecs::MusicSystem> musicSystem = engine.addSystem<ecs::MusicSystem>();
-
-    // Register components to MovementSystem
-    engine.addComponentToSystem<ecs::MovementSystem, ecs::Position>();
-    engine.addComponentToSystem<ecs::MovementSystem, ecs::Velocity>();
-    engine.addComponentToSystem<ecs::MovementSystem, ecs::Acceleration>();
-
-    // Register components to RenderSystem
-    engine.addComponentToSystem<ecs::RenderSpriteSystem, ecs::Position>();
-    engine.addComponentToSystem<ecs::RenderSpriteSystem, ecs::Sprite>();
-    engine.addComponentToSystem<ecs::RenderSpriteSystem, ecs::Scale>();
-    // engine.addComponentToSystem<ecs::RenderSpriteSystem, ecs::Rect>();
-
-    // Register components to RenderAnimationSystem
-    engine.addComponentToSystem<ecs::RenderAnimationSystem, ecs::Sprite>();
-    engine.addComponentToSystem<ecs::RenderAnimationSystem, ecs::Animation>();
-
-    // Register components to RenderTextSystem
-    engine.addComponentToSystem<ecs::RenderTextSystem, ecs::Position>();
-    engine.addComponentToSystem<ecs::RenderTextSystem, ecs::Text>();
-    engine.addComponentToSystem<ecs::RenderTextSystem, ecs::Color>();
-    engine.addComponentToSystem<ecs::RenderTextSystem, ecs::FontSize>();
-
-    // Register components to MusicSystem
-    engine.addComponentToSystem<ecs::MusicSystem, ecs::Music>();
-
-    EntityID entity = engine.createEntity();
-
-    engine.addComponentToEntity(entity, ecs::Position { 200.0f, 200.0f });
-    engine.addComponentToEntity(entity, ecs::Velocity { .x = 0.0f, .y = 0.0f, .speed = 0.0f });
-    engine.addComponentToEntity(entity, ecs::Acceleration { .x = 0.0f, .y = 0.0f, .maxSpeed = 5.0f });
-    engine.addComponentToEntity(entity, ecs::Scale { .x = 1.0f, .y = 1.0f });
-    engine.addComponentToEntity(entity, ecs::Sprite { .texture = LoadTexture("assets/characters.gif"), .source = { 0.0f, 0.0f, 32.0f, 16.0f }, .origin = { 0.0f, 0.0f } });
-    engine.addComponentToEntity(entity, ecs::Animation { .offset = { 0.0f, 0.0f, 32.0f, 0.0f }, .frames = 3, .currentFrame = 0, .chrono = std::chrono::steady_clock::now(), .elapsedTime = 300 });
-
-    EntityID entity2 = engine.createEntity();
-
-    engine.addComponentToEntity(entity2, ecs::Position { 180.0f, 180.0f });
-    engine.addComponentToEntity(entity2, ecs::Velocity { 0.0f, 0.0f, .speed = 0.0f });
-    engine.addComponentToEntity(entity2, ecs::Acceleration { 0.0f, 0.0f, .maxSpeed = 0.0f });
-    engine.addComponentToEntity(entity2, ecs::Text { "Player 1" });
-    engine.addComponentToEntity(entity2, ecs::Color { .color = WHITE });
-    engine.addComponentToEntity(entity2, ecs::FontSize { .size = 20.0f });
-
-    EntityID music = engine.createEntity();
-
-    engine.addComponentToEntity(music, ecs::Music { .music = LoadMusicStream("assets/mini1111.xm") });
-
-    PlayMusicStream(engine.getComponentFromEntity<ecs::Music>(music).music);
-    while (!WindowShouldClose()) {
-        if (IsKeyDown(KEY_UP)) {
-            engine.updateComponentToEntity(entity, ecs::Acceleration { 0.0f, -0.3f, .maxSpeed = 4.0f });
-            engine.updateComponentToEntity(entity2, ecs::Acceleration { 0.0f, -0.3f, .maxSpeed = 4.0f });
-        } else if (IsKeyDown(KEY_DOWN)) {
-            engine.updateComponentToEntity(entity, ecs::Acceleration { 0.0f, 0.3f, .maxSpeed = 4.0f });
-            engine.updateComponentToEntity(entity2, ecs::Acceleration { 0.0f, 0.3f, .maxSpeed = 4.0f });
-        } else if (IsKeyDown(KEY_LEFT)) {
-            engine.updateComponentToEntity(entity, ecs::Acceleration { -0.3f, 0.0f, .maxSpeed = 4.0f });
-            engine.updateComponentToEntity(entity2, ecs::Acceleration { -0.3f, 0.0f, .maxSpeed = 4.0f });
-        } else if (IsKeyDown(KEY_RIGHT)) {
-            engine.updateComponentToEntity(entity, ecs::Acceleration { 0.3f, 0.0f, .maxSpeed = 4.0f });
-            engine.updateComponentToEntity(entity2, ecs::Acceleration { 0.3f, 0.0f, .maxSpeed = 4.0f });
-        } else {
-            auto acceleration = engine.getComponentFromEntity<ecs::Acceleration>(entity);
-
-            acceleration.x *= -1;
-            acceleration.y *= -1;
-
-            acceleration.maxSpeed -= 0.1f;
-            acceleration.maxSpeed = acceleration.maxSpeed < 0.0f ? 0.0f : acceleration.maxSpeed;
-            engine.updateComponentToEntity(entity, acceleration);
-            engine.updateComponentToEntity(entity2, acceleration);
-        }
-
+    while (!WindowShouldClose())
+    {
         BeginDrawing();
-
         ClearBackground(BLACK);
 
-        musicSystem->update(engine);
-        movementSystem->update(engine);
-        renderAnimationSystem->update(engine);
-        renderSpriteSystem->update(engine);
-        renderTextSystem->update(engine);
+        musicSystem.update(world);
+        controllableSystem.update(world);
+        movementSystem.update(world);
+        animationSystem.update(world);
+        spriteSystem.update(world);
+        textSystem.update(world);
 
         EndDrawing();
     }
 
-    CloseAudioDevice();
     CloseWindow();
+    CloseAudioDevice();
 
     return EXIT_SUCCESS;
 }

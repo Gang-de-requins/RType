@@ -1,16 +1,17 @@
 #ifndef MOVEMENT_SYSTEM_HPP
 #define MOVEMENT_SYSTEM_HPP
 
-#include <memory>
 #include <vector>
+#include <algorithm>
 #include "components/Position.hpp"
 #include "components/Velocity.hpp"
 #include "components/Acceleration.hpp"
-#include "Archetype.hpp"
-#include "System.hpp"
+#include "ISystem.hpp"
 
 namespace ecs {
-    class MovementSystem : public System {
+    class World;
+
+    class MovementSystem : public ISystem {
         public:
             void update(World &world) override;
     };
