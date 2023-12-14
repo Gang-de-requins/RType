@@ -8,11 +8,11 @@
 #include "ISystem.hpp"
 
 namespace ecs {
-    class World;
+    class SceneManager;
 
     class ControllableSystem : public ISystem {
         public:
-            void update(World &world) override;
+            void update(SceneManager &sceneManager) override;
     };
 }
 

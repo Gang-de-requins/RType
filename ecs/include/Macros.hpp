@@ -2,6 +2,7 @@
 #define MACROS_HPP
 
 #define DEFAULT_NB_ENTITIES 1000
+#define DEFAULT_NB_SCENES 10
 
 /* -------------------- Colors -------------------- */
 #define GE_LIGHTGRAY  CLITERAL(ecs::Color){ 200, 200, 200, 255 }   // Light Gray

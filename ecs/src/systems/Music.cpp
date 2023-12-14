@@ -1,15 +1,15 @@
 #include "systems/Music.hpp"
-#include "World.hpp"
+#include "SceneManager.hpp"
 
 namespace ecs {
-    class World;
+    class SceneManager;
 
-    void MusicSystem::update(World &world) {
-        auto entities = world.view<Music>();
+    void MusicSystem::update(SceneManager &sceneManager) {
+        auto entities = sceneManager.view<Music>(sceneManager.getCurrentScene());
 
         for (auto &entity : entities) {
-            auto &music = world.get<Music>(*entity);
-            auto &musicData = world.getMusic(music.path);
+            auto &music = sceneManager.get<Music>(*entity);
+            auto &musicData = sceneManager.getMusic(music.path);
 
             IsMusicStreamPlaying(musicData) ? UpdateMusicStream(musicData) : PlayMusicStream(musicData);
         }
