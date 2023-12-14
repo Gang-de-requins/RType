@@ -10,12 +10,18 @@ namespace Client {
     {}
 
     int Game::launchGame(void) {
+        ecs::Entity &entity = this->_ecs.createEntity();
+
         while (!WindowShouldClose()) {
             BeginDrawing();
+            ClearBackground(BLACK);
 
-            ClearBackground(RAYWHITE);
-
-            DrawText("Salut, c'est Raylib !", 10, 10, 20, DARKGRAY);
+            _movementSystem.update();
+            _controllableSystem.update();
+            _spriteSystem.update();
+            _animationSystem.update();
+            _musicSystem.update();
+            _textSystem.update();
 
             EndDrawing();
         }

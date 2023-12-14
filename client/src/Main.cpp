@@ -2,7 +2,7 @@
 #include "GameEngine.hpp"
 #include "Game.hpp"
 
-int main(void) {
+int main(int ac, char **av) {
     Client::Game gameClient;
     gameClient.launchGame();
     return (0);
