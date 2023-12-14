@@ -27,4 +27,10 @@ namespace ecs {
 
         return this->m_musics.at(path);
     }
+
+    ::Sound &World::getSound(std::string_view path) {
+        if (this->m_sound.find(path) == this->m_sound.end()) {
+            this->m_sound.insert({path, LoadSound(path.data())});
+        }
+    }
 }

@@ -16,6 +16,7 @@ namespace ecs {
         std::size_t m_nextEntityId;
         std::unordered_map<std::string_view, Texture2D> m_textures;
         std::unordered_map<std::string_view, ::Music> m_musics;
+        std::unordered_map<std::string_view, ::Sound> m_sound;
 
         public:
             World() : m_nextEntityId(0), m_textures() {
@@ -59,6 +60,7 @@ namespace ecs {
             Texture2D &getTexture(std::string_view path);
 
             ::Music &getMusic(std::string_view path);
+            ::Sound &getSound(std::string_view path);
 
         private:
             template<typename... Components>
