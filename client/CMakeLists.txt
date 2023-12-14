@@ -15,6 +15,7 @@ set(ECS_LIBRARY _ecs)
 
 set(SRC
     src/Main.cpp
+    src/Game.cpp
 )
 
 add_compile_options(-Wall -Wextra -Werror -std=c++17)
