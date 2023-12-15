@@ -8,10 +8,11 @@
 #include <iostream>
 #include <boost/asio.hpp>
 #include "Rtype.hpp"
+#include "Network.hpp"
 
-serverGame::Rtype::Rtype(int port)
+serverGame::Rtype::Rtype()
 {
-    this->server.setupServer(port);
+    this->server.setupServer(12345);
     this->id = 0;
 }
 
@@ -24,14 +25,46 @@ void serverGame::Rtype::run(void)
 {
     while(true)
     {
-        this->server.receiveMessage();
+        processMessages();
     }
 }
 
-void serverGame::Rtype::addPlayer(std::string name)
+void serverGame::Rtype::processMessages(void)
+{
+    while (this->msgList.size() != 0)
+    {
+        this->mutex.lock();
+        serverGame::Message msg = this->msgList.front();
+        this->msgList.erase(this->msgList.begin());
+        this->mutex.unlock();
+
+        if (msg.getMessageType() == Network::MessageType::PlayerJoin)
+            addPlayer(msg);
+    }
+}
+
+void serverGame::Rtype::addPlayer(serverGame::Message msg)
 {
     this->id++;
-    name = "test";
-    // Player newPlayer(name, this->id, this->world);
-    // players.push_back(newPlayer);
+    Player newPlayer(msg.getMessage(), this->id, this->world);
+    newPlayer.setEndpoint(msg.getEndpoint());
+    players.push_back(newPlayer);
+
+    serverGame::Message playerJoinMessage;
+    playerJoinMessage.setMessageType(Network::MessageType::PlayerJoin);
+    playerJoinMessage.setMessage(newPlayer.getName());
+
+    for (auto& player : this->players) {
+        if (player.getId() != newPlayer.getId()) {
+            std::string playerNameMessage = player.getName();
+            serverGame::Message existingPlayerMessage;
+            existingPlayerMessage.setMessageType(Network::MessageType::PlayerJoin);
+            existingPlayerMessage.setMessage(playerNameMessage);
+            this->server.sendMessage(existingPlayerMessage, newPlayer.getEndpoint());
+
+            this->server.sendMessage(playerJoinMessage, player.getEndpoint());
+        }
+    }
 }
+
+

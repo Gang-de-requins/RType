@@ -41,8 +41,8 @@ serverGame::Player::Player(std::string name, int id, ecs::World &world)
     world.assign(this->entityName, color);
     world.assign(this->entityName, fontSize);
 
-    this->id = id;
-    this->name = name;
+    this->_id = id;
+    this->_name = name;
 }
 
 serverGame::Player::~Player()
