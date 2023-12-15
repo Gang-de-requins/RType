@@ -7,9 +7,11 @@
 #include "ISystem.hpp"
 
 namespace ecs {
+    class SceneManager;
+
     class MusicSystem : public ISystem {
         public:
-            void update(World &world) override;
+            void update(SceneManager &sceneManager) override;
     };
 }
 
