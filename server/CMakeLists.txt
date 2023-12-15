@@ -15,6 +15,7 @@ set(SRC
     src/Player.cpp
     src/Rtype.cpp
     src/Server.cpp
+    src/Message.cpp
 )
 
 add_compile_options(-Wall -Wextra -std=c++17)
