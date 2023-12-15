@@ -19,12 +19,38 @@ namespace serverGame
     public:
         Player(std::string name, int id, ecs::World &world);
         ~Player();
+        void setName(std::string name)
+        {
+            this->_name = name;
+        }
+
+        std::string getName()
+        {
+            return this->_name;
+        }
+
+        int getId()
+        {
+            return this->_id;
+        }
+
+        void setEndpoint(boost::asio::ip::udp::endpoint endpoint)
+        {
+            this->_endpoint = endpoint;
+        }
+
+        boost::asio::ip::udp::endpoint getEndpoint()
+        {
+            return this->_endpoint;
+        }
+
 
     private:
         ecs::Entity entityChar;
         ecs::Entity entityName;
-        int id;
-        std::string name;
+        int _id;
+        std::string _name;
+        boost::asio::ip::udp::endpoint _endpoint;
     };
 }
 

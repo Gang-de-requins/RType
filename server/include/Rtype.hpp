@@ -13,20 +13,25 @@
 #include "Server.hpp"
 #include "Player.hpp"
 #include "GameEngine.hpp"
-
+#include "Message.hpp"
+#include <mutex>
 
 namespace serverGame
 {
     class Rtype
     {
     public:
-        Rtype(int const port);
+        Rtype();
         ~Rtype();
         void run(void);
-        void addPlayer(std::string name);
+        void addPlayer(serverGame::Message msg);
+        void processMessages(void);
+        Server server;
+        std::vector<serverGame::Message> msgList;
+        std::mutex mutex;
+
 
     private:
-        Server server;
         std::vector<Player> players;
         ecs::World world;
         int id;

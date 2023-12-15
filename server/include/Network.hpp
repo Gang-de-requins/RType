@@ -5,32 +5,44 @@
 ** Server
 */
 
-#ifndef RTYPE_HPP_
-#define RTYPE_HPP_
+#ifndef NETWORK_HPP_
+#define NETWORK_HPP_
 
 #include <iostream>
-#include <boost/asio.hpp>
-#include "Server.hpp"
-#include "Player.hpp"
-#include "GameEngine.hpp"
+#include <vector>
+#include <cstring>
 
 
-namespace serverGame
+namespace Network
 {
-    class Rtype
-    {
-    public:
-        Rtype(int const port);
-        ~Rtype();
-        void run(void);
-        void addPlayer(std::string name);
+    enum class MessageType : char {
+        PlayerJoin = 0x01,
+        PlayerJoinResponse = 0x02,
+        PlayerAction = 0x03,
+        NewPlayer = 0x04,
+    };
 
-    private:
-        Server server;
-        std::vector<Player> players;
-        ecs::World world;
-        int id;
+    enum class PlayerActionType : char {
+        MoveLeft = 0x01,
+        MoveRight = 0x02,
+        Shoot = 0x03,
+    };
+
+    struct PlayerJoin {
+        MessageType type;
+        std::string playerName;
+    };
+
+    struct PlayerJoinResponse {
+        MessageType type;
+        int playerId;
+        bool success;
+    };
+
+    struct PlayerAction {
+        MessageType type;
+        int playerId;
+        PlayerActionType actionType;
     };
 }
-
-#endif /* !RTYPE_HPP_ */
+#endif /* !NETWORK_HPP_ */
