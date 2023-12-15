@@ -5,6 +5,7 @@
 #include <algorithm>
 #include "raylib.h"
 #include "Scene.hpp"
+#include "ParserJson.hpp"
 #include "systems/ISystem.hpp"
 #include "Macros.hpp"
 
@@ -14,8 +15,8 @@ namespace ecs {
         std::size_t m_nextSceneId;
         std::size_t m_currentSceneId;
         std::size_t m_nextEntityId;
-        std::unordered_map<std::string_view, Texture2D> m_textures;
-        std::unordered_map<std::string_view, ::Music> m_musics;
+        std::unordered_map<std::string, Texture2D> m_textures;
+        std::unordered_map<std::string, ::Music> m_musics;
 
         public:
             SceneManager() : m_scenes(), m_nextSceneId(0), m_currentSceneId(0), m_nextEntityId(0) {
@@ -36,8 +37,8 @@ namespace ecs {
             void destroyEntity(Scene &scene, Entity &entity);
 
             template<typename Component>
-            void assign(Entity &entity, Component &component) {
-                entity.components[typeid(Component).name()] = &component;
+            void assign(Entity &entity, Component component) {
+                entity.components[typeid(Component).name()] = std::make_any<Component>(component);
             }
 
             template<typename Component>
@@ -47,7 +48,12 @@ namespace ecs {
 
             template<typename Component>
             Component &get(Entity &entity) {
-                return *static_cast<Component *>(entity.components[typeid(Component).name()]);
+                try {
+                    return std::any_cast<Component &>(entity.components.at(typeid(Component).name()));
+                } catch (std::exception &e) {
+                    std::cerr << e.what() << std::endl;
+                    throw;
+                }
             }
 
             template<typename... Components>
@@ -68,15 +74,15 @@ namespace ecs {
                 (this->registerSystem<Systems>(scene), ...);
             }
 
-            void update() {
-                for (auto &system : this->m_scenes.at(this->m_currentSceneId).systems) {
-                    system->update(*this);
-                }
-            }
+            void update();
 
-            Texture2D &getTexture(std::string_view path);
+            void loadTextures(std::vector<std::string> paths);
+
+            void loadTexture(std::string path);
+
+            Texture2D &getTexture(std::string path);
             
-            ::Music &getMusic(std::string_view path);
+            ::Music &getMusic(std::string path);
 
         private:
             template<typename... Components>
@@ -88,6 +94,8 @@ namespace ecs {
             void registerSystem(Scene &scene) {
                 scene.systems.push_back(std::make_unique<System>());
             }
+
+            void loadEntitiesFromJson(Scene &scene);
     };
 }
 

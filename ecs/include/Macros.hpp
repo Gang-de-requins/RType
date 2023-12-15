@@ -31,4 +31,19 @@
 #define GE_BLANK      CLITERAL(ecs::Color){ 0, 0, 0, 0 }           // Blank (Transparent)
 #define GE_MAGENTA    CLITERAL(ecs::Color){ 255, 0, 255, 255 }     // Magenta
 
+/* -------------------- Components -------------------- */
+#define ALL_COMPONENTS "Acceleration",\
+                          "Animation",\
+                          "Color",\
+                          "Controllable",\
+                          "FontSize",\
+                          "Music",\
+                          "Position",\
+                          "Rectangle",\
+                          "Rotation",\
+                          "Scale",\
+                          "Sprite",\
+                          "Text",\
+                          "Velocity"
+
 #endif /* MACROS_HPP */

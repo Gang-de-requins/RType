@@ -12,6 +12,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(SRC
     src/World.cpp
     src/SceneManager.cpp
+    src/ParserJson.cpp
     src/systems/Movement.cpp
     src/systems/Controllable.cpp
     src/systems/Music.cpp

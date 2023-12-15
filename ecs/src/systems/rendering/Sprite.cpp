@@ -10,7 +10,7 @@ namespace ecs {
             auto &sprite = sceneManager.get<Sprite>(*entity);
             auto &scale = sceneManager.get<Scale>(*entity);
             auto &rotation = sceneManager.get<Rotation>(*entity);
-            auto &texture = sceneManager.getTexture(sprite.path);
+            auto &texture = sceneManager.getTexture(sprite.path.c_str());
 
             DrawTexturePro(
                 texture,
@@ -18,7 +18,7 @@ namespace ecs {
                 ::Rectangle{ position.x, position.y, sprite.source.width * scale.x, sprite.source.height * scale.y },
                 ::Vector2{ sprite.origin.x, sprite.origin.y },
                 rotation.angle,
-                WHITE
+                ::Color{ 255, 255, 255, 255 }
             );
         }
     }
