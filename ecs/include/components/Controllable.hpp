@@ -7,7 +7,6 @@ namespace ecs {
         int keyDown;
         int keyLeft;
         int keyRight;
-        int keySpace;
     };
 }
 

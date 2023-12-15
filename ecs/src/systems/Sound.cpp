@@ -10,9 +10,7 @@ namespace ecs {
         for (auto &entity : entities) {
             auto &sound = world.get<Sound>(*entity);
             auto &soundData = world.getSound(sound.path);
-
-            if (IsSoundPlaying(soundData))
-                PlaySound(soundData);
+            PlaySound(soundData);
         }
     }
 }
