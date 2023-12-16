@@ -7,34 +7,34 @@
 </h1>
 
 ## Table of contents
-- [Description](##Description)
-  - [History of the game](###History-of-the-game)
-  - [Goal of the project](###Goal-of-the-project)
-  - [Librairies](###Librairies)
-  - [Supported Platforms](###Supported-platforms )
-- [Installation](##Installation)
-  - [Clone the project](###Clone-the-project)
-  - [Launch the script](###Launch-the-scipt)
-    - [Linux](####Linux)
-    - [Windows](####Windows)
-- [Usage](##Usage)
-  - [Server](###Server)
-  - [Client](###Client)
-- [How to play](##How-to-play)
-  - [Settings](###Settings)
-  - [Lobby](###Lobby)
-  - [Move the player](###Move-the-player)
-    - [Keyboard](####Keyboard)
-    - [Controller](####Controller)
-  - [Kill enemies](###Kill-enemies)
-  - [Pause Game](###Pause-game)
-  - [Lose condition](###Lose-condition)
-- [About all the project](##About-all-the-project)
-  - [Protocol documentation](###Protocol-documentation)
-  - [GameEngine documentation](###Gameengine-documentation)
-  - [Server documentation](###Server-documentation)
-  - [Client documentation](###Client-documentation)
-- [Contributors](##Contributors)
+- [Description](#description)
+  - [History of the game](#history-of-the-game)
+  - [Goal of the project](#goal-of-the-project)
+  - [Librairies](#librairies)
+  - [Supported Platforms](#Supported-platforms)
+- [Installation](#installation)
+  - [Clone the project](#clone-the-project)
+  - [Launch the script](#launch-the-scipt)
+    - [Linux](#linux)
+    - [Windows](#windows)
+- [Usage](#usage)
+  - [Server](#server)
+  - [Client](#client)
+- [How to play](#how-to-play)
+  - [Settings](#settings)
+  - [Lobby](#lobby)
+  - [Move the player](#move-the-player)
+    - [Keyboard](#keyboard)
+    - [Controller](#controller)
+  - [Kill enemies](#kill-enemies)
+  - [Pause Game](#pause-game)
+  - [Lose condition](#lose-condition)
+- [About all the project](#about-all-the-project)
+  - [Protocol documentation](#protocol-documentation)
+  - [GameEngine documentation](#gameengine-documentation)
+  - [Server documentation](#server-documentation)
+  - [Client documentation](#client-documentation)
+- [Contributors](#contributors)
 
 
 ## 🚀 Description 🚀
@@ -74,8 +74,18 @@ R-tpye is composed of two parts: the server and the client, both in C++.
 
   #### Windows
 
+  To get started, issue this command to root :
+  ```bash
+  ./scripts/install_dependencies.bat
+  ```
 
-##Usage
+  Then run this command, still as root :
+  ```bash
+  ./scripts/build_project.bat
+  ``` 
+
+
+## Usage
 
 After running the script you will have two executable: "./r-type_client" and "./r-type_server
 
@@ -92,7 +102,7 @@ After running the script you will have two executable: "./r-type_client" and "./
   ```bash
   ./r-type_client
   ```
-  > *You can change the [PORT] and the [ADRESSE] on the seetings of the game.*
+  > *You can change the [PORT] and the [ADRESSE] on the settings of the game.*
 
 ## :brain: How to play :brain:
 

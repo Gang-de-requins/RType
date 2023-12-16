@@ -1,8 +1,8 @@
 #ifndef MACROS_HPP
 #define MACROS_HPP
 
-#define DEFAULT_NB_ENTITIES 1000
-#define DEFAULT_NB_SCENES 10
+#define DEFAULT_NB_ENTITIES 1000 // Default number of entities
+#define DEFAULT_NB_SCENES 10 // Default number of scenes
 
 /* -------------------- Colors -------------------- */
 #define GE_LIGHTGRAY  CLITERAL(ecs::Color){ 200, 200, 200, 255 }   // Light Gray

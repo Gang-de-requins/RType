@@ -8,7 +8,7 @@ set PROJECT_SERVER_NAME=r-type_server
 
 if not exist "build" mkdir build
 
-cmake --preset=Windows
+cmake --preset=windows
 
 cmake --build build
 
