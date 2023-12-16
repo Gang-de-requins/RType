@@ -17,16 +17,18 @@
 #include "components/Vector2.hpp"
 #include "components/Rotation.hpp"
 #include "components/Music.hpp"
-#include "components/Sound.hpp"
 
 /* Systems */
 #include "systems/Movement.hpp"
 #include "systems/Controllable.hpp"
 #include "systems/Music.hpp"
-#include "systems/Sound.hpp"
 #include "systems/rendering/Sprite.hpp"
 #include "systems/rendering/Animation.hpp"
 #include "systems/rendering/Text.hpp"
+#include "components/Components.hpp"
+
+/* Systems */
+#include "systems/Systems.hpp"
 
 #include "Entity.hpp"
 #include "World.hpp"

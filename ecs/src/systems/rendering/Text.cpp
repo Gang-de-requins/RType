@@ -1,15 +1,15 @@
 #include "systems/rendering/Text.hpp"
-#include "World.hpp"
+#include "SceneManager.hpp"
 
 namespace ecs {
-    void TextSystem::update(World &world) {
-        auto entities = world.view<Position, Text, Color, FontSize>();
+    void TextSystem::update(SceneManager &sceneManager) {
+        auto entities = sceneManager.view<Position, Text, Color, FontSize>(sceneManager.getCurrentScene());
 
         for (auto entity : entities) {
-            auto &position = world.get<Position>(*entity);
-            auto &text = world.get<Text>(*entity);
-            auto &color = world.get<Color>(*entity);
-            auto &fontSize = world.get<FontSize>(*entity);
+            auto &position = sceneManager.get<Position>(*entity);
+            auto &text = sceneManager.get<Text>(*entity);
+            auto &color = sceneManager.get<Color>(*entity);
+            auto &fontSize = sceneManager.get<FontSize>(*entity);
 
             DrawTextEx(
                 GetFontDefault(),

@@ -2,12 +2,12 @@
 #define ISYSTEM_HPP
 
 namespace ecs {
-    class World;
+    class SceneManager;
 
 	class ISystem {
         public:
             virtual ~ISystem() = default;
-            virtual void update(World &world) = 0;
+            virtual void update(SceneManager &sceneManager) = 0;
     };
 }
 

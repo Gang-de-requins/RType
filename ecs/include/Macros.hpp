@@ -1,7 +1,8 @@
 #ifndef MACROS_HPP
 #define MACROS_HPP
 
-#define DEFAULT_NB_ENTITIES 1000
+#define DEFAULT_NB_ENTITIES 1000 // Default number of entities
+#define DEFAULT_NB_SCENES 10 // Default number of scenes
 
 /* -------------------- Colors -------------------- */
 #define GE_LIGHTGRAY  CLITERAL(ecs::Color){ 200, 200, 200, 255 }   // Light Gray
@@ -29,5 +30,20 @@
 #define GE_BLACK      CLITERAL(ecs::Color){ 0, 0, 0, 255 }         // Black
 #define GE_BLANK      CLITERAL(ecs::Color){ 0, 0, 0, 0 }           // Blank (Transparent)
 #define GE_MAGENTA    CLITERAL(ecs::Color){ 255, 0, 255, 255 }     // Magenta
+
+/* -------------------- Components -------------------- */
+#define ALL_COMPONENTS "Acceleration",\
+                          "Animation",\
+                          "Color",\
+                          "Controllable",\
+                          "FontSize",\
+                          "Music",\
+                          "Position",\
+                          "Rectangle",\
+                          "Rotation",\
+                          "Scale",\
+                          "Sprite",\
+                          "Text",\
+                          "Velocity"
 
 #endif /* MACROS_HPP */

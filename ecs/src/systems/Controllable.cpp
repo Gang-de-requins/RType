@@ -1,13 +1,13 @@
 #include "systems/Controllable.hpp"
-#include "World.hpp"
+#include "SceneManager.hpp"
 
 namespace ecs {
-    void ControllableSystem::update(World &world) {
-        std::vector<Entity *> entities = world.view<Controllable, Acceleration>();
+    void ControllableSystem::update(SceneManager &sceneManager) {
+        std::vector<Entity *> entities = sceneManager.view<Controllable, Acceleration>(sceneManager.getCurrentScene());
 
         for (auto &entity : entities) {
-            Controllable &controllable = world.get<Controllable>(*entity);
-            Acceleration &acceleration = world.get<Acceleration>(*entity);
+            Controllable &controllable = sceneManager.get<Controllable>(*entity);
+            Acceleration &acceleration = sceneManager.get<Acceleration>(*entity);
 
             if (IsKeyDown(controllable.keyUp)) {
                 acceleration.ddx = 0;
