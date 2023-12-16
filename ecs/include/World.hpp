@@ -30,7 +30,11 @@ namespace ecs {
      * 
      */
     class World {
-        SceneManager m_sceneManager; // Scene manager
+        std::vector<Entity> m_entities;
+        std::size_t m_nextEntityId;
+        std::unordered_map<std::string_view, Texture2D> m_textures;
+        std::unordered_map<std::string_view, ::Music> m_musics;
+        std::unordered_map<std::string_view, ::Sound> m_sound;
 
         public:
             /**
@@ -157,6 +161,7 @@ namespace ecs {
              */
             void update();
 
+            ::Music &getMusic(std::string_view path);
             /**
              * @fn World::loadTextures
              * @brief Load textures
