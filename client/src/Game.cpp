@@ -16,6 +16,7 @@ namespace rtype {
         InitAudioDevice();
         InitWindow(800, 450, "rtype");
         SetTargetFPS(60);
+        this->m_world.loadTextures({ "assets/characters.gif" });
 
         while (!WindowShouldClose())
         {

@@ -1,15 +1,13 @@
 #include "systems/Sound.hpp"
-#include "World.hpp"
+#include "SceneManager.hpp"
 
 namespace ecs {
-    class World;
-
-    void SoundSystem::update(World &world) {
-        auto entities = world.view<Sound>();
+    void SoundSystem::update(SceneManager &sceneManager) {
+        auto entities = sceneManager.view<Sound>(sceneManager.getCurrentScene());
 
         for (auto &entity : entities) {
-            auto &sound = world.get<Sound>(*entity);
-            auto &soundData = world.getSound(sound.path);
+            auto &sound = sceneManager.get<Sound>(*entity);
+            auto &soundData = sceneManager.getSound(sound.path);
             PlaySound(soundData);
         }
     }
