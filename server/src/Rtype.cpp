@@ -38,8 +38,66 @@ void serverGame::Rtype::processMessages(void)
         this->msgList.erase(this->msgList.begin());
         this->mutex.unlock();
 
+        std::cout << msg.getEndpoint() << std::endl;
         if (msg.getMessageType() == Network::MessageType::PlayerJoin)
             addPlayer(msg);
+        if (msg.getMessageType() == Network::MessageType::GoRight)
+            GoDirection(msg, Network::MessageType::GoRight);
+        if (msg.getMessageType() == Network::MessageType::GoLeft)
+            GoDirection(msg, Network::MessageType::GoLeft);
+        if (msg.getMessageType() == Network::MessageType::GoTop)
+            GoDirection(msg, Network::MessageType::GoTop);
+        if (msg.getMessageType() == Network::MessageType::GoBottom)
+            GoDirection(msg, Network::MessageType::GoBottom);
+
+        if (msg.getMessageType() == Network::MessageType::StopRight)
+            StopDirection(msg, Network::MessageType::StopRight);
+        if (msg.getMessageType() == Network::MessageType::StopLeft)
+            StopDirection(msg, Network::MessageType::StopLeft);
+        if (msg.getMessageType() == Network::MessageType::StopTop)
+            StopDirection(msg, Network::MessageType::StopTop);
+        if (msg.getMessageType() == Network::MessageType::StopBottom)
+            StopDirection(msg, Network::MessageType::StopBottom);
+    }
+}
+
+void serverGame::Rtype::GoDirection(serverGame::Message msg, Network::MessageType dir)
+{
+    auto it = std::find_if(players.begin(), players.end(), [&msg](const Player& player) {
+        return player.getEndpoint() == msg.getEndpoint();
+    });
+
+    if (it != players.end()) {
+        const Player& matchingPlayer = *it;
+
+        serverGame::Message goRightMessage;
+        goRightMessage.setMessageType(dir);
+        goRightMessage.setMessage(matchingPlayer.getName());
+        for (auto& player : this->players) {
+            if (player.getEndpoint() != msg.getEndpoint()) {
+                this->server.sendMessage(goRightMessage, player.getEndpoint());
+            }
+        }
+    }
+}
+
+void serverGame::Rtype::StopDirection(serverGame::Message msg, Network::MessageType dir)
+{
+    auto it = std::find_if(players.begin(), players.end(), [&msg](const Player& player) {
+        return player.getEndpoint() == msg.getEndpoint();
+    });
+
+    if (it != players.end()) {
+        const Player& matchingPlayer = *it;
+
+        serverGame::Message goRightMessage;
+        goRightMessage.setMessageType(dir);
+        goRightMessage.setMessage(matchingPlayer.getName());
+        for (auto& player : this->players) {
+            if (player.getEndpoint() != msg.getEndpoint()) {
+                this->server.sendMessage(goRightMessage, player.getEndpoint());
+            }
+        }
     }
 }
 

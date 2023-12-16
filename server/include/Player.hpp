@@ -24,12 +24,12 @@ namespace serverGame
             this->_name = name;
         }
 
-        std::string getName()
+        std::string getName() const
         {
             return this->_name;
         }
 
-        int getId()
+        int getId() const
         {
             return this->_id;
         }
@@ -39,7 +39,7 @@ namespace serverGame
             this->_endpoint = endpoint;
         }
 
-        boost::asio::ip::udp::endpoint getEndpoint()
+        boost::asio::ip::udp::endpoint getEndpoint() const
         {
             return this->_endpoint;
         }
