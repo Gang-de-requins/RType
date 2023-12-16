@@ -20,6 +20,14 @@ namespace Network
         PlayerJoinResponse = 0x02,
         PlayerAction = 0x03,
         NewPlayer = 0x04,
+        GoRight = 0x05,
+        GoLeft = 0x06,
+        GoTop = 0x07,
+        GoBottom = 0x08,
+        StopRight = 0x09,
+        StopLeft = 0x10,
+        StopTop = 0x11,
+        StopBottom = 0x12,
     };
 
     enum class PlayerActionType : char {
