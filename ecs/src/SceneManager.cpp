@@ -41,17 +41,25 @@ namespace ecs {
         }
     }
 
-    void SceneManager::loadTextures(std::vector<std::string> paths) {
+    void SceneManager::loadTextures(std::vector<std::string> &paths) {
         for (auto &path : paths) {
             this->getTexture(path);
         }
     }
 
-    void SceneManager::loadTexture(std::string path) {
-        this->getTexture(path);
+    void SceneManager::loadMusics(std::vector<std::string> &paths) {
+        for (auto &path : paths) {
+            this->getMusic(path);
+        }
     }
 
-    Texture2D &SceneManager::getTexture(std::string path) {
+    void SceneManager::loadSounds(std::vector<std::string> &paths) {
+        for (auto &path : paths) {
+            this->getSound(path);
+        }
+    }
+
+    Texture2D &SceneManager::getTexture(std::string &path) {
         if (this->m_textures.find(path) == this->m_textures.end()) {
             this->m_textures.insert({path, LoadTexture(path.c_str())});
         }
@@ -59,12 +67,20 @@ namespace ecs {
         return this->m_textures.at(path);
     }
 
-    ::Music &SceneManager::getMusic(std::string path) {
+    ::Music &SceneManager::getMusic(std::string &path) {
         if (this->m_musics.find(path) == this->m_musics.end()) {
             this->m_musics.insert({path, LoadMusicStream(path.c_str())});
         }
 
         return this->m_musics.at(path);
+    }
+
+    ::Sound &SceneManager::getSound(std::string &path) {
+        if (this->m_sounds.find(path) == this->m_sounds.end()) {
+            this->m_sounds.insert({path, LoadSound(path.c_str())});
+        }
+
+        return this->m_sounds.at(path);
     }
 
     void SceneManager::loadEntitiesFromJson(Scene &scene) {

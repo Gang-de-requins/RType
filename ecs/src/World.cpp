@@ -33,13 +33,11 @@ namespace ecs {
         this->m_sceneManager.loadTextures(paths);
     }
 
-    void World::loadTexture(std::string path) {
-        this->m_sceneManager.loadTexture(path);
+    void World::loadMusics(std::vector<std::string> paths) {
+        this->m_sceneManager.loadMusics(paths);
     }
 
-    ::Sound &World::getSound(std::string_view path) {
-        if (this->m_sound.find(path) == this->m_sound.end()) {
-            this->m_sound.insert({path, LoadSound(path.data())});
-        }
+    void World::loadSounds(std::vector<std::string> paths) {
+        this->m_sceneManager.loadSounds(paths);
     }
 }

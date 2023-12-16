@@ -2,8 +2,6 @@
 #include "SceneManager.hpp"
 
 namespace ecs {
-    class SceneManager;
-
     void MusicSystem::update(SceneManager &sceneManager) {
         auto entities = sceneManager.view<Music>(sceneManager.getCurrentScene());
 

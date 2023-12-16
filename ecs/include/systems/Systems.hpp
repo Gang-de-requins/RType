@@ -4,6 +4,7 @@
 #include "Controllable.hpp"
 #include "Movement.hpp"
 #include "Music.hpp"
+#include "Sound.hpp"
 #include "rendering/Animation.hpp"
 #include "rendering/Sprite.hpp"
 #include "rendering/Text.hpp"

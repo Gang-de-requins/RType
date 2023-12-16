@@ -42,6 +42,7 @@ namespace ecs {
         std::size_t m_nextEntityId; // Next entity id
         std::unordered_map<std::string, Texture2D> m_textures; // Textures
         std::unordered_map<std::string, ::Music> m_musics; // Musics
+        std::unordered_map<std::string, ::Sound> m_sounds; // Sounds
 
         public:
             /**
@@ -193,20 +194,28 @@ namespace ecs {
             void update();
 
             /**
-             * @fn SceneManager::loadScene
-             * @brief Load a scene from a json file
+             * @fn SceneManager::loadTextures
+             * @brief Load textures
              * 
-             * @param path The path to the json file.
+             * @param path The path to the textures.
              */
-            void loadTextures(std::vector<std::string> paths);
+            void loadTextures(std::vector<std::string> &paths);
 
             /**
-             * @fn SceneManager::loadTexture
-             * @brief Load a texture
+             * @fn SceneManager::loadMusics
+             * @brief Load musics
              * 
-             * @param path The path to the texture.
+             * @param paths The paths to the musics.
              */
-            void loadTexture(std::string path);
+            void loadMusics(std::vector<std::string> &paths);
+
+            /**
+             * @fn SceneManager::loadSounds
+             * @brief Load sounds
+             * 
+             * @param paths The paths to the sounds.
+             */
+            void loadSounds(std::vector<std::string> &paths);
 
             /**
              * @fn SceneManager::getTexture
@@ -215,15 +224,25 @@ namespace ecs {
              * @param path The path to the texture.
              * @return The texture.
              */
-            Texture2D &getTexture(std::string path);
+            Texture2D &getTexture(std::string &path);
 
             /**
-             * @fn SceneManager::loadMusics
-             * @brief Load musics
+             * @fn SceneManager::getMusic
+             * @brief Get a music
              * 
-             * @param paths The paths to the musics.
+             * @param paths The path to the music.
+             * @return The music.
              */
-            ::Music &getMusic(std::string path);
+            ::Music &getMusic(std::string &path);
+
+            /**
+             * @fn SceneManager::getSound
+             * @brief Get a sound
+             * 
+             * @param path The path to the sound.
+             * @return The sound.
+             */
+            ::Sound &getSound(std::string &path);
 
         private:
             /**
