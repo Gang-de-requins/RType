@@ -224,7 +224,7 @@ namespace ecs {
              * @param path The path to the texture.
              * @return The texture.
              */
-            Texture2D &getTexture(std::string &path);
+            Texture2D &getTexture(std::string path);
 
             /**
              * @fn SceneManager::getMusic
@@ -233,7 +233,7 @@ namespace ecs {
              * @param paths The path to the music.
              * @return The music.
              */
-            ::Music &getMusic(std::string &path);
+            ::Music &getMusic(std::string path);
 
             /**
              * @fn SceneManager::getSound
@@ -242,7 +242,7 @@ namespace ecs {
              * @param path The path to the sound.
              * @return The sound.
              */
-            ::Sound &getSound(std::string &path);
+            ::Sound &getSound(std::string path);
 
         private:
             /**

@@ -40,7 +40,16 @@ namespace rtype {
 
     void Network::receive(Game &game)
     {
-        std::cout << "Receiving messages" << std::endl;
+        std::vector<::Network::MessageType> directions = {
+            ::Network::MessageType::GoRight,
+            ::Network::MessageType::GoLeft,
+            ::Network::MessageType::GoTop,
+            ::Network::MessageType::GoBottom,
+            ::Network::MessageType::StopRight,
+            ::Network::MessageType::StopLeft,
+            ::Network::MessageType::StopTop,
+            ::Network::MessageType::StopBottom,
+        };
 
         while (this->m_running) {
             try {
@@ -56,6 +65,9 @@ namespace rtype {
                         if (messageType == ::Network::MessageType::PlayerJoin) {
                             this->newPlayerConnected(game, msg);
                         }
+                        if (std::find(directions.begin(), directions.end(), messageType) != directions.end()) {
+                            this->moveEntity(game, msg, messageType);
+                        }
                     }
                 }
             } catch (const std::exception &e) {
@@ -65,6 +77,13 @@ namespace rtype {
         }
         std::cout << "Stopped receiving messages" << std::endl;
     }
+
+    void Network::setRunning(bool running)
+    {
+        this->m_running = running;
+    }
+
+    /* ---------------------------- PRIVATE FUNCTIONS --------------------------- */
 
     void Network::newPlayerConnected(Game &game, std::string name)
     {
@@ -86,15 +105,21 @@ namespace rtype {
         world.assign(text, ecs::Position{pos.first - 20, pos.second - 20});
         world.assign(text, ecs::Text{name});
         world.assign(text, ecs::FontSize{20});
-        world.assign(text, WHITE);
+        world.assign(text, ecs::Color{255, 255, 255, 255});
+        world.assign(text, ecs::Velocity{0, 0});
+        world.assign(text, ecs::Acceleration{0, 0, 4});
 
         Player newPlayer(player, text, name);
 
         game.addPlayer(newPlayer);
     }
 
-    void Network::setRunning(bool running)
+    void Network::moveEntity(Game &game, std::string name, ::Network::MessageType direction)
     {
-        this->m_running = running;
+        for (auto &player : game.getPlayers()) {
+            if (player.getName() == name) {
+                player.move(game, direction);
+            }
+        }
     }
 }

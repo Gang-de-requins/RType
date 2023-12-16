@@ -24,6 +24,7 @@ namespace rtype {
             ecs::World &getWorld();
             float getOffsetColorSpaceship() const;
             void addPlayer(Player &player);
+            std::vector<Player> &getPlayers();
 
         private:
             void initScenes();
