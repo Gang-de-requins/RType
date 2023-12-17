@@ -6,7 +6,10 @@ namespace rtype {
     m_spaceship(Entityspaceship),
     m_name(Entityname),
     c_name(name),
-    m_isMoving(false)
+    m_isMovingTop(false),
+    m_isMovingBottom(false),
+    m_isMovingLeft(false),
+    m_isMovingRight(false)
     {
     }
 
@@ -34,10 +37,11 @@ namespace rtype {
         ecs::World &world = game.getWorld();
         ecs::Acceleration &accSpaceship = world.get<ecs::Acceleration>(this->m_spaceship);
         ecs::Acceleration &accName = world.get<ecs::Acceleration>(this->m_name);
+        std::thread stopThread;
 
         switch (direction) {
             case ::Network::MessageType::GoTop:
-                this->m_isMoving = true;
+                this->m_isMovingTop = true;
                 accSpaceship.ddx = 0;
                 accSpaceship.ddy = -0.3f;
                 accSpaceship.maxSpeed = 4.0f;
@@ -46,7 +50,7 @@ namespace rtype {
                 accName.maxSpeed = 4.0f;
                 break;
             case ::Network::MessageType::GoBottom:
-                this->m_isMoving = true;
+                this->m_isMovingBottom = true;
                 accSpaceship.ddx = 0;
                 accSpaceship.ddy = 0.3f;
                 accSpaceship.maxSpeed = 4.0f;
@@ -55,7 +59,7 @@ namespace rtype {
                 accName.maxSpeed = 4.0f;
                 break;
             case ::Network::MessageType::GoLeft:
-                this->m_isMoving = true;
+                this->m_isMovingLeft = true;
                 accSpaceship.ddx = -0.3f;
                 accSpaceship.ddy = 0;
                 accSpaceship.maxSpeed = 4.0f;
@@ -64,7 +68,7 @@ namespace rtype {
                 accName.maxSpeed = 4.0f;
                 break;
             case ::Network::MessageType::GoRight:
-                this->m_isMoving = true;
+                this->m_isMovingRight = true;
                 accSpaceship.ddx = 0.3f;
                 accSpaceship.ddy = 0;
                 accSpaceship.maxSpeed = 4.0f;
@@ -72,11 +76,33 @@ namespace rtype {
                 accName.ddy = 0;
                 accName.maxSpeed = 4.0f;
                 break;
-            default:
-                this->m_isMoving = false;
-                std::thread stopThread(&Player::stopMoving, this, std::ref(accSpaceship), std::ref(accName));
+            case ::Network::MessageType::StopTop:
+                this->m_isMovingTop = false;
+                stopThread = std::thread(&Player::stopMoving, this, std::ref(accSpaceship), std::ref(accName));
                 stopThread.detach();
                 break;
+            case ::Network::MessageType::StopBottom:
+                this->m_isMovingBottom = false;
+                stopThread = std::thread(&Player::stopMoving, this, std::ref(accSpaceship), std::ref(accName));
+                stopThread.detach();
+                break;
+            case ::Network::MessageType::StopLeft:
+                this->m_isMovingLeft = false;
+                stopThread = std::thread(&Player::stopMoving, this, std::ref(accSpaceship), std::ref(accName));
+                stopThread.detach();
+                break;
+            case ::Network::MessageType::StopRight:
+                this->m_isMovingRight = false;
+                stopThread = std::thread(&Player::stopMoving, this, std::ref(accSpaceship), std::ref(accName));
+                stopThread.detach();
+                break;
+            default:
+                break;
+            // default:
+            //     this->m_isMoving = false;
+            //     std::thread stopThread(&Player::stopMoving, this, std::ref(accSpaceship), std::ref(accName));
+            //     stopThread.detach();
+            //     break;
         }
     }
 
@@ -84,7 +110,7 @@ namespace rtype {
     {
         std::mutex mutex;
 
-        while (!this->m_isMoving && accSpaceship.maxSpeed > 0.0f && accName.maxSpeed > 0.0f) {
+        while (!this->m_isMovingTop && !this->m_isMovingBottom && !this->m_isMovingLeft && !this->m_isMovingRight) {
             std::unique_lock<std::mutex> lock(mutex);
             accSpaceship.ddx *= -1;
             accSpaceship.ddy *= -1;

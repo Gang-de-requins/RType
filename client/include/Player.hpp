@@ -18,7 +18,10 @@ namespace rtype {
         ecs::Entity &m_spaceship;
         ecs::Entity &m_name;
         const std::string c_name;
-        bool m_isMoving;
+        bool m_isMovingTop;
+        bool m_isMovingBottom;
+        bool m_isMovingLeft;
+        bool m_isMovingRight;
 
         public:
             Player(ecs::Entity &Entityspaceship, ecs::Entity &Entityname, const std::string &name);
