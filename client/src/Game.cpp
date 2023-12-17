@@ -20,6 +20,24 @@ namespace rtype {
 
         while (!WindowShouldClose())
         {
+            if (IsKeyPressed(KEY_UP))
+                this->m_network.send(::Network::MessageType::GoTop, "Player1");
+            if (IsKeyPressed(KEY_DOWN))
+                this->m_network.send(::Network::MessageType::GoBottom, "Player1");
+            if (IsKeyPressed(KEY_LEFT))
+                this->m_network.send(::Network::MessageType::GoLeft, "Player1");
+            if (IsKeyPressed(KEY_RIGHT))
+                this->m_network.send(::Network::MessageType::GoRight, "Player1");
+            
+            if (IsKeyReleased(KEY_UP))
+                this->m_network.send(::Network::MessageType::StopTop, "Player1");
+            if (IsKeyReleased(KEY_DOWN))
+                this->m_network.send(::Network::MessageType::StopBottom, "Player1");
+            if (IsKeyReleased(KEY_LEFT))
+                this->m_network.send(::Network::MessageType::StopLeft, "Player1");
+            if (IsKeyReleased(KEY_RIGHT))
+                this->m_network.send(::Network::MessageType::StopRight, "Player1");
+
             BeginDrawing();
             ClearBackground(BLACK);
 
@@ -40,15 +58,17 @@ namespace rtype {
 
     float Game::getOffsetColorSpaceship() const
     {
-        // return this->m_players.size() * 16;
-        float offset = this->m_players.size() * 16;
-        std::cout << "Offset: " << offset << std::endl;
-        return offset;
+        return this->m_players.size() * 16;
     }
 
     void Game::addPlayer(Player &player)
     {
         this->m_players.push_back(player);
+    }
+
+    std::vector<Player> &Game::getPlayers()
+    {
+        return this->m_players;
     }
 
     /* ---------------------------- PRIVATE FUNCTIONS --------------------------- */
