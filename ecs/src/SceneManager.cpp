@@ -2,7 +2,7 @@
 
 namespace ecs {
     Scene &SceneManager::createScene() {
-        this->m_scenes.emplace_back(Scene{this->m_nextSceneId++, {}, {}, "", false});
+        this->m_scenes.emplace_back(Scene{this->m_nextSceneId++, {}, {}, {}, "", false});
         return this->m_scenes.back();
     }
     
@@ -35,10 +35,21 @@ namespace ecs {
         }), scene.entities.end());
     }
 
+    Entity &SceneManager::getEntityById(Scene &scene, std::size_t id) {
+        return *std::find_if(scene.entities.begin(), scene.entities.end(), [&id](const Entity &e) {
+            return e.id == id;
+        });
+    }
+
     void SceneManager::update() {
         for (auto &system : this->m_scenes.at(this->m_currentSceneId).systems) {
             system->update(*this);
         }
+
+        // for (auto &entity : this->m_scenes.at(this->m_currentSceneId).entitiesToDelete) {
+        //     this->destroyEntity(this->getCurrentScene(), entity);
+        // }
+        // this->m_scenes.at(this->m_currentSceneId).entitiesToDelete.clear();
     }
 
     void SceneManager::loadTextures(std::vector<std::string> &paths) {
@@ -59,7 +70,7 @@ namespace ecs {
         }
     }
 
-    Texture2D &SceneManager::getTexture(std::string &path) {
+    Texture2D &SceneManager::getTexture(std::string path) {
         if (this->m_textures.find(path) == this->m_textures.end()) {
             this->m_textures.insert({path, LoadTexture(path.c_str())});
         }
@@ -67,7 +78,7 @@ namespace ecs {
         return this->m_textures.at(path);
     }
 
-    ::Music &SceneManager::getMusic(std::string &path) {
+    ::Music &SceneManager::getMusic(std::string path) {
         if (this->m_musics.find(path) == this->m_musics.end()) {
             this->m_musics.insert({path, LoadMusicStream(path.c_str())});
         }
@@ -75,7 +86,7 @@ namespace ecs {
         return this->m_musics.at(path);
     }
 
-    ::Sound &SceneManager::getSound(std::string &path) {
+    ::Sound &SceneManager::getSound(std::string path) {
         if (this->m_sounds.find(path) == this->m_sounds.end()) {
             this->m_sounds.insert({path, LoadSound(path.c_str())});
         }

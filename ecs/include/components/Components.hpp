@@ -10,6 +10,7 @@
 #include "FontSize.hpp"
 #include "Health.hpp"
 #include "Music.hpp"
+#include "Name.hpp"
 #include "Position.hpp"
 #include "Rectangle.hpp"
 #include "Rotation.hpp"

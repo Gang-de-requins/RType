@@ -5,6 +5,7 @@
 #include <algorithm>
 #include "components/Collision.hpp"
 #include "components/Position.hpp"
+#include "components/Sprite.hpp"
 #include "components/Rectangle.hpp"
 #include "components/Velocity.hpp"
 #include "components/Acceleration.hpp"

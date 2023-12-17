@@ -34,6 +34,7 @@ namespace ecs {
     struct Scene {
         std::size_t id;
         std::vector<Entity> entities;
+        std::vector<Entity *> entitiesToDelete;
         std::vector<std::unique_ptr<ISystem>> systems;
         std::string_view path;
         bool loadFromPath;

@@ -19,13 +19,25 @@ namespace ecs {
                 Sprite &sprite2 = sceneManager.get<Sprite>(*entity2);
 
                 if (isColliding(position1, sprite1, position2, sprite2)) {
-                    Collision &collision1 = sceneManager.get<Collision>(*entity1);
-                    Collision &collision2 = sceneManager.get<Collision>(*entity2);
-
                     collision1.isColliding = true;
-                    collision2.isColliding = true;
                     collision1.collidingWith.push_back(entity2->id);
-                    collision2.collidingWith.push_back(entity1->id);
+
+                    if (sceneManager.has<Velocity>(*entity1)) {
+                        Velocity &velocity1 = sceneManager.get<Velocity>(*entity1);
+                        velocity1.dx = 0;
+                        velocity1.dy = 0;
+
+                        float overlapX = (position1.x + sprite1.source.width) - position2.x;
+                        float overlapY = (position1.y + sprite1.source.height) - position2.y;
+
+                        if (std::abs(overlapX) < std::abs(overlapY)) {
+                            position1.x -= overlapX / 2;
+                            position2.x += overlapX / 2;
+                        } else {
+                            position1.y -= overlapY / 2;
+                            position2.y += overlapY / 2;
+                        }
+                    }
                 }
             }
         }

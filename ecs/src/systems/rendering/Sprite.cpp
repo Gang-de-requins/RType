@@ -5,7 +5,7 @@ namespace ecs {
     void SpriteSystem::update(SceneManager &sceneManager) {
         auto entities = sceneManager.view<Position, Sprite, Scale, Rotation>(sceneManager.getCurrentScene());
 
-        for (auto entity : entities) {
+        for (auto &entity : entities) {
             auto &position = sceneManager.get<Position>(*entity);
             auto &sprite = sceneManager.get<Sprite>(*entity);
             auto &scale = sceneManager.get<Scale>(*entity);

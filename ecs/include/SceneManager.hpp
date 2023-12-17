@@ -110,6 +110,16 @@ namespace ecs {
              */
             void destroyEntity(Scene &scene, Entity &entity);
 
+            Entity &getEntityById(Scene &scene, std::size_t id);
+
+            // auto getEntitiesToDelete(Scene &scene) {
+            //     std::vector<Entity *> entitiesToDelete;
+
+            //     for (auto &entity : scene.entitiesToDelete) {
+            //         entitiesToDelete.push_back(&entity);
+            //     }
+            // }
+
             /**
              * @fn SceneManager::assign
              * @brief Assign a component to an entity
@@ -133,6 +143,19 @@ namespace ecs {
             template<typename Component>
             void remove(Entity &entity) {
                 entity.components.erase(typeid(Component).name());
+            }
+
+            /**
+             * @fn SceneManager::has
+             * @brief Check if an entity has a component
+             * 
+             * @tparam Component The type of the component.
+             * @param entity The entity to check.
+             * @return true if the entity has the component, false otherwise.
+             */
+            template<typename Component>
+            bool has(Entity &entity) {
+                return entity.components.find(typeid(Component).name()) != entity.components.end();
             }
 
             /**
@@ -224,7 +247,7 @@ namespace ecs {
              * @param path The path to the texture.
              * @return The texture.
              */
-            Texture2D &getTexture(std::string &path);
+            Texture2D &getTexture(std::string path);
 
             /**
              * @fn SceneManager::getMusic
@@ -233,7 +256,7 @@ namespace ecs {
              * @param paths The path to the music.
              * @return The music.
              */
-            ::Music &getMusic(std::string &path);
+            ::Music &getMusic(std::string path);
 
             /**
              * @fn SceneManager::getSound
@@ -242,7 +265,7 @@ namespace ecs {
              * @param path The path to the sound.
              * @return The sound.
              */
-            ::Sound &getSound(std::string &path);
+            ::Sound &getSound(std::string path);
 
         private:
             /**
