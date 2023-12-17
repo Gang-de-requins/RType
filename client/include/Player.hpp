@@ -34,7 +34,7 @@ namespace rtype {
             void move(Game &game, ::Network::MessageType direction);
         
         private:
-            void stopMoving(ecs::Acceleration &accSpaceship, ecs::Acceleration &accName);
+            void stopMoving(ecs::Acceleration &accSpaceship);
     };
 }
 
