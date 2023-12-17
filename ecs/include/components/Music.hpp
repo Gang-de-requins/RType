@@ -1,11 +1,11 @@
 #ifndef MUSIC_COMPONENT_HPP
 #define MUSIC_COMPONENT_HPP
 
-#include "raylib.h"
+#include <string>
 
 namespace ecs {
     struct Music {
-        ::Music music;
+        std::string path;
     };
 }
 

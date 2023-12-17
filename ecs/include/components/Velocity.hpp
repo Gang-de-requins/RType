@@ -3,9 +3,8 @@
 
 namespace ecs {
     struct Velocity {
-        float x;
-        float y;
-        float speed;
+        float dx;
+        float dy;
     };
 }
 

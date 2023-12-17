@@ -1,16 +1,17 @@
 #ifndef MUSIC_SYSTEM_HPP
 #define MUSIC_SYSTEM_HPP
 
-#include <memory>
 #include <vector>
+#include "raylib.h"
 #include "components/Music.hpp"
-#include "Archetype.hpp"
-#include "System.hpp"
+#include "ISystem.hpp"
 
 namespace ecs {
-    class MusicSystem : public System {
+    class SceneManager;
+
+    class MusicSystem : public ISystem {
         public:
-            void update(World &world) override;
+            void update(SceneManager &sceneManager) override;
     };
 }
 

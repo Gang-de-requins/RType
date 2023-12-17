@@ -1,211 +1,185 @@
 #ifndef WORLD_HPP
 #define WORLD_HPP
 
-#include <iostream>
+#include <unordered_map>
 #include <string_view>
 #include <vector>
-#include <memory>
-#include <unordered_map>
-#include "CustomExceptions.hpp"
-#include "Archetype.hpp"
-#include "System.hpp"
+#include <algorithm>
+#include <typeinfo>
+#include "Entity.hpp"
+#include "SceneManager.hpp"
 #include "Macros.hpp"
 
+/**
+ * @namespace ecs
+ * @brief Namespace of the ECS library
+ * 
+ * @details
+ * This namespace contains all the classes and functions of the ECS library.
+ */
 namespace ecs {
+    /**
+     * @class World
+     * @brief World class
+     * 
+     * @details
+     * This class is used to manage the scenes and the entities.
+     * 
+     * @var World::m_sceneManager
+     * The scene manager.
+     * 
+     */
     class World {
-        EntityID _nextEntity;
-        ComponentTypeID _nextComponentType;
-        std::unordered_map<EntityID, ArchetypeID> _entityToArchetypeMap;
-        std::unordered_map<ArchetypeID, std::shared_ptr<Archetype>> _archetypes;
-        std::unordered_map<const char*, ComponentTypeID> _componentTypes;
-        std::unordered_map<const char*, ArchetypeID> _systemToArchetypeMap;
-        std::unordered_map<const char*, std::shared_ptr<System>> _systems;
-
-        private:
-            void addComponentType(const char *&typeName) noexcept;
-            ArchetypeID updateEntityArchetypeID(const EntityID &entity, const ComponentTypeID &componentType, const bool &isSet);
-            void createArchetype(const ArchetypeID &archetypeId) noexcept;
-            void updateSystemArchetype(const char *&systemTypeName, ArchetypeID &systemArchetypeId) noexcept;
-
-            template<typename C>
-            void addComponentToEntityArchetype(const EntityID &entity, C &component, const ComponentTypeID &componentType) noexcept
-            {
-                ArchetypeID oldArchetypeId = this->_entityToArchetypeMap.at(entity);
-                ArchetypeID newArchetypeId = this->updateEntityArchetypeID(entity, componentType, true);
-
-                if (this->_archetypes.find(newArchetypeId) == this->_archetypes.end()) {
-                    this->createArchetype(newArchetypeId);
-                }
-
-                std::shared_ptr<Archetype> newArchetype = this->_archetypes.at(newArchetypeId);
-                newArchetype->addEntity(entity);
-
-                if (oldArchetypeId.any()) {
-                    std::shared_ptr<Archetype> oldArchetype = this->_archetypes.at(oldArchetypeId);
-                    oldArchetype->removeEntity(entity);
-                    oldArchetype->transferComponents(entity, newArchetype);
-                }
-
-                newArchetype->addComponent(entity, component);
-            }
-
-            template<typename C>
-            void updateComponentEntityArchetype(const EntityID &entity, C &component) noexcept
-            {
-                ArchetypeID archetypeId = this->_entityToArchetypeMap.at(entity);
-
-                if (this->_archetypes.find(archetypeId) == this->_archetypes.end()) {
-                    std::cerr << "Archetype does not exist." << std::endl;
-                    return;
-                }
-
-                std::shared_ptr<Archetype> archetype = this->_archetypes.at(archetypeId);
-
-                archetype->updateComponent(entity, component);
-            }
+        SceneManager m_sceneManager; // Scene manager
 
         public:
-            World() noexcept;
-            EntityID createEntity() noexcept;
-            void destroyEntity(const EntityID &entity) noexcept;
-
-            template<typename C>
-            void addComponentToEntity(EntityID entity, C component) noexcept
-            {
-                const char *typeName = typeid(C).name();
-
-                if (this->_componentTypes.find(typeName) == this->_componentTypes.end()) {
-                    this->addComponentType(typeName);
-                }
-
-                ComponentTypeID componentTypeId = this->_componentTypes.at(typeName);
-
-                this->addComponentToEntityArchetype(entity, component, componentTypeId);
+            /**
+             * @fn World::World
+             * @brief Construct a new World object
+             * 
+             */
+            World() : m_sceneManager() {
             }
 
-            template<typename C>
-            void updateComponentToEntity(EntityID entity, C component) noexcept
-            {
-                const char *typeName = typeid(C).name();
+            /**
+             * @fn World::~World
+             * @brief Destroy the World object
+             * 
+             */
+            ~World() {
+            }
+            /**
+             * @fn World::createScene
+             * @brief Create a scene
+             * 
+             * @return The created scene.
+             */
+            Scene &createScene();
+            /**
+             * @fn World::destroyScene
+             * @brief Destroy a scene
+             * 
+             * @param scene The scene to destroy.
+             */
+            void destroyScene(Scene &scene);
 
-                if (this->_componentTypes.find(typeName) == this->_componentTypes.end()) {
-                    std::cerr << "Component type not registered." << std::endl;
-                    return;
-                }
+            /**
+             * @fn World::switchToScene
+             * @brief Switch to a scene
+             * 
+             * @param sceneId The id of the scene to switch to.
+             */
+            void switchToScene(std::size_t sceneId);
+            /**
+             * @fn World::getCurrentScene
+             * @brief Get the current scene
+             * 
+             * @return The current scene.
+             */
+            Scene &getCurrentScene();
 
-                this->updateComponentEntityArchetype(entity, component);
+            /**
+             * @fn World::createEntity
+             * @brief Create an entity
+             * 
+             * @param scene The scene in which the entity will be created.
+             * @return The created entity.
+             */
+            Entity &createEntity(Scene &scene);
+            /**
+             * @fn World::destroyEntity
+             * @brief Destroy an entity
+             * 
+             * @param scene The scene in which the entity will be destroyed.
+             * @param entity The entity to destroy.
+             */
+            void destroyEntity(Scene &scene, Entity &entity);
+
+            /**
+             * @fn World::assign
+             * @brief Assign a component to an entity
+             * 
+             * @tparam Component The type of the component to assign.
+             * @param entity The entity to which the component will be assigned.
+             * @param component The component to assign.
+             */
+            template<typename Component>
+            void assign(Entity &entity, Component component) {
+                entity.components[typeid(Component).name()] = std::make_any<Component>(component);
             }
 
-            template<typename S>
-            std::shared_ptr<S> addSystem() noexcept
-            {
-                const char *typeName = typeid(S).name();
-
-                if (this->_systems.find(typeName) != this->_systems.end()) {
-                    std::cerr << "Added system more than once." << std::endl;
-                    return nullptr;
-                }
-
-                std::shared_ptr<S> system = std::make_shared<S>();
-
-                this->_systems.insert({typeName, system});
-
-                this->_systemToArchetypeMap.insert({typeName, ArchetypeID()});
-
-                return system;
+            /**
+             * @fn World::remove
+             * @brief Remove a component from an entity
+             * 
+             * @tparam Component The type of the component to remove.
+             * @param entity The entity from which the component will be removed.
+             */
+            template<typename Component>
+            void remove(Entity &entity) {
+                entity.components.erase(typeid(Component).name());
             }
 
-            template<typename S, typename C>
-            void addComponentToSystem() noexcept
-            {
-                const char *systemTypeName = typeid(S).name();
-                const char *componentTypeName = typeid(C).name();
-
-                if (this->_systems.find(systemTypeName) == this->_systems.end()) {
-                    std::cerr << "System not registered." << std::endl;
-                    return;
+            /**
+             * @fn World::get
+             * @brief Get a component from an entity
+             * 
+             * @tparam Component The type of the component to get.
+             * @param entity The entity from which the component will be get.
+             * @return The component.
+             */
+            template<typename Component>
+            Component &get(Entity &entity) {
+                try {
+                    return std::any_cast<Component &>(entity.components.at(typeid(Component).name()));
+                } catch (std::exception &e) {
+                    std::cerr << e.what() << std::endl;
+                    throw;
                 }
-                
-                if (this->_componentTypes.find(componentTypeName) == this->_componentTypes.end()) {
-                    this->addComponentType(componentTypeName);
-                }
-
-                ComponentTypeID componentTypeId = this->_componentTypes.at(componentTypeName);
-                ArchetypeID systemArchetypeId = this->_systemToArchetypeMap.at(systemTypeName).set(componentTypeId, true);
-
-                this->updateSystemArchetype(systemTypeName, systemArchetypeId);
             }
 
-            template<typename S, typename C>
-            void removeComponentFromSystem() noexcept
-            {
-                const char *systemTypeName = typeid(S).name();
-                const char *componentTypeName = typeid(C).name();
-
-                if (this->_systems.find(systemTypeName) == this->_systems.end()) {
-                    std::cerr << "System not registered." << std::endl;
-                    return;
-                }
-                
-                if (this->_componentTypes.find(componentTypeName) == this->_componentTypes.end()) {
-                    std::cerr << "Component type not registered." << std::endl;
-                    return;
-                }
-
-                ComponentTypeID componentTypeId = this->_componentTypes.at(componentTypeName);
-                ArchetypeID systemArchetypeId = this->_systemToArchetypeMap.at(systemTypeName).set(componentTypeId, false);
-
-                this->updateSystemArchetype(systemTypeName, systemArchetypeId);
+            /**
+             * @fn World::registerSystems
+             * @brief Register systems
+             * 
+             * @tparam Systems The systems to register.
+             * @param scene The scene in which the systems will be registered.
+             */
+            template<typename... Systems>
+            void registerSystems(Scene &scene) {
+                this->m_sceneManager.registerSystems<Systems...>(scene);
             }
 
-            template<typename S>
-            void removeSystem() noexcept
-            {
-                const char *typeName = typeid(S).name();
+            /**
+             * @fn World::update
+             * @brief Update the world
+             * 
+             */
+            void update();
 
-                if (this->_systems.find(typeName) == this->_systems.end()) {
-                    std::cerr << "System not registered." << std::endl;
-                    return;
-                }
+            /**
+             * @fn World::loadTextures
+             * @brief Load textures
+             * 
+             * @param paths The paths of the textures to load.
+             */
+            void loadTextures(std::vector<std::string> paths);
 
-                this->_systems.erase(typeName);
-                this->_systemToArchetypeMap.erase(typeName);
-            }
+            /**
+             * @fn World::loadMusics
+             * @brief Load musics
+             * 
+             * @param paths The paths of the musics to load.
+             */
+            void loadMusics(std::vector<std::string> paths);
 
-            template<typename S>
-            std::shared_ptr<S> getSystem() noexcept
-            {
-                const char *typeName = typeid(S).name();
-
-                if (this->_systems.find(typeName) == this->_systems.end()) {
-                    std::cerr << "System not registered." << std::endl;
-                    return nullptr;
-                }
-
-                return std::dynamic_pointer_cast<S>(this->_systems.at(typeName));
-            }
-
-            template<typename C>
-            C getComponentFromEntity(const EntityID &entity) noexcept
-            {
-                const char *typeName = typeid(C).name();
-
-                if (this->_componentTypes.find(typeName) == this->_componentTypes.end()) {
-                    std::cerr << "Component type not registered." << std::endl;
-                    return C();
-                }
-
-                ArchetypeID archetypeId = this->_entityToArchetypeMap.at(entity);
-
-                if (this->_archetypes.find(archetypeId) == this->_archetypes.end()) {
-                    std::cerr << "Archetype does not exist." << std::endl;
-                    return C();
-                }
-
-                std::shared_ptr<Archetype> archetype = this->_archetypes.at(archetypeId);
-
-                return archetype->getComponent<C>(entity);
-            }
+            /**
+             * @fn World::loadSounds
+             * @brief Load sounds
+             * 
+             * @param paths The paths of the sounds to load.
+             */
+            void loadSounds(std::vector<std::string> paths);
     };
 }
 
