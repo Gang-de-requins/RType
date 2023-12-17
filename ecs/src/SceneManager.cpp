@@ -2,7 +2,7 @@
 
 namespace ecs {
     Scene &SceneManager::createScene() {
-        this->m_scenes.emplace_back(Scene{this->m_nextSceneId++, {}, {}, {}, "", false});
+        this->m_scenes.emplace_back(Scene{this->m_nextSceneId++, {}, {}, "", false});
         return this->m_scenes.back();
     }
     
@@ -35,21 +35,10 @@ namespace ecs {
         }), scene.entities.end());
     }
 
-    Entity &SceneManager::getEntityById(Scene &scene, std::size_t id) {
-        return *std::find_if(scene.entities.begin(), scene.entities.end(), [&id](const Entity &e) {
-            return e.id == id;
-        });
-    }
-
     void SceneManager::update() {
         for (auto &system : this->m_scenes.at(this->m_currentSceneId).systems) {
             system->update(*this);
         }
-
-        // for (auto &entity : this->m_scenes.at(this->m_currentSceneId).entitiesToDelete) {
-        //     this->destroyEntity(this->getCurrentScene(), entity);
-        // }
-        // this->m_scenes.at(this->m_currentSceneId).entitiesToDelete.clear();
     }
 
     void SceneManager::loadTextures(std::vector<std::string> &paths) {

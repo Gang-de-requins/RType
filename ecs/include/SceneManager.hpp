@@ -110,16 +110,6 @@ namespace ecs {
              */
             void destroyEntity(Scene &scene, Entity &entity);
 
-            Entity &getEntityById(Scene &scene, std::size_t id);
-
-            // auto getEntitiesToDelete(Scene &scene) {
-            //     std::vector<Entity *> entitiesToDelete;
-
-            //     for (auto &entity : scene.entitiesToDelete) {
-            //         entitiesToDelete.push_back(&entity);
-            //     }
-            // }
-
             /**
              * @fn SceneManager::assign
              * @brief Assign a component to an entity
