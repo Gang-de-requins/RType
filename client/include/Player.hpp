@@ -11,12 +11,15 @@ namespace ecs {
     struct Acceleration;
 }
 
+namespace ecs {
+    class World;
+}
+
 namespace rtype {
     class Game;
 
     class Player {
         ecs::Entity &m_spaceship;
-        ecs::Entity &m_name;
         const std::string c_name;
         bool m_isMovingTop;
         bool m_isMovingBottom;
@@ -24,10 +27,9 @@ namespace rtype {
         bool m_isMovingRight;
 
         public:
-            Player(ecs::Entity &Entityspaceship, ecs::Entity &Entityname, const std::string &name);
+            Player(ecs::Entity &Entityspaceship, const std::string &name);
             ~Player();
             ecs::Entity &getSpaceshipEntity();
-            ecs::Entity &getNameEntity();
             const std::string &getName() const;
             void move(Game &game, ::Network::MessageType direction);
         

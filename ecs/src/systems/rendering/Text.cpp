@@ -5,7 +5,7 @@ namespace ecs {
     void TextSystem::update(SceneManager &sceneManager) {
         auto entities = sceneManager.view<Position, Text, Color, FontSize>(sceneManager.getCurrentScene());
 
-        for (auto entity : entities) {
+        for (auto &entity : entities) {
             auto &position = sceneManager.get<Position>(*entity);
             auto &text = sceneManager.get<Text>(*entity);
             auto &color = sceneManager.get<Color>(*entity);

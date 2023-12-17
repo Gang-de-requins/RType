@@ -79,6 +79,14 @@ namespace ecs {
             void destroyScene(Scene &scene);
 
             /**
+             * @fn SceneManager::unloadScene
+             * @brief Unload a scene (remove all entities)
+             * 
+             * @param scene The scene to unload.
+             */
+            void unloadScene(Scene &scene);
+
+            /**
              * @fn SceneManager::switchToScene
              * @brief Switch to a scene
              * 
@@ -133,6 +141,19 @@ namespace ecs {
             template<typename Component>
             void remove(Entity &entity) {
                 entity.components.erase(typeid(Component).name());
+            }
+
+            /**
+             * @fn SceneManager::has
+             * @brief Check if an entity has a component
+             * 
+             * @tparam Component The type of the component.
+             * @param entity The entity to check.
+             * @return true if the entity has the component, false otherwise.
+             */
+            template<typename Component>
+            bool has(Entity &entity) {
+                return entity.components.find(typeid(Component).name()) != entity.components.end();
             }
 
             /**

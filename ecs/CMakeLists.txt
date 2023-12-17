@@ -17,6 +17,9 @@ set(SRC
     src/systems/Controllable.cpp
     src/systems/Music.cpp
     src/systems/Sound.cpp
+    src/systems/Collision.cpp
+    src/systems/Life.cpp
+    src/systems/rendering/Name.cpp
     src/systems/rendering/Sprite.cpp
     src/systems/rendering/Text.cpp
     src/systems/rendering/Animation.cpp

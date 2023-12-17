@@ -39,12 +39,22 @@ namespace ecs {
     void ParserJson::loadComponentsFromJson(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &components) {
         std::vector<std::string_view> componentsNames = std::vector<std::string_view>{ALL_COMPONENTS};
         std::vector<void (ParserJson::*)(SceneManager &, Scene &, Entity &, rapidjson::Value &)> componentsLoaders = {
-            &ParserJson::loadAcceleration, &ParserJson::loadAnimation,
-            &ParserJson::loadColor, &ParserJson::loadControllable,
-            &ParserJson::loadFontSize, &ParserJson::loadMusic,
-            &ParserJson::loadPosition, &ParserJson::loadRectangle,
-            &ParserJson::loadRotation, &ParserJson::loadScale,
-            &ParserJson::loadSprite, &ParserJson::loadText,
+            &ParserJson::loadAcceleration,
+            &ParserJson::loadAnimation,
+            &ParserJson::loadColor,
+            &ParserJson::loadCollision,
+            &ParserJson::loadControllable,
+            &ParserJson::loadDamage,
+            &ParserJson::loadFontSize,
+            &ParserJson::loadHealth,
+            &ParserJson::loadMusic,
+            &ParserJson::loadPosition,
+            &ParserJson::loadRectangle,
+            &ParserJson::loadRotation,
+            &ParserJson::loadScale,
+            &ParserJson::loadSound,
+            &ParserJson::loadSprite,
+            &ParserJson::loadText,
             &ParserJson::loadVelocity
         };
 
@@ -135,6 +145,15 @@ namespace ecs {
         sceneManager.assign<Color>(entity, Color{colorValues[0], colorValues[1], colorValues[2], colorValues[3]});
     }
 
+    void ParserJson::loadCollision(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &collision) {
+        if (!collision.HasMember("isColliding") || !collision["isColliding"].IsBool()) {
+            std::cerr << "Collision has no isColliding or is not a boolean in file: " << scene.path << std::endl;
+            return;
+        }
+
+        sceneManager.assign<Collision>(entity, Collision{collision["isColliding"].GetBool(), std::vector<std::size_t>()});
+    }
+
     void ParserJson::loadControllable(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &controllable) {
         std::array<std::string_view, 4> controllableNames = {"keyUp", "keyDown", "keyLeft", "keyRight"};
         std::array<int, 4> controllableValues = {0, 0, 0, 0};
@@ -151,6 +170,15 @@ namespace ecs {
         sceneManager.assign<Controllable>(entity, Controllable{controllableValues[0], controllableValues[1], controllableValues[2], controllableValues[3]});
     }
 
+    void ParserJson::loadDamage(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &damage) {
+        if (!damage.HasMember("damage") || !damage["damage"].IsNumber()) {
+            std::cerr << "Damage has no damage or is not a number in file: " << scene.path << std::endl;
+            return;
+        }
+
+        sceneManager.assign<Damage>(entity, Damage{damage["damage"].GetFloat()});
+    }
+
     void ParserJson::loadFontSize(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &fontSize) {
         if (!fontSize.HasMember("size") || !fontSize["size"].IsNumber()) {
             std::cerr << "FontSize has no size or is not an integer in file: " << scene.path << std::endl;
@@ -158,6 +186,15 @@ namespace ecs {
         }
 
         sceneManager.assign<FontSize>(entity, FontSize{fontSize["size"].GetFloat()});
+    }
+
+    void ParserJson::loadHealth(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &health) {
+        if (!health.HasMember("health") || !health["health"].IsNumber()) {
+            std::cerr << "Health has no health or is not a number in file: " << scene.path << std::endl;
+            return;
+        }
+
+        sceneManager.assign<Health>(entity, Health{health["health"].GetFloat()});
     }
 
     void ParserJson::loadMusic(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &music) {
@@ -220,6 +257,15 @@ namespace ecs {
         }
 
         sceneManager.assign<Scale>(entity, Scale{scale["x"].GetFloat(), scale["y"].GetFloat()});
+    }
+
+    void ParserJson::loadSound(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &sound) {
+        if (!sound.HasMember("path") || !sound["path"].IsString()) {
+            std::cerr << "Sound has no path or is not a string in file: " << scene.path << std::endl;
+            return;
+        }
+
+        sceneManager.assign<Sound>(entity, Sound{sound["path"].GetString()});
     }
 
     void ParserJson::loadSprite(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &sprite) {

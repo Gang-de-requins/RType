@@ -100,16 +100,9 @@ namespace rtype {
         world.assign(player, ecs::Acceleration{0, 0, 4});
         world.assign(player, ecs::Scale{1, 1});
         world.assign(player, ecs::Rotation{0});
+        world.assign(player, ecs::Name{name, ecs::Position{-20, -20}});
 
-        ecs::Entity &text = world.createEntity(inGame);
-        world.assign(text, ecs::Position{pos.first - 20, pos.second - 20});
-        world.assign(text, ecs::Text{name});
-        world.assign(text, ecs::FontSize{20});
-        world.assign(text, ecs::Color{255, 255, 255, 255});
-        world.assign(text, ecs::Velocity{0, 0});
-        world.assign(text, ecs::Acceleration{0, 0, 4});
-
-        Player newPlayer(player, text, name);
+        Player newPlayer(player, name);
 
         game.addPlayer(newPlayer);
     }

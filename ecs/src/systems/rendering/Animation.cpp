@@ -5,7 +5,7 @@ namespace ecs {
     void AnimationSystem::update(SceneManager &sceneManager) {
         auto entities = sceneManager.view<Animation, Sprite>(sceneManager.getCurrentScene());
 
-        for (auto entity : entities) {
+        for (auto &entity : entities) {
             auto &animation = sceneManager.get<Animation>(*entity);
             auto &sprite = sceneManager.get<Sprite>(*entity);
 

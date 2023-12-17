@@ -1,10 +1,9 @@
 #include "Player.hpp"
-#include "Game.hpp"
+#include "Game.hpp
 
 namespace rtype {
-    Player::Player(ecs::Entity &Entityspaceship, ecs::Entity &Entityname, const std::string &name) :
+    Player::Player(ecs::Entity &Entityspaceship, const std::string &name) :
     m_spaceship(Entityspaceship),
-    m_name(Entityname),
     c_name(name),
     m_isMovingTop(false),
     m_isMovingBottom(false),
@@ -20,11 +19,6 @@ namespace rtype {
     ecs::Entity &Player::getSpaceshipEntity()
     {
         return this->m_spaceship;
-    }
-
-    ecs::Entity &Player::getNameEntity()
-    {
-        return this->m_name;
     }
 
     const std::string &Player::getName() const
@@ -98,11 +92,6 @@ namespace rtype {
                 break;
             default:
                 break;
-            // default:
-            //     this->m_isMoving = false;
-            //     std::thread stopThread(&Player::stopMoving, this, std::ref(accSpaceship), std::ref(accName));
-            //     stopThread.detach();
-            //     break;
         }
     }
 
