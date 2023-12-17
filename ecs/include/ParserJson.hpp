@@ -68,6 +68,7 @@ namespace ecs {
              * @param acceleration The acceleration component
              */
             void loadAcceleration(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &acceleration);
+
             /**
              * @fn ParserJson::loadAnimation
              * @brief Load the animation component of an entity from a json file
@@ -78,6 +79,7 @@ namespace ecs {
              * @param animation The animation component
              */
             void loadAnimation(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &animation);
+
             /**
              * @fn ParserJson::loadColor
              * @brief Load the color component of an entity from a json file
@@ -88,6 +90,18 @@ namespace ecs {
              * @param color The color component
              */
             void loadColor(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &color);
+
+            /**
+             * @fn ParserJson::loadCollision
+             * @brief Load the collision component of an entity from a json file
+             * 
+             * @param sceneManager The scene manager
+             * @param scene The scene 
+             * @param entity The entity
+             * @param collision The collision component
+             */
+            void loadCollision(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &collision);
+
             /**
              * @fn ParserJson::loadControllable
              * @brief Load the controllable component of an entity from a json file
@@ -98,6 +112,18 @@ namespace ecs {
              * @param controllable The controllable component
              */
             void loadControllable(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &controllable);
+
+            /**
+             * @fn ParserJson::loadDamage
+             * @brief Load the damage component of an entity from a json file
+             * 
+             * @param sceneManager The scene manager
+             * @param scene The scene
+             * @param entity The entity
+             * @param damage The damage component
+             */
+            void loadDamage(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &damage);
+
             /**
              * @fn ParserJson::loadFontSize
              * @brief Load the font size component of an entity from a json file
@@ -108,6 +134,18 @@ namespace ecs {
              * @param fontSize The font size component
              */
             void loadFontSize(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &fontSize);
+
+            /**
+             * @fn ParserJson::loadHealth
+             * @brief Load the health component of an entity from a json file
+             * 
+             * @param sceneManager The scene manager
+             * @param scene The scene 
+             * @param entity The entity
+             * @param health The health component
+             */
+            void loadHealth(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &health);
+
             /**
              * @fn ParserJson::loadMusic
              * @brief Load the music component of an entity from a json file
@@ -118,6 +156,7 @@ namespace ecs {
              * @param music The music component
              */
             void loadMusic(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &music);
+
             /**
              * @fn ParserJson::loadPosition
              * @brief Load the position component of an entity from a json file
@@ -128,6 +167,7 @@ namespace ecs {
              * @param position The position component
              */
             void loadPosition(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &position);
+
             /**
              * @fn ParserJson::loadRectangle
              * @brief Load the rectangle component of an entity from a json file
@@ -138,6 +178,7 @@ namespace ecs {
              * @param rectangle The rectangle component
              */
             void loadRectangle(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &rectangle);
+
             /**
              * @fn ParserJson::loadRotation
              * @brief Load the rotation component of an entity from a json file
@@ -148,6 +189,7 @@ namespace ecs {
              * @param rotation The rotation component
              */
             void loadRotation(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &rotation);
+
             /**
              * @fn ParserJson::loadScale
              * @brief Load the scale component of an entity from a json file
@@ -158,6 +200,18 @@ namespace ecs {
              * @param scale The scale component
              */
             void loadScale(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &scale);
+
+            /**
+             * @fn ParserJson::loadSound
+             * @brief Load the sound component of an entity from a json file
+             * 
+             * @param sceneManager The scene manager
+             * @param scene The scene 
+             * @param entity The entity
+             * @param sound The sound component
+             */
+            void loadSound(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &sound);
+
             /**
              * @fn ParserJson::loadSprite
              * @brief Load the sprite component of an entity from a json file
@@ -168,6 +222,7 @@ namespace ecs {
              * @param sprite The sprite component
              */
             void loadSprite(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &sprite);
+
             /**
              * @fn ParserJson::loadText
              * @brief Load the text component of an entity from a json file
@@ -178,6 +233,7 @@ namespace ecs {
              * @param text The text component
              */
             void loadText(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &text);
+
             /**
              * @fn ParserJson::loadVelocity
              * @brief Load the velocity component of an entity from a json file
