@@ -79,6 +79,14 @@ namespace ecs {
             void destroyScene(Scene &scene);
 
             /**
+             * @fn SceneManager::unloadScene
+             * @brief Unload a scene (remove all entities)
+             * 
+             * @param scene The scene to unload.
+             */
+            void unloadScene(Scene &scene);
+
+            /**
              * @fn SceneManager::switchToScene
              * @brief Switch to a scene
              * 

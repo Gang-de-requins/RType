@@ -11,10 +11,17 @@ namespace ecs {
             return s.id == scene.id;
         }), this->m_scenes.end());
     }
+
+    void SceneManager::unloadScene(Scene &scene) {
+        scene.entities.clear();
+        scene.systems.clear();
+    }
     
     void SceneManager::switchToScene(std::size_t sceneId) {
-        this->m_currentSceneId = sceneId;
+        this->unloadScene(this->m_scenes[this->m_currentSceneId]);
 
+        this->m_nextEntityId = 0;
+        this->m_currentSceneId = sceneId;
         if (this->m_scenes[this->m_currentSceneId].loadFromPath) {
             this->loadEntitiesFromJson(this->m_scenes[this->m_currentSceneId]);
         }
