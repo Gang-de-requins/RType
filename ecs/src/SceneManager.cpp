@@ -11,10 +11,17 @@ namespace ecs {
             return s.id == scene.id;
         }), this->m_scenes.end());
     }
+
+    void SceneManager::unloadScene(Scene &scene) {
+        scene.entities.clear();
+        scene.systems.clear();
+    }
     
     void SceneManager::switchToScene(std::size_t sceneId) {
-        this->m_currentSceneId = sceneId;
+        this->unloadScene(this->m_scenes[this->m_currentSceneId]);
 
+        this->m_nextEntityId = 0;
+        this->m_currentSceneId = sceneId;
         if (this->m_scenes[this->m_currentSceneId].loadFromPath) {
             this->loadEntitiesFromJson(this->m_scenes[this->m_currentSceneId]);
         }
@@ -59,7 +66,7 @@ namespace ecs {
         }
     }
 
-    Texture2D &SceneManager::getTexture(std::string &path) {
+    Texture2D &SceneManager::getTexture(std::string path) {
         if (this->m_textures.find(path) == this->m_textures.end()) {
             this->m_textures.insert({path, LoadTexture(path.c_str())});
         }
@@ -67,7 +74,7 @@ namespace ecs {
         return this->m_textures.at(path);
     }
 
-    ::Music &SceneManager::getMusic(std::string &path) {
+    ::Music &SceneManager::getMusic(std::string path) {
         if (this->m_musics.find(path) == this->m_musics.end()) {
             this->m_musics.insert({path, LoadMusicStream(path.c_str())});
         }
@@ -75,7 +82,7 @@ namespace ecs {
         return this->m_musics.at(path);
     }
 
-    ::Sound &SceneManager::getSound(std::string &path) {
+    ::Sound &SceneManager::getSound(std::string path) {
         if (this->m_sounds.find(path) == this->m_sounds.end()) {
             this->m_sounds.insert({path, LoadSound(path.c_str())});
         }

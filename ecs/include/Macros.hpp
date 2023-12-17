@@ -33,17 +33,21 @@
 
 /* -------------------- Components -------------------- */
 #define ALL_COMPONENTS "Acceleration",\
-                          "Animation",\
-                          "Color",\
-                          "Controllable",\
-                          "FontSize",\
-                          "Music",\
-                          "Position",\
-                          "Rectangle",\
-                          "Rotation",\
-                          "Scale",\
-                          "Sprite",\
-                          "Text",\
-                          "Velocity"
+                            "Animation",\
+                            "Color",\
+                            "Collision",\
+                            "Controllable",\
+                            "Damage",\
+                            "FontSize",\
+                            "Health",\
+                            "Music",\
+                            "Position",\
+                            "Rectangle",\
+                            "Rotation",\
+                            "Scale",\
+                            "Sound",\
+                            "Sprite",\
+                            "Text",\
+                            "Velocity"
 
 #endif /* MACROS_HPP */

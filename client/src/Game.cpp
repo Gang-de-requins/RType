@@ -57,27 +57,44 @@ namespace rtype {
     {
         ecs::Scene &inGame = this->m_world.createScene();
 
-        this->m_world.registerSystems<ecs::MusicSystem, ecs::ControllableSystem, ecs::AnimationSystem, ecs::MovementSystem, ecs::SpriteSystem, ecs::TextSystem>(inGame);
+        this->m_world.registerSystems<
+            ecs::MusicSystem,
+            ecs::ControllableSystem,
+            ecs::AnimationSystem,
+            ecs::MovementSystem,
+            ecs::SpriteSystem,
+            ecs::NameSystem,
+            ecs::TextSystem,
+            ecs::CollisionSystem,
+            ecs::LifeSystem
+        >(inGame);
         ecs::Entity &myPlayer = this->m_world.createEntity(inGame);
 
         this->m_world.assign(myPlayer, ecs::Position{200, 200});
-        this->m_world.assign(myPlayer, ecs::Position{200, 200});
+        this->m_world.assign(myPlayer, ecs::Health{100});
         this->m_world.assign(myPlayer, ecs::Velocity{0, 0});
         this->m_world.assign(myPlayer, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}});
         this->m_world.assign(myPlayer, ecs::Acceleration{0, 0, 4});
         this->m_world.assign(myPlayer, ecs::Scale{1, 1});
         this->m_world.assign(myPlayer, ecs::Rotation{0});
         this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT});
+        this->m_world.assign(myPlayer, ecs::Collision{false, {}});
+        this->m_world.assign(myPlayer, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 4, 0, 300, std::chrono::steady_clock::now()});
+        this->m_world.assign(myPlayer, ecs::Name{"Player 1", ecs::Position{-20, -20}});
 
-        ecs::Entity &myPlayerText = this->m_world.createEntity(inGame);
-        this->m_world.assign(myPlayerText, ecs::Position{180, 180});
-        this->m_world.assign(myPlayerText, ecs::Text{"Player 1"});
-        this->m_world.assign(myPlayerText, ecs::FontSize{20});
-        this->m_world.assign(myPlayerText, ecs::Color{ 255, 255, 255, 255 });
-        this->m_world.assign(myPlayerText, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT});
-        this->m_world.assign(myPlayerText, ecs::Velocity{0, 0});
-        this->m_world.assign(myPlayerText, ecs::Acceleration{0, 0, 4});
+        this->m_players.push_back(Player(myPlayer, "Player 1"));
 
-        this->m_players.push_back(Player(myPlayer, myPlayerText, "Player 1"));
+        ecs::Entity &myPlayer2 = this->m_world.createEntity(inGame);
+        this->m_world.assign(myPlayer2, ecs::Position{300, 300});
+        this->m_world.assign(myPlayer2, ecs::Health{100});
+        this->m_world.assign(myPlayer2, ecs::Velocity{0, 0});
+        this->m_world.assign(myPlayer2, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}});
+        this->m_world.assign(myPlayer2, ecs::Acceleration{0, 0, 4});
+        this->m_world.assign(myPlayer2, ecs::Scale{1, 1});
+        this->m_world.assign(myPlayer2, ecs::Rotation{0});
+        this->m_world.assign(myPlayer2, ecs::Controllable{KEY_W, KEY_S, KEY_A, KEY_D});
+        this->m_world.assign(myPlayer2, ecs::Collision{false, {}});
+        this->m_world.assign(myPlayer2, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 4, 0, 300, std::chrono::steady_clock::now()});
+        this->m_world.assign(myPlayer2, ecs::Damage{10});
     }
 }
