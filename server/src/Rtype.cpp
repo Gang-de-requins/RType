@@ -164,3 +164,21 @@ void serverGame::Rtype::addPlayer(serverGame::Message msg)
         }
     }
 }
+
+void serverGame::Rtype::sendGameState()
+{
+    for (auto& entity : this->getEntities()) {
+        if (entity.getType() == "PLAYER") {
+            for (auto& entity : this->getEntities()) {
+                std::pair<float, float> pos = entity.getPosition(this->world);
+                serverGame::Message message;
+                message.setMessageType(Network::MessageType::Ping);
+
+                std::string posStr = std::to_string(pos.first) + "," + std::to_string(pos.second);
+                message.setMessage(entity.getType() + entity.getName() + posStr);
+
+                this->server.sendMessage(message, entity.getEndpoint());
+            }
+        }
+    }
+}
