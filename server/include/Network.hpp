@@ -28,6 +28,7 @@ namespace Network
         StopLeft = 0x10,
         StopTop = 0x11,
         StopBottom = 0x12,
+        Ping = 0x13,
     };
 
     enum class PlayerActionType : char {
