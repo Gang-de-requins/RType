@@ -25,9 +25,9 @@ namespace ecs {
                 acceleration.ddx = 0.3f;
                 acceleration.ddy = 0;
                 acceleration.maxSpeed = 4.0f;
-            } else if (IsKeyDown(controllable.keySpace)) {
+            } else if (IsKeyPressed(controllable.keySpace)) {
                 auto entities = sceneManager.view<Sound>(sceneManager.getCurrentScene())[0];
-                auto &sound = sceneManager.get<Sound>(*entity);
+                auto &sound = sceneManager.get<Sound>(*entities);
                 auto &soundData = sceneManager.getSound(sound.path);
                 PlaySound(soundData);
             } else {
