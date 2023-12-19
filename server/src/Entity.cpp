@@ -93,3 +93,19 @@ void serverGame::Entity::move(std::string name, Network::MessageType direction, 
     }
 
 }
+
+void serverGame::Entity::stopMoving(ecs::Acceleration &accSpaceship)
+{
+    std::mutex mutex;
+    while (!this->isMovingTop && !this->isMovingBottom && !this->isMovingLeft && !this->isMovingRight) {
+        std::unique_lock<std::mutex> lock(mutex);
+        accSpaceship.ddx *= -1;
+        accSpaceship.ddy *= -1;
+        accSpaceship.maxSpeed -= 0.1f;
+        accSpaceship.maxSpeed = std::max(accSpaceship.maxSpeed, 0.0f);
+        lock.unlock();
+        std::this_thread::sleep_for(std::chrono::milliseconds(15));
+    }
+}
+
+
