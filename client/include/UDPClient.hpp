@@ -17,7 +17,7 @@ namespace rtype_client {
             void start();
 
         private:
-            void sendConnectionMessage(const std::string& name);
+            void sendData(PacketType type, const std::string& data);
     };
 }
 

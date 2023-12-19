@@ -10,24 +10,24 @@ namespace rtype_client {
 
     void UDPClient::start()
     {
-        this->sendConnectionMessage(this->m_name);
+        this->sendData(PacketType::CONNECT, this->m_name);
     }
 
     /* --------------------------- PRIVATE METHODS --------------------------- */
 
-    void UDPClient::sendConnectionMessage(const std::string &name)
+    void UDPClient::sendData(PacketType type, const std::string &data)
     {
-        Packet connectionMessage;
-        connectionMessage.type = PacketType::CONNECT;
-        connectionMessage.data = name;
+        Packet packet;
+        packet.type = type;
+        packet.data = data;
 
         std::ostringstream archiveStream;
         boost::archive::binary_oarchive archive(archiveStream);
-        archive << connectionMessage;
+        archive << packet;
 
         std::string serializedMessage = archiveStream.str();
 
-        std::cout << "Sending connection message: " << serializedMessage << std::endl;
+        std::cout << "Sending data: " << serializedMessage << std::endl;
         this->m_socket.async_send_to(
             boost::asio::buffer(serializedMessage),
             this->m_serverEndpoint,
