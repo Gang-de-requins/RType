@@ -44,59 +44,57 @@ void serverGame::Rtype::run(void)
 
 void serverGame::Rtype::processMessages(void)
 {
-    while (!this->msgList.empty())
+    while (!this->bufferList.empty())
     {
         this->mutex.lock();
-        serverGame::Message msg = this->msgList.front();
-        this->msgList.erase(this->msgList.begin());
+        ecs::Buffer buffer = this->bufferList.front();
+        this->bufferList.erase(this->bufferList.begin());
         this->mutex.unlock();
 
-        std::cout << msg.getMessage() << std::endl;
+        std::cout << buffer.readString() << std::endl;
 
-        auto it = std::find_if(this->entities.begin(), this->entities.end(), [&msg](const Entity& entity) {
-            return entity.getName() == msg.getMessage();
+        auto it = std::find_if(this->entities.begin(), this->entities.end(), [&buffer](const Entity& entity) {
+            return entity.getName() == buffer.readString();
         });
 
-        if (msg.getMessageType() == Network::MessageType::PlayerJoin) {
-            addPlayer(msg);
+        if (buffer.readMessageType() == ecs::MessageType::PlayerJoin) {
+            addPlayer(buffer);
             return;
         }
 
-
-
-        if (it != this->entities.end()) {
-            Entity& matchingPlayer = *it;
-            switch (msg.getMessageType())
-            {
-                case Network::MessageType::GoRight:
-                    GoDirection(msg, Network::MessageType::GoRight);
-                    matchingPlayer.move(msg.getMessage(), Network::MessageType::GoRight, this->world);
-                    break;
-                case Network::MessageType::GoLeft:
-                    GoDirection(msg, Network::MessageType::GoLeft);
-                    break;
-                case Network::MessageType::GoTop:
-                    GoDirection(msg, Network::MessageType::GoTop);
-                    break;
-                case Network::MessageType::GoBottom:
-                    GoDirection(msg, Network::MessageType::GoBottom);
-                    break;
-                case Network::MessageType::StopRight:
-                    StopDirection(msg, Network::MessageType::StopRight);
-                    break;
-                case Network::MessageType::StopLeft:
-                    StopDirection(msg, Network::MessageType::StopLeft);
-                    break;
-                case Network::MessageType::StopTop:
-                    StopDirection(msg, Network::MessageType::StopTop);
-                    break;
-                case Network::MessageType::StopBottom:
-                    StopDirection(msg, Network::MessageType::StopBottom);
-                    break;
-                default:
-                    break;
-            }
-        }
+        // if (it != this->entities.end()) {
+        //     Entity& matchingPlayer = *it;
+        //     switch (msg.getMessageType())
+        //     {
+        //         case Network::MessageType::GoRight:
+        //             GoDirection(msg, Network::MessageType::GoRight);
+        //             matchingPlayer.move(msg.getMessage(), Network::MessageType::GoRight, this->world);
+        //             break;
+        //         case Network::MessageType::GoLeft:
+        //             GoDirection(msg, Network::MessageType::GoLeft);
+        //             break;
+        //         case Network::MessageType::GoTop:
+        //             GoDirection(msg, Network::MessageType::GoTop);
+        //             break;
+        //         case Network::MessageType::GoBottom:
+        //             GoDirection(msg, Network::MessageType::GoBottom);
+        //             break;
+        //         case Network::MessageType::StopRight:
+        //             StopDirection(msg, Network::MessageType::StopRight);
+        //             break;
+        //         case Network::MessageType::StopLeft:
+        //             StopDirection(msg, Network::MessageType::StopLeft);
+        //             break;
+        //         case Network::MessageType::StopTop:
+        //             StopDirection(msg, Network::MessageType::StopTop);
+        //             break;
+        //         case Network::MessageType::StopBottom:
+        //             StopDirection(msg, Network::MessageType::StopBottom);
+        //             break;
+        //         default:
+        //             break;
+        //     }
+        // }
     }
 }
 
@@ -112,11 +110,11 @@ void serverGame::Rtype::GoDirection(serverGame::Message msg, Network::MessageTyp
         serverGame::Message goRightMessage;
         goRightMessage.setMessageType(dir);
         goRightMessage.setMessage(matchingPlayer.getName());
-        for (auto& player : this->players) {
-            if (player.getEndpoint() != msg.getEndpoint()) {
-                this->server.sendMessage(goRightMessage, player.getEndpoint());
-            }
-        }
+        // for (auto& player : this->players) {
+        //     if (player.getEndpoint() != msg.getEndpoint()) {
+        //         this->server.sendMessage(goRightMessage, player.getEndpoint());
+        //     }
+        // }
     }
 }
 
@@ -132,34 +130,34 @@ void serverGame::Rtype::StopDirection(serverGame::Message msg, Network::MessageT
         serverGame::Message goRightMessage;
         goRightMessage.setMessageType(dir);
         goRightMessage.setMessage(matchingPlayer.getName());
-        for (auto& player : this->players) {
-            if (player.getEndpoint() != msg.getEndpoint()) {
-                this->server.sendMessage(goRightMessage, player.getEndpoint());
-            }
-        }
+        // for (auto& player : this->players) {
+        //     if (player.getEndpoint() != msg.getEndpoint()) {
+        //         this->server.sendMessage(goRightMessage, player.getEndpoint());
+        //     }
+        // }
     }
 }
 
-void serverGame::Rtype::addPlayer(serverGame::Message msg)
+void serverGame::Rtype::addPlayer(ecs::Buffer msg)
 {
     this->id++;
-    serverGame::Entity newEntity(msg.getMessage(), this->id, this->world);
+    serverGame::Entity newEntity(msg.readString(), this->id, this->world);
     newEntity.setEndpoint(msg.getEndpoint());
     newEntity.setType("PLAYER");
     this->entities.push_back(newEntity);
 
-    serverGame::Message playerJoinMessage;
-    playerJoinMessage.setMessageType(Network::MessageType::PlayerJoin);
-    playerJoinMessage.setMessage(newEntity.getName());
+    ecs::Buffer playerJoinMessage;
+    playerJoinMessage.writeMessageType(ecs::MessageType::PlayerJoin);
+    playerJoinMessage.writeString(newEntity.getName());
 
     for (auto& entity : this->entities) {
         if (entity.getName() != newEntity.getName()) {
             std::string playerNameMessage = entity.getName();
-            serverGame::Message existingPlayerMessage;
-            existingPlayerMessage.setMessageType(Network::MessageType::PlayerJoin);
-            existingPlayerMessage.setMessage(playerNameMessage);
-            this->server.sendMessage(existingPlayerMessage, newEntity.getEndpoint());
+            ecs::Buffer existingPlayerMessage;
+            existingPlayerMessage.writeMessageType(ecs::MessageType::PlayerJoin);
+            existingPlayerMessage.writeString(playerNameMessage);
 
+            this->server.sendMessage(existingPlayerMessage, newEntity.getEndpoint());
             this->server.sendMessage(playerJoinMessage, entity.getEndpoint());
         }
     }
@@ -177,7 +175,7 @@ void serverGame::Rtype::sendGameState()
                 std::string posStr = std::to_string(pos.first) + "," + std::to_string(pos.second);
                 message.setMessage(entity.getType() + entity.getName() + posStr);
 
-                this->server.sendMessage(message, entity.getEndpoint());
+                ///this->server.sendMessage(message, entity.getEndpoint());
             }
         }
     }
