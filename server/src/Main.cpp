@@ -21,12 +21,21 @@ void receiveMessageThread(std::shared_ptr<serverGame::Rtype> rtype)
 	}
 }
 
+void sendGameStateThread(std::shared_ptr<serverGame::Rtype> rtype) {
+    while (true) {
+        rtype->sendGameState();
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 32));
+    }
+}
+
+
 int main()
 {
     // serverGame::ServerRooms Rooms;
     // Rooms.start();
     std::shared_ptr<serverGame::Rtype> rtype = std::make_shared<serverGame::Rtype>();
     std::thread receive(receiveMessageThread, rtype);
+    std::thread send(sendGameStateThread, rtype);
     rtype->run();
     return 0;
 }
