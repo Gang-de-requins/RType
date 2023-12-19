@@ -25,7 +25,8 @@ namespace serverGame
         Rtype();
         ~Rtype();
         void run(void);
-        void addPlayer(serverGame::Message msg);
+        //void addPlayer(serverGame::Message msg);
+        void addPlayer(ecs::Buffer msg);
         void GoDirection(serverGame::Message msg, Network::MessageType dir);
         void StopDirection(serverGame::Message msg, Network::MessageType dir);
         void processMessages(void);
@@ -41,7 +42,7 @@ namespace serverGame
         }
         
         Server server;
-        std::vector<serverGame::Message> msgList;
+        std::vector<ecs::Buffer> bufferList;
         std::mutex mutex;
 
 
