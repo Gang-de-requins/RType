@@ -44,33 +44,59 @@ void serverGame::Rtype::run(void)
 
 void serverGame::Rtype::processMessages(void)
 {
-    while (this->msgList.size() != 0)
+    while (!this->msgList.empty())
     {
         this->mutex.lock();
         serverGame::Message msg = this->msgList.front();
         this->msgList.erase(this->msgList.begin());
         this->mutex.unlock();
 
-        std::cout << msg.getEndpoint() << std::endl;
-        if (msg.getMessageType() == Network::MessageType::PlayerJoin)
-            addPlayer(msg);
-        if (msg.getMessageType() == Network::MessageType::GoRight)
-            GoDirection(msg, Network::MessageType::GoRight);
-        if (msg.getMessageType() == Network::MessageType::GoLeft)
-            GoDirection(msg, Network::MessageType::GoLeft);
-        if (msg.getMessageType() == Network::MessageType::GoTop)
-            GoDirection(msg, Network::MessageType::GoTop);
-        if (msg.getMessageType() == Network::MessageType::GoBottom)
-            GoDirection(msg, Network::MessageType::GoBottom);
+        std::cout << msg.getMessage() << std::endl;
 
-        if (msg.getMessageType() == Network::MessageType::StopRight)
-            StopDirection(msg, Network::MessageType::StopRight);
-        if (msg.getMessageType() == Network::MessageType::StopLeft)
-            StopDirection(msg, Network::MessageType::StopLeft);
-        if (msg.getMessageType() == Network::MessageType::StopTop)
-            StopDirection(msg, Network::MessageType::StopTop);
-        if (msg.getMessageType() == Network::MessageType::StopBottom)
-            StopDirection(msg, Network::MessageType::StopBottom);
+        auto it = std::find_if(this->entities.begin(), this->entities.end(), [&msg](const Entity& entity) {
+            return entity.getName() == msg.getMessage();
+        });
+
+        if (msg.getMessageType() == Network::MessageType::PlayerJoin) {
+            addPlayer(msg);
+            return;
+        }
+
+
+
+        if (it != this->entities.end()) {
+            Entity& matchingPlayer = *it;
+            switch (msg.getMessageType())
+            {
+                case Network::MessageType::GoRight:
+                    GoDirection(msg, Network::MessageType::GoRight);
+                    matchingPlayer.move(msg.getMessage(), Network::MessageType::GoRight, this->world);
+                    break;
+                case Network::MessageType::GoLeft:
+                    GoDirection(msg, Network::MessageType::GoLeft);
+                    break;
+                case Network::MessageType::GoTop:
+                    GoDirection(msg, Network::MessageType::GoTop);
+                    break;
+                case Network::MessageType::GoBottom:
+                    GoDirection(msg, Network::MessageType::GoBottom);
+                    break;
+                case Network::MessageType::StopRight:
+                    StopDirection(msg, Network::MessageType::StopRight);
+                    break;
+                case Network::MessageType::StopLeft:
+                    StopDirection(msg, Network::MessageType::StopLeft);
+                    break;
+                case Network::MessageType::StopTop:
+                    StopDirection(msg, Network::MessageType::StopTop);
+                    break;
+                case Network::MessageType::StopBottom:
+                    StopDirection(msg, Network::MessageType::StopBottom);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
 
@@ -117,25 +143,24 @@ void serverGame::Rtype::StopDirection(serverGame::Message msg, Network::MessageT
 void serverGame::Rtype::addPlayer(serverGame::Message msg)
 {
     this->id++;
-    Player newPlayer(msg.getMessage(), this->id, this->world);
-    newPlayer.setEndpoint(msg.getEndpoint());
-    players.push_back(newPlayer);
+    serverGame::Entity newEntity(msg.getMessage(), this->id, this->world);
+    newEntity.setEndpoint(msg.getEndpoint());
+    newEntity.setType("PLAYER");
+    this->entities.push_back(newEntity);
 
     serverGame::Message playerJoinMessage;
     playerJoinMessage.setMessageType(Network::MessageType::PlayerJoin);
-    playerJoinMessage.setMessage(newPlayer.getName());
+    playerJoinMessage.setMessage(newEntity.getName());
 
-    for (auto& player : this->players) {
-        if (player.getId() != newPlayer.getId()) {
-            std::string playerNameMessage = player.getName();
+    for (auto& entity : this->entities) {
+        if (entity.getName() != newEntity.getName()) {
+            std::string playerNameMessage = entity.getName();
             serverGame::Message existingPlayerMessage;
             existingPlayerMessage.setMessageType(Network::MessageType::PlayerJoin);
             existingPlayerMessage.setMessage(playerNameMessage);
-            this->server.sendMessage(existingPlayerMessage, newPlayer.getEndpoint());
+            this->server.sendMessage(existingPlayerMessage, newEntity.getEndpoint());
 
-            this->server.sendMessage(playerJoinMessage, player.getEndpoint());
+            this->server.sendMessage(playerJoinMessage, entity.getEndpoint());
         }
     }
 }
-
-
