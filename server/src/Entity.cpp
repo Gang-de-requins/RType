@@ -37,3 +37,22 @@ serverGame::Entity::~Entity()
 
 }
 
+
+void serverGame::Entity::move(std::string name, Network::MessageType direction, ecs::World &world)
+{
+    ecs::Acceleration &accSpaceship = world.get<ecs::Acceleration>(this->_entity);
+    std::thread stopThread;
+
+    switch (direction) {
+        case ::Network::MessageType::GoTop:
+            this->isMovingTop = true;
+            accSpaceship.ddx = 0;
+            accSpaceship.ddy = -0.3f;
+            accSpaceship.maxSpeed = 4.0f;
+            break;
+
+        default:
+            break;
+    }
+
+}
