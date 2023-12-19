@@ -83,4 +83,67 @@ namespace rtype {
             }
         );
     }
+
+    void UDPServer::newConnection(const std::string &name)
+    {
+        ecs::SceneManager &sceneManager = this->m_world.getSceneManager();
+        ecs::Scene &scene = sceneManager.getCurrentScene();
+        std::vector<ecs::Entity *> entities = sceneManager.view<ecs::Controllable, ecs::Health>(scene);
+
+        if (entities.size() <= 4) {
+            this->sendData(PacketType::CONNECTION_ACCEPTED, "Connection accepted, data will be sent...");
+            std::vector<ecs::Entity *> entities = sceneManager.getEntities(scene);
+
+
+            for (auto &entity : entities) {
+                std::string entityData = "Entity:";
+                entityData += std::to_string(entity->id);
+                entityData += ";";
+                for (auto &component : entity->components) {
+                    if (component.first.find("Acceleration") != std::string::npos) {
+                        ecs::Acceleration &acceleration = sceneManager.get<ecs::Acceleration>(*entity);
+                        entityData += "Acceleration:";
+                        entityData += std::to_string(acceleration.ddx);
+                        entityData += ",";
+                        entityData += std::to_string(acceleration.ddy);
+                        entityData += ",";
+                        entityData += std::to_string(acceleration.maxSpeed);
+                        entityData += ";";
+                    }
+                    if (component.first.find("Animation") != std::string::npos) {
+                        ecs::Animation &animation = sceneManager.get<ecs::Animation>(*entity);
+                        entityData += "Animation:";
+                        entityData += std::to_string(animation.currentFrame);
+                        entityData += ",";
+                        entityData += std::to_string(animation.frames);
+                        entityData += ",";
+                        entityData += std::to_string(animation.frameTime);
+                        entityData += ",";
+                        entityData += std::to_string(animation.offset.x);
+                        entityData += ",";
+                        entityData += std::to_string(animation.offset.y);
+                        entityData += ",";
+                        entityData += std::to_string(animation.offset.width);
+                        entityData += ",";
+                        entityData += std::to_string(animation.offset.height);
+                        entityData += ";";
+                    }
+                    if (component.first.find("Collision") != std::string::npos) {
+                        ecs::Collision &collision = sceneManager.get<ecs::Collision>(*entity);
+                        entityData += "Collision:";
+                        entityData += std::to_string(collision.isColliding);
+                        for (auto &collidingEntity : collision.collidingWith) {
+                            entityData += ",";
+                            entityData += std::to_string(collidingEntity);
+                        }
+                        entityData += ";";
+                    }
+                    }
+                this->sendData(PacketType::CREATE, entityData);
+            }
+            this->sendData(PacketType::END_OF_DATA, "End of data");
+        } else {
+            this->sendData(PacketType::CONNECTION_ACCEPTED, "Too many players");
+        }
+    }
 }
