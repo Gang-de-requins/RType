@@ -68,6 +68,26 @@ void serverGame::Entity::move(std::string name, Network::MessageType direction, 
             accSpaceship.ddy = 0;
             accSpaceship.maxSpeed = 4.0f;
             break;
+        case ::Network::MessageType::StopTop:
+            this->isMovingTop = false;
+            stopThread = std::thread(&Entity::stopMoving, this, std::ref(accSpaceship));
+            stopThread.detach();
+            break;
+        case ::Network::MessageType::StopBottom:
+            this->isMovingBottom = false;
+            stopThread = std::thread(&Entity::stopMoving, this, std::ref(accSpaceship));
+            stopThread.detach();
+            break;
+        case ::Network::MessageType::StopLeft:
+            this->isMovingLeft = false;
+            stopThread = std::thread(&Entity::stopMoving, this, std::ref(accSpaceship));
+            stopThread.detach();
+            break;
+        case ::Network::MessageType::StopRight:
+            this->isMovingRight = false;
+            stopThread = std::thread(&Entity::stopMoving, this, std::ref(accSpaceship));
+            stopThread.detach();
+            break;
         default:
             break;
     }
