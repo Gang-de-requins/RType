@@ -21,22 +21,22 @@ namespace rtype {
         while (!WindowShouldClose())
         {
             if (IsKeyPressed(KEY_UP))
-                this->m_network.send(::Network::MessageType::GoTop, "Player1");
+                this->m_network.send(ecs::MessageType::GoTop, "Player3");
             if (IsKeyPressed(KEY_DOWN))
-                this->m_network.send(::Network::MessageType::GoBottom, "Player1");
+                this->m_network.send(ecs::MessageType::GoBottom, "Player3");
             if (IsKeyPressed(KEY_LEFT))
-                this->m_network.send(::Network::MessageType::GoLeft, "Player1");
+                this->m_network.send(ecs::MessageType::GoLeft, "Player3");
             if (IsKeyPressed(KEY_RIGHT))
-                this->m_network.send(::Network::MessageType::GoRight, "Player1");
+                this->m_network.send(ecs::MessageType::GoRight, "Player3");
             
             if (IsKeyReleased(KEY_UP))
-                this->m_network.send(::Network::MessageType::StopTop, "Player1");
+                this->m_network.send(ecs::MessageType::StopTop, "Player3");
             if (IsKeyReleased(KEY_DOWN))
-                this->m_network.send(::Network::MessageType::StopBottom, "Player1");
+                this->m_network.send(ecs::MessageType::StopBottom, "Player3");
             if (IsKeyReleased(KEY_LEFT))
-                this->m_network.send(::Network::MessageType::StopLeft, "Player1");
+                this->m_network.send(ecs::MessageType::StopLeft, "Player3");
             if (IsKeyReleased(KEY_RIGHT))
-                this->m_network.send(::Network::MessageType::StopRight, "Player1");
+                this->m_network.send(ecs::MessageType::StopRight, "Player3");
 
             BeginDrawing();
             ClearBackground(BLACK);
@@ -100,9 +100,9 @@ namespace rtype {
         this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT});
         this->m_world.assign(myPlayer, ecs::Collision{false, {}});
         this->m_world.assign(myPlayer, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 4, 0, 300, std::chrono::steady_clock::now()});
-        this->m_world.assign(myPlayer, ecs::Name{"Player 1", ecs::Position{-20, -20}});
+        this->m_world.assign(myPlayer, ecs::Name{"Player 3", ecs::Position{-20, -20}});
 
-        this->m_players.push_back(Player(myPlayer, "Player 1"));
+        this->m_players.push_back(Player(myPlayer, "Player 3"));
 
         ecs::Entity &myPlayer2 = this->m_world.createEntity(inGame);
         this->m_world.assign(myPlayer2, ecs::Position{300, 300});
