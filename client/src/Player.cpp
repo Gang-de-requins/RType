@@ -26,53 +26,53 @@ namespace rtype {
         return this->c_name;
     }
 
-    void Player::move(Game &game, ::Network::MessageType direction)
+    void Player::move(Game &game, ecs::MessageType direction)
     {
         ecs::World &world = game.getWorld();
         ecs::Acceleration &accSpaceship = world.get<ecs::Acceleration>(this->m_spaceship);
         std::thread stopThread;
 
         switch (direction) {
-            case ::Network::MessageType::GoTop:
+            case ecs::MessageType::GoTop:
                 this->m_isMovingTop = true;
                 accSpaceship.ddx = 0;
                 accSpaceship.ddy = -0.3f;
                 accSpaceship.maxSpeed = 4.0f;
                 break;
-            case ::Network::MessageType::GoBottom:
+            case ecs::MessageType::GoBottom:
                 this->m_isMovingBottom = true;
                 accSpaceship.ddx = 0;
                 accSpaceship.ddy = 0.3f;
                 accSpaceship.maxSpeed = 4.0f;
                 break;
-            case ::Network::MessageType::GoLeft:
+            case ecs::MessageType::GoLeft:
                 this->m_isMovingLeft = true;
                 accSpaceship.ddx = -0.3f;
                 accSpaceship.ddy = 0;
                 accSpaceship.maxSpeed = 4.0f;
                 break;
-            case ::Network::MessageType::GoRight:
+            case ecs::MessageType::GoRight:
                 this->m_isMovingRight = true;
                 accSpaceship.ddx = 0.3f;
                 accSpaceship.ddy = 0;
                 accSpaceship.maxSpeed = 4.0f;
                 break;
-            case ::Network::MessageType::StopTop:
+            case ecs::MessageType::StopTop:
                 this->m_isMovingTop = false;
                 stopThread = std::thread(&Player::stopMoving, this, std::ref(accSpaceship));
                 stopThread.detach();
                 break;
-            case ::Network::MessageType::StopBottom:
+            case ecs::MessageType::StopBottom:
                 this->m_isMovingBottom = false;
                 stopThread = std::thread(&Player::stopMoving, this, std::ref(accSpaceship));
                 stopThread.detach();
                 break;
-            case ::Network::MessageType::StopLeft:
+            case ecs::MessageType::StopLeft:
                 this->m_isMovingLeft = false;
                 stopThread = std::thread(&Player::stopMoving, this, std::ref(accSpaceship));
                 stopThread.detach();
                 break;
-            case ::Network::MessageType::StopRight:
+            case ecs::MessageType::StopRight:
                 this->m_isMovingRight = false;
                 stopThread = std::thread(&Player::stopMoving, this, std::ref(accSpaceship));
                 stopThread.detach();
