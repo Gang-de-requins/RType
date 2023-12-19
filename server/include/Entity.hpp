@@ -67,6 +67,7 @@ namespace serverGame
         std::string _type;
         std::string _name;
         boost::asio::ip::udp::endpoint _endpoint;
+        int _hp;
     };
 }
 
