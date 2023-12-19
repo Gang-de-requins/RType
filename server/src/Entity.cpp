@@ -108,4 +108,13 @@ void serverGame::Entity::stopMoving(ecs::Acceleration &accSpaceship)
     }
 }
 
+std::pair<float, float> serverGame::Entity::getPosition(ecs::World &world)
+{
+    ecs::Position &test = world.get<ecs::Position>(this->_entity);
+    std::pair<float, float> pos;
 
+    pos.first = test.x;
+    pos.second = test.y;
+
+    return pos;
+}
