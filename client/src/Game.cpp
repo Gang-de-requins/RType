@@ -28,7 +28,6 @@ namespace rtype {
                 this->m_network.send(::Network::MessageType::GoLeft, "Player1");
             if (IsKeyPressed(KEY_RIGHT))
                 this->m_network.send(::Network::MessageType::GoRight, "Player1");
-            
             if (IsKeyReleased(KEY_UP))
                 this->m_network.send(::Network::MessageType::StopTop, "Player1");
             if (IsKeyReleased(KEY_DOWN))
@@ -97,7 +96,7 @@ namespace rtype {
         this->m_world.assign(myPlayer, ecs::Acceleration{0, 0, 4});
         this->m_world.assign(myPlayer, ecs::Scale{1, 1});
         this->m_world.assign(myPlayer, ecs::Rotation{0});
-        this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT});
+        this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE});
         this->m_world.assign(myPlayer, ecs::Collision{false, {}});
         this->m_world.assign(myPlayer, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 4, 0, 300, std::chrono::steady_clock::now()});
         this->m_world.assign(myPlayer, ecs::Name{"Player 1", ecs::Position{-20, -20}});
@@ -112,9 +111,12 @@ namespace rtype {
         this->m_world.assign(myPlayer2, ecs::Acceleration{0, 0, 4});
         this->m_world.assign(myPlayer2, ecs::Scale{1, 1});
         this->m_world.assign(myPlayer2, ecs::Rotation{0});
-        this->m_world.assign(myPlayer2, ecs::Controllable{KEY_W, KEY_S, KEY_A, KEY_D});
+        this->m_world.assign(myPlayer2, ecs::Controllable{KEY_W, KEY_S, KEY_A, KEY_D, KEY_SPACE});
         this->m_world.assign(myPlayer2, ecs::Collision{false, {}});
         this->m_world.assign(myPlayer2, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 4, 0, 300, std::chrono::steady_clock::now()});
         this->m_world.assign(myPlayer2, ecs::Damage{10});
+
+        ecs::Entity &SoundPlayer = this->m_world.createEntity(inGame);
+        this->m_world.assign(SoundPlayer, ecs::Sound{"assets/weird.wav"});
     }
 }
