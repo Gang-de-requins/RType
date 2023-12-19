@@ -15,6 +15,7 @@
 #include "GameEngine.hpp"
 #include "Message.hpp"
 #include <mutex>
+#include "Entity.hpp"
 
 namespace serverGame
 {
@@ -28,6 +29,16 @@ namespace serverGame
         void GoDirection(serverGame::Message msg, Network::MessageType dir);
         void StopDirection(serverGame::Message msg, Network::MessageType dir);
         void processMessages(void);
+        void sendGameState();
+        void newEntity(std::string name);
+        std::vector<Player> getPlayers()
+        {
+            return this->players;
+        }
+        std::vector<serverGame::Entity> getEntities()
+        {
+            return this->entities;
+        }
         
         Server server;
         std::vector<serverGame::Message> msgList;
@@ -36,7 +47,9 @@ namespace serverGame
 
     private:
         std::vector<Player> players;
+        std::vector<serverGame::Entity> entities;
         ecs::World world;
+        ecs::Scene scene;
         int id;
     };
 }
