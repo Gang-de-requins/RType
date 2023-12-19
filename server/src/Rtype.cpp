@@ -9,11 +9,24 @@
 #include <boost/asio.hpp>
 #include "Rtype.hpp"
 #include "Network.hpp"
+#include "Entity.hpp"
 
 serverGame::Rtype::Rtype()
 {
     this->server.setupServer(12345);
     this->id = 0;
+    ecs::Scene &inGame = this->world.createScene();
+    this->world.registerSystems<
+        ecs::MusicSystem,
+        ecs::ControllableSystem,
+        ecs::AnimationSystem,
+        ecs::MovementSystem,
+        ecs::SpriteSystem,
+        ecs::NameSystem,
+        ecs::TextSystem,
+        ecs::CollisionSystem,
+        ecs::LifeSystem
+    >(inGame);
 }
 
 serverGame::Rtype::~Rtype()
