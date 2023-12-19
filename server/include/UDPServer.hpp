@@ -12,6 +12,7 @@ namespace rtype {
         boost::asio::ip::udp::endpoint m_serverEndpoint;
         boost::asio::ip::udp::endpoint m_remoteEndpoint;
         std::array<char, 1024> m_recvBuffer;
+        ecs::World &m_world;
 
         public:
             UDPServer(boost::asio::io_context &io_context, const unsigned short port);
@@ -21,6 +22,8 @@ namespace rtype {
             void startReceive();
             void handleReceive(const boost::system::error_code &error, std::size_t bytes_transferred);
             void handlePacket(const Packet &packet);
+            void sendData(PacketType type, const std::string &data);
+            void newConnection(const std::string &name);
     };
 }
 
