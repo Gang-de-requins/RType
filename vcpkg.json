@@ -9,6 +9,9 @@
             "name": "boost-asio"
         },
         {
+            "name": "boost-serialization"
+        },
+        {
             "name": "rapidjson"
         }
     ]

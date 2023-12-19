@@ -11,9 +11,9 @@
 
 serverGame::Player::Player(std::string name, int id, ecs::World &world)
 {
-    ecs::Entity &entity = world.createEntity();
+    ecs::Scene scene;
 
-    this->entityChar = world.createEntity();
+    this->entityChar = world.createEntity(scene);
     ecs::Position position{200, 200};
     ecs::Velocity velocity{0, 0};
     ecs::Acceleration acceleration{0, 0, 4};
@@ -26,7 +26,7 @@ serverGame::Player::Player(std::string name, int id, ecs::World &world)
     world.assign(this->entityChar, scale);
     world.assign(this->entityChar, rotation);
 
-    this->entityName = world.createEntity();
+    this->entityName = world.createEntity(scene);
     ecs::Position position1{180, 180};
     ecs::Velocity velocity1{0, 0};
     ecs::Text text{name};

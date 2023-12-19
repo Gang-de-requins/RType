@@ -24,10 +24,10 @@ namespace serverGame
         Rtype();
         ~Rtype();
         void run(void);
-        void addPlayer(serverGame::Message msg);
-        void GoDirection(serverGame::Message msg, Network::MessageType dir);
-        void StopDirection(serverGame::Message msg, Network::MessageType dir);
-        void processMessages(void);
+        // void addPlayer(serverGame::Message msg);
+        // void GoDirection(serverGame::Message msg, Network::MessageType dir);
+        // void StopDirection(serverGame::Message msg, Network::MessageType dir);
+        // void processMessages(void);
         
         Server server;
         std::vector<serverGame::Message> msgList;

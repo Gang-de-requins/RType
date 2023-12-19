@@ -6,7 +6,7 @@ message("Looking for raylib...")
 find_package(raylib CONFIG REQUIRED)
 message("Found raylib")
 message("Looking for Boost...")
-find_package(Boost COMPONENTS system REQUIRED)
+find_package(Boost COMPONENTS system serialization REQUIRED)
 message("Found Boost")
 
 set(CMAKE_CXX_STANDARD 17)
@@ -17,10 +17,11 @@ set(SRC
     src/Main.cpp
     src/Game.cpp
     src/Network.cpp
-    src/Player.cpp
+    src/UDPClient.cpp
+    # src/Player.cpp
 )
 
-add_compile_options(-Wall -Wextra -Werror -std=c++17)
+# add_compile_options(-Wall -Wextra -Werror -std=c++17)
 
 message("Compiling ${PROJECT_NAME}...")
 
@@ -30,7 +31,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE include)
 target_include_directories(${PROJECT_NAME} PUBLIC ../ecs/include)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC ${ECS_LIBRARY})
-target_link_libraries(${PROJECT_NAME} PRIVATE Boost::boost Boost::system)
+target_link_libraries(${PROJECT_NAME} PRIVATE Boost::boost Boost::system Boost::serialization)
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
 
 message("Compiling ${PROJECT_NAME} done successfully!")

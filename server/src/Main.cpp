@@ -1,32 +1,13 @@
-/*
-** EPITECH PROJECT, 2023
-** r type
-** File description:
-** Server
-*/
+#include "Server.hpp"
 
-#include "../include/ServerRooms.hpp"
-#include "Rtype.hpp"
-#include "Message.hpp"
+int checkArgs(int ac, char const * const *av);
 
-void receiveMessageThread(std::shared_ptr<serverGame::Rtype> rtype)
+int main(int ac, char const * const *av)
 {
-	while(true)
-	{
-		serverGame::Message msg;
-        rtype->server.receiveMessage(msg);
-		rtype->mutex.lock();
-		rtype->msgList.push_back(msg);
-		rtype->mutex.unlock();
-	}
-}
+    if (checkArgs(ac, av) == 84)
+        return 84;
+    rtype::Server server(std::stoi(av[1]));
 
-int main()
-{
-    // serverGame::ServerRooms Rooms;
-    // Rooms.start();
-    std::shared_ptr<serverGame::Rtype> rtype = std::make_shared<serverGame::Rtype>();
-    std::thread receive(receiveMessageThread, rtype);
-    rtype->run();
-    return 0;
+    server.run();
+    return EXIT_SUCCESS;
 }
