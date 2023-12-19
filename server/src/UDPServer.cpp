@@ -59,4 +59,28 @@ namespace rtype {
                 break;
         }
     }
+
+    void UDPServer::sendData(PacketType type, const std::string &data)
+    {
+        Packet packet;
+        packet.type = type;
+        packet.data = data;
+
+        std::ostringstream archiveStream;
+        boost::archive::binary_oarchive archive(archiveStream);
+        archive << packet;
+
+        std::string serializedMessage = archiveStream.str();
+
+        std::cout << "Sending data: " << serializedMessage << std::endl;
+        this->m_socket.async_send_to(
+            boost::asio::buffer(serializedMessage),
+            this->m_remoteEndpoint,
+            [this](const boost::system::error_code &error, std::size_t /* bytesSent */) {
+                if (error) {
+                    std::cerr << "Error sending data: " << error.message() << std::endl;
+                }
+            }
+        );
+    }
 }
