@@ -3,7 +3,7 @@
 
 namespace ecs {
     void ParallaxSystem::update(SceneManager &sceneManager) {
-        std::vector<Entities *> = sceneManager.view<Parallax, Position>(sceneManager.getCurrentScene());
+        std::vector<Entity *> entities = sceneManager.view<Parallax, Position>(sceneManager.getCurrentScene());
 
         for (auto &entity : entities) {
             Parallax &parallax = sceneManager.get<Parallax>(*entity);
