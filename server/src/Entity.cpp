@@ -50,7 +50,24 @@ void serverGame::Entity::move(std::string name, Network::MessageType direction, 
             accSpaceship.ddy = -0.3f;
             accSpaceship.maxSpeed = 4.0f;
             break;
-
+        case ::Network::MessageType::GoBottom:
+            this->isMovingBottom = true;
+            accSpaceship.ddx = 0;
+            accSpaceship.ddy = 0.3f;
+            accSpaceship.maxSpeed = 4.0f;
+            break;
+        case ::Network::MessageType::GoLeft:
+            this->isMovingLeft = true;
+            accSpaceship.ddx = -0.3f;
+            accSpaceship.ddy = 0;
+            accSpaceship.maxSpeed = 4.0f;
+            break;
+        case ::Network::MessageType::GoRight:
+            this->isMovingRight = true;
+            accSpaceship.ddx = 0.3f;
+            accSpaceship.ddy = 0;
+            accSpaceship.maxSpeed = 4.0f;
+            break;
         default:
             break;
     }
