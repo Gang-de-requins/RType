@@ -13,10 +13,10 @@ void receiveMessageThread(std::shared_ptr<serverGame::Rtype> rtype)
 {
 	while(true)
 	{
-		serverGame::Message msg;
-        rtype->server.receiveMessage(msg);
+		ecs::Buffer buffer;
+        rtype->server.receiveMessage(buffer);
 		rtype->mutex.lock();
-		rtype->msgList.push_back(msg);
+		rtype->bufferList.push_back(buffer);
 		rtype->mutex.unlock();
 	}
 }
