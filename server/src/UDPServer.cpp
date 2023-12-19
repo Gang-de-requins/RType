@@ -138,6 +138,126 @@ namespace rtype {
                         }
                         entityData += ";";
                     }
+                    if (component.first.find("Color") != std::string::npos) {
+                        ecs::Color &color = sceneManager.get<ecs::Color>(*entity);
+                        entityData += "Color:";
+                        entityData += std::to_string(color.r);
+                        entityData += ",";
+                        entityData += std::to_string(color.g);
+                        entityData += ",";
+                        entityData += std::to_string(color.b);
+                        entityData += ",";
+                        entityData += std::to_string(color.a);
+                        entityData += ";";
+                    }
+                    if (component.first.find("Controllable") != std::string::npos) {
+                        ecs::Controllable &controllable = sceneManager.get<ecs::Controllable>(*entity);
+                        entityData += "Controllable:";
+                        entityData += std::to_string(controllable.keyUp);
+                        entityData += ",";
+                        entityData += std::to_string(controllable.keyDown);
+                        entityData += ",";
+                        entityData += std::to_string(controllable.keyLeft);
+                        entityData += ",";
+                        entityData += std::to_string(controllable.keyRight);
+                        entityData += ",";
+                        entityData += std::to_string(controllable.keySpace);
+                        entityData += ";";
+                    }
+                    if (component.first.find("Damage") != std::string::npos) {
+                        ecs::Damage &damage = sceneManager.get<ecs::Damage>(*entity);
+                        entityData += "Damage:";
+                        entityData += std::to_string(damage.damage);
+                        entityData += ";";
+                    }
+                    if (component.first.find("FontSize") != std::string::npos) {
+                        ecs::FontSize &fontSize = sceneManager.get<ecs::FontSize>(*entity);
+                        entityData += "FontSize:";
+                        entityData += std::to_string(fontSize.size);
+                        entityData += ";";
+                    }
+                    if (component.first.find("Health") != std::string::npos) {
+                        ecs::Health &health = sceneManager.get<ecs::Health>(*entity);
+                        entityData += "Health:";
+                        entityData += std::to_string(health.health);
+                        entityData += ";";
+                    }
+                    if (component.first.find("Music") != std::string::npos) {
+                        ecs::Music &music = sceneManager.get<ecs::Music>(*entity);
+                        entityData += "Music:";
+                        entityData += music.path;
+                        entityData += ";";
+                    }
+                    if (component.first.find("Name") != std::string::npos) {
+                        ecs::Name &name = sceneManager.get<ecs::Name>(*entity);
+                        entityData += "Name:";
+                        entityData += name.name;
+                        entityData += ",";
+                        entityData += std::to_string(name.position.x);
+                        entityData += ",";
+                        entityData += std::to_string(name.position.y);
+                        entityData += ";";
+                    }
+                    if (component.first.find("Position") != std::string::npos) {
+                        ecs::Position &position = sceneManager.get<ecs::Position>(*entity);
+                        entityData += "Position:";
+                        entityData += std::to_string(position.x);
+                        entityData += ",";
+                        entityData += std::to_string(position.y);
+                        entityData += ";";
+                    }
+                    if (component.first.find("Rectangle") != std::string::npos) {
+                        ecs::Rectangle &rectangle = sceneManager.get<ecs::Rectangle>(*entity);
+                        entityData += "Rectangle:";
+                        entityData += std::to_string(rectangle.x);
+                        entityData += ",";
+                        entityData += std::to_string(rectangle.y);
+                        entityData += ",";
+                        entityData += std::to_string(rectangle.width);
+                        entityData += ",";
+                        entityData += std::to_string(rectangle.height);
+                        entityData += ";";
+                    }
+                    if (component.first.find("Rotation") != std::string::npos) {
+                        ecs::Rotation &rotation = sceneManager.get<ecs::Rotation>(*entity);
+                        entityData += "Rotation:";
+                        entityData += std::to_string(rotation.angle);
+                        entityData += ";";
+                    }
+                    if (component.first.find("Scale") != std::string::npos) {
+                        ecs::Scale &scale = sceneManager.get<ecs::Scale>(*entity);
+                        entityData += "Scale:";
+                        entityData += std::to_string(scale.x);
+                        entityData += ",";
+                        entityData += std::to_string(scale.y);
+                        entityData += ";";
+                    }
+                    if (component.first.find("Sound") != std::string::npos) {
+                        ecs::Sound &sound = sceneManager.get<ecs::Sound>(*entity);
+                        entityData += "Sound:";
+                        entityData += sound.path;
+                        entityData += ";";
+                    }
+                    if (component.first.find("Sprite") != std::string::npos) {
+                        ecs::Sprite &sprite = sceneManager.get<ecs::Sprite>(*entity);
+                        entityData += "Sprite:";
+                        entityData += sprite.path;
+                        entityData += ";";
+                    }
+                    if (component.first.find("Text") != std::string::npos) {
+                        ecs::Text &text = sceneManager.get<ecs::Text>(*entity);
+                        entityData += "Text:";
+                        entityData += text.content;
+                        entityData += ";";
+                    }
+                    if (component.first.find("Velocity") != std::string::npos) {
+                        ecs::Velocity &velocity = sceneManager.get<ecs::Velocity>(*entity);
+                        entityData += "Velocity:";
+                        entityData += std::to_string(velocity.dx);
+                        entityData += ",";
+                        entityData += std::to_string(velocity.dy);
+                        entityData += ";";
+                    }
                     }
                 this->sendData(PacketType::CREATE, entityData);
             }
