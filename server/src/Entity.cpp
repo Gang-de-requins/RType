@@ -43,6 +43,12 @@ void serverGame::Entity::move(std::string name, Network::MessageType direction, 
     ecs::Acceleration &accSpaceship = world.get<ecs::Acceleration>(this->_entity);
     std::thread stopThread;
 
+    std::pair<float, float> postest = this->getPosition(world);
+
+    std::cout << postest.first <<  " " << postest.second << std::endl;
+
+    char directionValue = static_cast<char>(direction);
+
     switch (direction) {
         case ::Network::MessageType::GoTop:
             this->isMovingTop = true;
@@ -63,6 +69,7 @@ void serverGame::Entity::move(std::string name, Network::MessageType direction, 
             accSpaceship.maxSpeed = 4.0f;
             break;
         case ::Network::MessageType::GoRight:
+            std::cout << "HEREE" << std::endl;
             this->isMovingRight = true;
             accSpaceship.ddx = 0.3f;
             accSpaceship.ddy = 0;
