@@ -20,6 +20,11 @@ jobs:
     - name: Build cmake first part
       run: |
         cmake -S . -B build
+
+    - name: Build cmake second part
+      run: |
+        cmake --build build
+
     - name: Finalize
       run: |
         echo "GitHub Action completed successfully for the tests"
