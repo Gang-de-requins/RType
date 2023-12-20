@@ -65,7 +65,7 @@ namespace rtype {
         public:
             Network();
             ~Network();
-            void connect(std::string ip, int port, Game &game);
+            void connect(const std::string &ip, const unsigned short port, Game &game, const std::string &playerName);
             void send(::Network::MessageType type, std::string message);
             void receive(Game &game);
             void setRunning(bool running);

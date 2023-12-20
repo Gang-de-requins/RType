@@ -21,7 +21,7 @@ namespace serverGame
     class Rtype
     {
     public:
-        Rtype();
+        Rtype(int port);
         ~Rtype();
         void run(void);
         void addPlayer(serverGame::Message msg);

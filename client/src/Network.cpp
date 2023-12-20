@@ -16,13 +16,13 @@ namespace rtype {
         }
     }
 
-    void Network::connect(std::string ip, int port, Game &game)
+    void Network::connect(const std::string &ip, const unsigned short port, Game &game, const std::string &playerName)
     {
         this->m_endpoint = boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string(ip), port);
         this->m_socket.connect(this->m_endpoint);
         this->m_threads.emplace_back(std::thread(&Network::receive, this, std::ref(game)));
 
-        this->send(::Network::MessageType::PlayerJoin, "Player1");
+        this->send(::Network::MessageType::PlayerJoin, playerName);
     }
 
     void Network::send(::Network::MessageType type, std::string message)

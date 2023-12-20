@@ -10,9 +10,9 @@
 #include "Rtype.hpp"
 #include "Network.hpp"
 
-serverGame::Rtype::Rtype()
+serverGame::Rtype::Rtype(int port)
 {
-    this->server.setupServer(12345);
+    this->server.setupServer(port);
     this->id = 0;
 }
 
