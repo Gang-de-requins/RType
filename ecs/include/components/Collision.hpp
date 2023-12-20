@@ -7,6 +7,7 @@ namespace ecs {
     struct Collision {
         bool isColliding;
         std::vector<std::size_t> collidingWith;
+        bool isOverlap;
     };
 }
 

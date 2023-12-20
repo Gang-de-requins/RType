@@ -15,12 +15,13 @@ set(ECS_LIBRARY _ecs)
 
 set(SRC
     src/Main.cpp
+    src/ErrorHandling.cpp
     src/Game.cpp
     src/Network.cpp
     src/Player.cpp
 )
 
-add_compile_options(-Wall -Wextra -Werror -std=c++17)
+# add_compile_options(-Wall -Wextra -Werror -std=c++17)
 
 message("Compiling ${PROJECT_NAME}...")
 

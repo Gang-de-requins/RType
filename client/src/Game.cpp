@@ -1,10 +1,11 @@
 #include "Game.hpp"
 
 namespace rtype {
-    Game::Game()
+    Game::Game(const std::string &ip, const unsigned short port, const std::string &playerName) :
+    c_playerName(playerName)
     {
         initScenes();
-        this->m_network.connect("127.0.0.1", 12345, *this);
+        this->m_network.connect(ip, port, *this, this->c_playerName);
     }
 
     Game::~Game()
@@ -14,29 +15,40 @@ namespace rtype {
     void Game::run()
     {
         InitAudioDevice();
-        InitWindow(800, 450, "rtype");
+        InitWindow(1920, 1080, "rtype");
         SetTargetFPS(60);
         this->m_world.loadTextures({ "assets/characters.gif" });
 
         while (!WindowShouldClose())
         {
             if (IsKeyPressed(KEY_UP))
-                this->m_network.send(ecs::MessageType::GoTop, "Player3");
+                this->m_network.send(::Network::MessageType::GoTop, this->c_playerName);
             if (IsKeyPressed(KEY_DOWN))
-                this->m_network.send(ecs::MessageType::GoBottom, "Player3");
+                this->m_network.send(::Network::MessageType::GoBottom, this->c_playerName);
             if (IsKeyPressed(KEY_LEFT))
-                this->m_network.send(ecs::MessageType::GoLeft, "Player3");
+                this->m_network.send(::Network::MessageType::GoLeft, this->c_playerName);
             if (IsKeyPressed(KEY_RIGHT))
-                this->m_network.send(ecs::MessageType::GoRight, "Player3");
-            
+                this->m_network.send(::Network::MessageType::GoRight, this->c_playerName);
             if (IsKeyReleased(KEY_UP))
-                this->m_network.send(ecs::MessageType::StopTop, "Player3");
+                this->m_network.send(::Network::MessageType::StopTop, this->c_playerName);
             if (IsKeyReleased(KEY_DOWN))
-                this->m_network.send(ecs::MessageType::StopBottom, "Player3");
+                this->m_network.send(::Network::MessageType::StopBottom, this->c_playerName);
             if (IsKeyReleased(KEY_LEFT))
-                this->m_network.send(ecs::MessageType::StopLeft, "Player3");
+                this->m_network.send(::Network::MessageType::StopLeft, this->c_playerName);
             if (IsKeyReleased(KEY_RIGHT))
-                this->m_network.send(ecs::MessageType::StopRight, "Player3");
+                this->m_network.send(::Network::MessageType::StopRight, this->c_playerName);
+            if (IsKeyPressed(KEY_SPACE)) {
+                ecs::SceneManager &sceneManager = this->m_world.getSceneManager();
+                auto entities = sceneManager.view<ecs::Controllable>(sceneManager.getCurrentScene());
+            
+                for (auto &entity : entities) {
+                    ecs::Controllable &controllable = sceneManager.get<ecs::Controllable>(*entity);
+                    if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - controllable.shootUpdate).count() >= controllable.timeOut) {
+                        this->m_network.send(::Network::MessageType::NewMissile, this->c_playerName);
+                    }
+                }
+
+            }
 
             BeginDrawing();
             ClearBackground(BLACK);
@@ -86,35 +98,47 @@ namespace rtype {
             ecs::NameSystem,
             ecs::TextSystem,
             ecs::CollisionSystem,
-            ecs::LifeSystem
+            ecs::LifeSystem,
+            ecs::ParallaxSystem
         >(inGame);
-        ecs::Entity &myPlayer = this->m_world.createEntity(inGame);
 
+        ecs::Entity &ParallaxBack1 = this->m_world.createEntity(inGame);
+        this->m_world.assign(ParallaxBack1, ecs::Position{0, 0});
+        this->m_world.assign(ParallaxBack1, ecs::Velocity{-3, 0});
+        this->m_world.assign(ParallaxBack1, ecs::Sprite{"assets/space-back.png", ecs::Rectangle{0, 0, 7596, 1080}, ecs::Vector2{0, 0}});
+        this->m_world.assign(ParallaxBack1, ecs::Parallax{true});
+        this->m_world.assign(ParallaxBack1, ecs::Acceleration{0, 0, 3});
+        this->m_world.assign(ParallaxBack1, ecs::Scale{1, 1});
+        this->m_world.assign(ParallaxBack1, ecs::Rotation{0});
+
+        ecs::Entity &ParallaxBack2 = this->m_world.createEntity(inGame);
+        this->m_world.assign(ParallaxBack2, ecs::Position{1920, 0});
+        this->m_world.assign(ParallaxBack2, ecs::Velocity{-1.5, 0});
+        this->m_world.assign(ParallaxBack2, ecs::Sprite{"assets/far-planets.png", ecs::Rectangle{0, 0, 272, 160}, ecs::Vector2{0, 0}});
+        this->m_world.assign(ParallaxBack2, ecs::Parallax{true});
+        this->m_world.assign(ParallaxBack2, ecs::Acceleration{0, 0, 2});
+        this->m_world.assign(ParallaxBack2, ecs::Scale{1920 / 272, 1080 / 160});
+        this->m_world.assign(ParallaxBack2, ecs::Rotation{0});
+
+        ecs::Entity &myPlayer = this->m_world.createEntity(inGame);
         this->m_world.assign(myPlayer, ecs::Position{200, 200});
         this->m_world.assign(myPlayer, ecs::Health{100});
         this->m_world.assign(myPlayer, ecs::Velocity{0, 0});
-        this->m_world.assign(myPlayer, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}});
+        this->m_world.assign(myPlayer, ecs::Sprite{"assets/characters2.gif", ecs::Rectangle{0, 0, 32, 32}, ecs::Vector2{0, 0}});
         this->m_world.assign(myPlayer, ecs::Acceleration{0, 0, 4});
-        this->m_world.assign(myPlayer, ecs::Scale{1, 1});
+        this->m_world.assign(myPlayer, ecs::Scale{2, 2});
         this->m_world.assign(myPlayer, ecs::Rotation{0});
-        this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT});
-        this->m_world.assign(myPlayer, ecs::Collision{false, {}});
-        this->m_world.assign(myPlayer, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 4, 0, 300, std::chrono::steady_clock::now()});
-        this->m_world.assign(myPlayer, ecs::Name{"Player 3", ecs::Position{-20, -20}});
+        this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, 0.05, std::chrono::steady_clock::now()});
+        this->m_world.assign(myPlayer, ecs::Collision{false, {}, false});
+        this->m_world.assign(myPlayer, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 8, 0, 150, std::chrono::steady_clock::now()});
+        this->m_world.assign(myPlayer, ecs::Name{this->c_playerName, ecs::Position{-20, -20}});
 
-        this->m_players.push_back(Player(myPlayer, "Player 3"));
+        this->m_players.push_back(Player(myPlayer, this->c_playerName));
 
-        ecs::Entity &myPlayer2 = this->m_world.createEntity(inGame);
-        this->m_world.assign(myPlayer2, ecs::Position{300, 300});
-        this->m_world.assign(myPlayer2, ecs::Health{100});
-        this->m_world.assign(myPlayer2, ecs::Velocity{0, 0});
-        this->m_world.assign(myPlayer2, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}});
-        this->m_world.assign(myPlayer2, ecs::Acceleration{0, 0, 4});
-        this->m_world.assign(myPlayer2, ecs::Scale{1, 1});
-        this->m_world.assign(myPlayer2, ecs::Rotation{0});
-        this->m_world.assign(myPlayer2, ecs::Controllable{KEY_W, KEY_S, KEY_A, KEY_D});
-        this->m_world.assign(myPlayer2, ecs::Collision{false, {}});
-        this->m_world.assign(myPlayer2, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 4, 0, 300, std::chrono::steady_clock::now()});
-        this->m_world.assign(myPlayer2, ecs::Damage{10});
+        ecs::Entity &SoundPlayer = this->m_world.createEntity(inGame);
+        this->m_world.assign(SoundPlayer, ecs::Sound{"assets/weird.wav"});
+
+        ecs::Entity &music = this->m_world.createEntity(inGame);
+        this->m_world.assign(music, ecs::Music{"assets/mini1111.xm"});
     }
 }

@@ -18,7 +18,7 @@ set(SRC
     src/Message.cpp
 )
 
-add_compile_options(-Wall -Wextra -std=c++17)
+# add_compile_options(-Wall -Wextra -std=c++17)
 
 message("Compiling ${PROJECT_NAME}...")
 

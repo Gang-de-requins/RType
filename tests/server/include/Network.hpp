@@ -28,11 +28,6 @@ namespace Network
         StopLeft = 0x10,
         StopTop = 0x11,
         StopBottom = 0x12,
-        NewMissile = 0x13,
-        NewEnemy = 0x14,
-        EnemyDead = 0x15,
-        MissileDead = 0x16,
-        PlayerDead = 0x17
     };
 
     enum class PlayerActionType : char {

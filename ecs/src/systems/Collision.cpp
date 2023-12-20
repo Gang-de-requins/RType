@@ -17,12 +17,13 @@ namespace ecs {
                 Position &position2 = sceneManager.get<Position>(*entity2);
                 Sprite &sprite1 = sceneManager.get<Sprite>(*entity1);
                 Sprite &sprite2 = sceneManager.get<Sprite>(*entity2);
+                Collision &collision2 = sceneManager.get<Collision>(*entity2);
 
                 if (isColliding(position1, sprite1, position2, sprite2)) {
                     collision1.isColliding = true;
                     collision1.collidingWith.push_back(entity2->id);
 
-                    if (sceneManager.has<Velocity>(*entity1)) {
+                    if (!collision1.isOverlap && !collision2.isOverlap && sceneManager.has<Velocity>(*entity1)) {
                         Velocity &velocity1 = sceneManager.get<Velocity>(*entity1);
                         velocity1.dx = 0;
                         velocity1.dy = 0;
