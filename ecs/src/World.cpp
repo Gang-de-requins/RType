@@ -17,6 +17,10 @@ namespace ecs {
         return this->m_sceneManager.getCurrentScene();
     }
 
+    SceneManager &World::getSceneManager() {
+        return this->m_sceneManager;
+    }
+
     Entity &World::createEntity(Scene &scene) {
         return this->m_sceneManager.createEntity(scene);
     }

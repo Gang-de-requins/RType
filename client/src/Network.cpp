@@ -16,13 +16,13 @@ namespace rtype {
         }
     }
 
-    void Network::connect(std::string ip, int port, Game &game)
+    void Network::connect(const std::string &ip, const unsigned short port, Game &game, const std::string &playerName)
     {
         this->m_endpoint = boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string(ip), port);
         this->m_socket.connect(this->m_endpoint);
         this->m_threads.emplace_back(std::thread(&Network::receive, this, std::ref(game)));
 
-        this->send(::Network::MessageType::PlayerJoin, "Player1");
+        this->send(::Network::MessageType::PlayerJoin, playerName);
     }
 
     void Network::send(::Network::MessageType type, std::string message)
@@ -64,9 +64,12 @@ namespace rtype {
                         std::string msg(receiveBuffer.data() + sizeof(::Network::MessageType), bytes_transferred - sizeof(::Network::MessageType));
                         if (messageType == ::Network::MessageType::PlayerJoin) {
                             this->newPlayerConnected(game, msg);
-                        }
-                        if (std::find(directions.begin(), directions.end(), messageType) != directions.end()) {
+                        } else if (std::find(directions.begin(), directions.end(), messageType) != directions.end()) {
                             this->moveEntity(game, msg, messageType);
+                        } else if (messageType == ::Network::MessageType::NewMissile) {
+                            this->newMissile(game, msg);
+                        } else if (messageType == ::Network::MessageType::NewEnemy) {
+                            this->newEnemy(game, msg);
                         }
                     }
                 }
@@ -96,7 +99,7 @@ namespace rtype {
         ecs::Entity &player = world.createEntity(inGame);
         world.assign(player, ecs::Position{pos.first, pos.second});
         world.assign(player, ecs::Velocity{0, 0});
-        world.assign(player, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, offset, 32, 16}, ecs::Vector2{0, 0}});
+        world.assign(player, ecs::Sprite{"assets/characters2.gif", ecs::Rectangle{0, offset, 32, 16}, ecs::Vector2{0, 0}});
         world.assign(player, ecs::Acceleration{0, 0, 4});
         world.assign(player, ecs::Scale{1, 1});
         world.assign(player, ecs::Rotation{0});
@@ -114,5 +117,34 @@ namespace rtype {
                 player.move(game, direction);
             }
         }
+    }
+
+    void Network::newMissile(Game &game, std::string name)
+    {
+        for (auto &player : game.getPlayers()) {
+            if (player.getName() == name) {
+                player.shoot(game);
+            }
+        }
+    }
+
+    void Network::newEnemy(Game &game, std::string name)
+    {
+        auto &world = game.getWorld();
+        ecs::Scene &inGame = world.getCurrentScene();
+        std::string rawPos = name.substr(name.find(":") + 1);
+        std::pair<float, float> pos = std::make_pair(std::stof(rawPos.substr(0, rawPos.find(":"))), std::stof(rawPos.substr(rawPos.find(":") + 1)));
+
+        ecs::Entity &enemy = world.createEntity(inGame);
+        world.assign(enemy, ecs::Position{pos.first, pos.second});
+        world.assign(enemy, ecs::Velocity{-3, 0});
+        world.assign(enemy, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}});
+        world.assign(enemy, ecs::Acceleration{0, 0, 4});
+        world.assign(enemy, ecs::Scale{1, 1});
+        world.assign(enemy, ecs::Rotation{0});
+        world.assign(enemy, ecs::Name{"enemy", ecs::Position{-20, -20}});
+        world.assign(enemy, ecs::Health{50});
+        world.assign(enemy, ecs::Collision{false, {}, true});
+        world.assign(enemy, ecs::Damage{30});
     }
 }

@@ -78,6 +78,8 @@ namespace ecs {
              */
             Scene &getCurrentScene();
 
+            SceneManager &getSceneManager();
+
             /**
              * @fn World::createEntity
              * @brief Create an entity

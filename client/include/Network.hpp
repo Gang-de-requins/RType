@@ -21,6 +21,11 @@ namespace Network
         StopLeft = 0x10,
         StopTop = 0x11,
         StopBottom = 0x12,
+        NewMissile = 0x13,
+        NewEnemy = 0x14,
+        EnemyDead = 0x15,
+        MissileDead = 0x16,
+        PlayerDead = 0x17
     };
 
     enum class PlayerActionType : char {
@@ -65,7 +70,7 @@ namespace rtype {
         public:
             Network();
             ~Network();
-            void connect(std::string ip, int port, Game &game);
+            void connect(const std::string &ip, const unsigned short port, Game &game, const std::string &playerName);
             void send(::Network::MessageType type, std::string message);
             void receive(Game &game);
             void setRunning(bool running);
@@ -73,6 +78,8 @@ namespace rtype {
         private:
             void newPlayerConnected(Game &game, std::string name);
             void moveEntity(Game &game, std::string name, ::Network::MessageType type);
+            void newMissile(Game &game, std::string name);
+            void newEnemy(Game &game, std::string name);
     };
 }
 
