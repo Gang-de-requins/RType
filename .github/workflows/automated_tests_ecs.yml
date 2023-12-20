@@ -1,4 +1,4 @@
-name: Automated tests
+name: Automated tests ecs
 
 on:
   push:
@@ -17,6 +17,7 @@ jobs:
     - name: Go to the correct file
       run: |
         cd tests/ecs
+
     - name: Build cmake first part
       run: |
         cmake -S . -B build
