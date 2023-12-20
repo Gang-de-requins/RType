@@ -11,7 +11,7 @@ namespace ecs {
         int keyRight;
         int keySpace;
         float timeOut;
-        std::chrono::steady_clock::time_point shootUpadte;
+        std::chrono::steady_clock::time_point shootUpdate;
     };
 }
 
