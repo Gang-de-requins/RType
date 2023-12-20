@@ -36,19 +36,14 @@ void serverGame::Server::receiveMessage(ecs::Buffer& buffer) {
         std::size_t bytes_transferred = this->socket->receive_from(boost::asio::buffer(receiveBuffer), senderEndpoint);
 
         if (bytes_transferred > 0) {
-            buffer = ecs::Buffer();
-            buffer.getData() = std::vector<char>(receiveBuffer.begin(), receiveBuffer.begin() + bytes_transferred);
+            buffer.setData(std::vector<char>(receiveBuffer.begin(), receiveBuffer.begin() + bytes_transferred));
             buffer.setEndpoint(senderEndpoint);
-
-            ecs::MessageType messageType = buffer.readMessageType();
-            std::string receivedString = buffer.readString();
-
-            std::cout << receivedString << std::endl;
         }
     } catch (std::exception &e) {
         std::cerr << "Exception in receiveMessage: " << e.what() << std::endl;
     }
 }
+
 
 // void serverGame::Server::sendMessage(const serverGame::Message &message, const boost::asio::ip::udp::endpoint &recipientEndpoint) {
 //     try {

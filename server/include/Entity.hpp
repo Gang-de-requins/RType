@@ -22,7 +22,7 @@ namespace serverGame
     {
 
     public:
-        Entity(std::string name, int id, ecs::World &world);
+        Entity(std::string name, int id, ecs::World &world, ecs::Entity &entity);
         ~Entity();
         void setName(std::string name)
         {
@@ -54,7 +54,7 @@ namespace serverGame
             return this->_type;
         }
 
-        void move(std::string name, Network::MessageType direction, ecs::World &world);
+        void move(std::string name, ecs::MessageType direction, ecs::World &world);
         void stopMoving(ecs::Acceleration &accSpaceship);
         std::pair<float, float> getPosition(ecs::World &world);
         bool isMovingTop;
@@ -63,7 +63,7 @@ namespace serverGame
         bool isMovingBottom;
 
     private:
-        ecs::Entity _entity;
+        ecs::Entity &_entity;
         std::string _type;
         std::string _name;
         boost::asio::ip::udp::endpoint _endpoint;

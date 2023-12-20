@@ -9,23 +9,23 @@
 #include <boost/asio.hpp>
 #include "Entity.hpp"
 
-serverGame::Entity::Entity(std::string name, int id, ecs::World &world) : _entity(world.createEntity(world.getCurrentScene()))
+serverGame::Entity::Entity(std::string name, int id, ecs::World &world, ecs::Entity &entity) : _entity(entity)
 {
-    ecs::Scene &inGame = world.getCurrentScene();
-    this->_entity = world.createEntity(inGame);
     this->_name = name;
+    // ecs::Scene &inGame = world.getCurrentScene();
+    // this->_entity = world.createEntity(inGame);
 
-    world.assign(this->_entity, ecs::Position{200, 200});
-    world.assign(this->_entity, ecs::Health{100});
-    world.assign(this->_entity, ecs::Velocity{0, 0});
-    world.assign(this->_entity, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}});
-    world.assign(this->_entity, ecs::Acceleration{0, 0, 4});
-    world.assign(this->_entity, ecs::Scale{1, 1});
-    world.assign(this->_entity, ecs::Rotation{0});
-    world.assign(this->_entity, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT});
-    world.assign(this->_entity, ecs::Collision{false, {}});
-    world.assign(this->_entity, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 4, 0, 300, std::chrono::steady_clock::now()});
-    world.assign(this->_entity, ecs::Name{name, ecs::Position{-20, -20}});
+    // world.assign(this->_entity, ecs::Position{200, 200});
+    // world.assign(this->_entity, ecs::Health{100});
+    // world.assign(this->_entity, ecs::Velocity{0, 0});
+    // world.assign(this->_entity, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}});
+    // world.assign(this->_entity, ecs::Acceleration{0, 0, 4});
+    // world.assign(this->_entity, ecs::Scale{1, 1});
+    // world.assign(this->_entity, ecs::Rotation{0});
+    // world.assign(this->_entity, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT});
+    // world.assign(this->_entity, ecs::Collision{false, {}});
+    // world.assign(this->_entity, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 4, 0, 300, std::chrono::steady_clock::now()});
+    // world.assign(this->_entity, ecs::Name{name, ecs::Position{-20, -20}});
     this->isMovingTop = false;
     this->isMovingLeft = false;
     this->isMovingRight = false;
@@ -38,7 +38,7 @@ serverGame::Entity::~Entity()
 }
 
 
-void serverGame::Entity::move(std::string name, Network::MessageType direction, ecs::World &world)
+void serverGame::Entity::move(std::string name, ecs::MessageType direction, ecs::World &world)
 {
     ecs::Acceleration &accSpaceship = world.get<ecs::Acceleration>(this->_entity);
     std::thread stopThread;
@@ -50,47 +50,47 @@ void serverGame::Entity::move(std::string name, Network::MessageType direction, 
     char directionValue = static_cast<char>(direction);
 
     switch (direction) {
-        case ::Network::MessageType::GoTop:
+        case ecs::MessageType::GoTop:
             this->isMovingTop = true;
             accSpaceship.ddx = 0;
             accSpaceship.ddy = -0.3f;
             accSpaceship.maxSpeed = 4.0f;
             break;
-        case ::Network::MessageType::GoBottom:
+        case ecs::MessageType::GoBottom:
             this->isMovingBottom = true;
             accSpaceship.ddx = 0;
             accSpaceship.ddy = 0.3f;
             accSpaceship.maxSpeed = 4.0f;
             break;
-        case ::Network::MessageType::GoLeft:
+        case ecs::MessageType::GoLeft:
             this->isMovingLeft = true;
             accSpaceship.ddx = -0.3f;
             accSpaceship.ddy = 0;
             accSpaceship.maxSpeed = 4.0f;
             break;
-        case ::Network::MessageType::GoRight:
+        case ecs::MessageType::GoRight:
             std::cout << "HEREE" << std::endl;
             this->isMovingRight = true;
             accSpaceship.ddx = 0.3f;
             accSpaceship.ddy = 0;
             accSpaceship.maxSpeed = 4.0f;
             break;
-        case ::Network::MessageType::StopTop:
+        case ecs::MessageType::StopTop:
             this->isMovingTop = false;
             stopThread = std::thread(&Entity::stopMoving, this, std::ref(accSpaceship));
             stopThread.detach();
             break;
-        case ::Network::MessageType::StopBottom:
+        case ecs::MessageType::StopBottom:
             this->isMovingBottom = false;
             stopThread = std::thread(&Entity::stopMoving, this, std::ref(accSpaceship));
             stopThread.detach();
             break;
-        case ::Network::MessageType::StopLeft:
+        case ecs::MessageType::StopLeft:
             this->isMovingLeft = false;
             stopThread = std::thread(&Entity::stopMoving, this, std::ref(accSpaceship));
             stopThread.detach();
             break;
-        case ::Network::MessageType::StopRight:
+        case ecs::MessageType::StopRight:
             this->isMovingRight = false;
             stopThread = std::thread(&Entity::stopMoving, this, std::ref(accSpaceship));
             stopThread.detach();

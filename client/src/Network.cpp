@@ -31,7 +31,7 @@ namespace rtype {
 
         buffer.writeMessageType(type);
         buffer.writeString(message);
-
+        std::cout << "Received MessageType: " << static_cast<int>(buffer.readMessageType()) << std::endl;
         this->m_socket.send_to(boost::asio::buffer(buffer.getData()), this->m_endpoint);
     }
 
@@ -61,6 +61,8 @@ namespace rtype {
 
                     ecs::MessageType messageType = buffer.readMessageType();
                     std::string msg = buffer.readString();
+
+                    std::cout << msg << std::endl;
 
                     if (messageType == ecs::MessageType::PlayerJoin) {
                         this->newPlayerConnected(game, msg);

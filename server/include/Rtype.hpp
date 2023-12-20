@@ -26,7 +26,7 @@ namespace serverGame
         ~Rtype();
         void run(void);
         //void addPlayer(serverGame::Message msg);
-        void addPlayer(ecs::Buffer msg);
+        void addPlayer(std::string name, boost::asio::ip::udp::endpoint endpoint);
         void GoDirection(serverGame::Message msg, Network::MessageType dir);
         void StopDirection(serverGame::Message msg, Network::MessageType dir);
         void processMessages(void);
@@ -36,7 +36,7 @@ namespace serverGame
         {
             return this->players;
         }
-        std::vector<serverGame::Entity> getEntities()
+        std::vector<serverGame::Entity> &getEntities()
         {
             return this->entities;
         }

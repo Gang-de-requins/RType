@@ -100,9 +100,9 @@ namespace rtype {
         this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT});
         this->m_world.assign(myPlayer, ecs::Collision{false, {}});
         this->m_world.assign(myPlayer, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 4, 0, 300, std::chrono::steady_clock::now()});
-        this->m_world.assign(myPlayer, ecs::Name{"Player 3", ecs::Position{-20, -20}});
+        this->m_world.assign(myPlayer, ecs::Name{"Player 1", ecs::Position{-20, -20}});
 
-        this->m_players.push_back(Player(myPlayer, "Player 3"));
+        this->m_players.push_back(Player(myPlayer, "Player 1"));
 
         ecs::Entity &myPlayer2 = this->m_world.createEntity(inGame);
         this->m_world.assign(myPlayer2, ecs::Position{300, 300});

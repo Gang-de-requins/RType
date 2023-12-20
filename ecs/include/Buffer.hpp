@@ -38,6 +38,9 @@ namespace ecs {
             std::vector<char>& getData() {
                 return data_;
             }
+            void setData(const std::vector<char>& newData) {
+                data_ = newData;
+            }
 
         private:
             std::vector<char> data_;
