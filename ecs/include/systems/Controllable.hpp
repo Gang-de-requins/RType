@@ -5,6 +5,7 @@
 #include "raylib.h"
 #include "components/Acceleration.hpp"
 #include "components/Controllable.hpp"
+#include "components/Sound.hpp"
 #include "ISystem.hpp"
 
 namespace ecs {
