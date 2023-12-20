@@ -39,12 +39,14 @@ The entities are stored in a vector for each scene, and the components are store
 
 ## Systems
 
-| Main System | Sub System |
-|-------------|------------|
+| Main System |
+|-------------|
 | Animation | |
 | Controllable | |
 | Movement | |
-| Render | Text, Sprite |
+| Text |
+| Sprite |
+| Name |
 | Music | |
 
 ## How to create a component

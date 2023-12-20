@@ -20,6 +20,7 @@ set(SRC
     src/systems/Sound.cpp
     src/systems/Collision.cpp
     src/systems/Life.cpp
+    src/systems/Parallax.cpp
     src/systems/rendering/Name.cpp
     src/systems/rendering/Sprite.cpp
     src/systems/rendering/Text.cpp

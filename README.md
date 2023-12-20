@@ -182,10 +182,15 @@ Game Engine:
 - [Ethan Saux](https://github.com/Eowiin)
 - [Justin Thibault](https://github.com/jThiba)
 
-Server and Client:
+Client:
+- [Ethan Saux](https://github.com/Eowiin)
+- [Justin Thibault](https://github.com/jThiba)
+
+Server:
 - [Tony Tran](https://github.com/Troxifox)
 - [Alexandre Jankovic](https://github.com/Acovic17)
 - [Hugo Martins-Gandra](https://github.com/Masteruuuuu)
 
 Dev-ops:
 - [Hugo Martins-Gandra](https://github.com/Masteruuuuu)
+- [Ethan Saux](https://github.com/Eowiin)
