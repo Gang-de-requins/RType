@@ -1,20 +1,9 @@
-/*
-** EPITECH PROJECT, 2023
-** r type
-** File description:
-** Server
-*/
+#ifndef NETWORK_HPP
+#define NETWORK_HPP
 
-#ifndef NETWORK_HPP_
-#define NETWORK_HPP_
+#include <string>
 
-#include <iostream>
-#include <vector>
-#include <cstring>
-
-
-namespace Network
-{
+namespace ecs {
     enum class MessageType : char {
         PlayerJoin = 0x01,
         PlayerJoinResponse = 0x02,
@@ -53,5 +42,6 @@ namespace Network
         int playerId;
         PlayerActionType actionType;
     };
-}
-#endif /* !NETWORK_HPP_ */
+};
+
+#endif /* NETWORK_HPP */

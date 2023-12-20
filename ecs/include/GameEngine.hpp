@@ -10,5 +10,6 @@
 
 #include "Entity.hpp"
 #include "World.hpp"
+#include "Buffer.hpp"
 
 #endif /* GAME_ENGINE_HPP */
