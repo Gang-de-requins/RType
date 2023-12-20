@@ -34,6 +34,14 @@ namespace ecs {
                 Position &position = sceneManager.get<Position>(*entity);
                 Sprite &sprite = sceneManager.get<Sprite>(*entity);
                 Entity &Shoot = sceneManager.createEntity(sceneManager.getCurrentScene());
+                sceneManager.assign(Shoot, Position{position.x + sprite.source.width, position.y});
+                sceneManager.assign(Shoot, Velocity{3, 0});
+                sceneManager.assign(Shoot, Sprite{"assets/28.png", Rectangle{0, 0, 210, 92}, Vector2{0, 0}});
+                sceneManager.assign(Shoot, Acceleration{0, 0, 15});
+                sceneManager.assign(Shoot, Scale{0.25, 0.25});
+                sceneManager.assign(Shoot, Rotation{0});;
+                sceneManager.assign(Shoot, Collision{false, {}});
+                sceneManager.assign(Shoot, Damage{10});
             } else {
                 acceleration.ddx *= -1;
                 acceleration.ddy *= -1;
