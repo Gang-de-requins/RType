@@ -25,11 +25,15 @@ namespace ecs {
                 acceleration.ddx = 0.3f;
                 acceleration.ddy = 0;
                 acceleration.maxSpeed = 4.0f;
-            } else if (IsKeyPressed(controllable.keySpace)) {
+            } else if (IsKeyPressed(controllable.keySpace) && std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - controllable.shootUpdate).count() >= controllable.timeOut){
                 auto entities = sceneManager.view<Sound>(sceneManager.getCurrentScene())[0];
                 auto &sound = sceneManager.get<Sound>(*entities);
                 auto &soundData = sceneManager.getSound(sound.path);
+
                 PlaySound(soundData);
+                Position &position = sceneManager.get<Position>(*entity);
+                Sprite &sprite = sceneManager.get<Sprite>(*entity);
+                Entity &Shoot = sceneManager.createEntity(sceneManager.getCurrentScene());
             } else {
                 acceleration.ddx *= -1;
                 acceleration.ddy *= -1;
