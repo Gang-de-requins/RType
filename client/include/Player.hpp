@@ -32,6 +32,7 @@ namespace rtype {
             ecs::Entity &getSpaceshipEntity();
             const std::string &getName() const;
             void move(Game &game, ::Network::MessageType direction);
+            void shoot(Game &game);
         
         private:
             void stopMoving(ecs::Acceleration &accSpaceship);

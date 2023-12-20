@@ -37,6 +37,18 @@ namespace rtype {
                 this->m_network.send(::Network::MessageType::StopLeft, this->c_playerName);
             if (IsKeyReleased(KEY_RIGHT))
                 this->m_network.send(::Network::MessageType::StopRight, this->c_playerName);
+            if (IsKeyPressed(KEY_SPACE)) {
+                ecs::SceneManager &sceneManager = this->m_world.getSceneManager();
+                auto entities = sceneManager.view<ecs::Controllable>(sceneManager.getCurrentScene());
+            
+                for (auto &entity : entities) {
+                    ecs::Controllable &controllable = sceneManager.get<ecs::Controllable>(*entity);
+                    if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - controllable.shootUpdate).count() >= controllable.timeOut) {
+                        this->m_network.send(::Network::MessageType::NewMissile, this->c_playerName);
+                    }
+                }
+
+            }
 
             BeginDrawing();
             ClearBackground(BLACK);
@@ -125,5 +137,8 @@ namespace rtype {
 
         ecs::Entity &SoundPlayer = this->m_world.createEntity(inGame);
         this->m_world.assign(SoundPlayer, ecs::Sound{"assets/weird.wav"});
+
+        ecs::Entity &music = this->m_world.createEntity(inGame);
+        this->m_world.assign(music, ecs::Music{"assets/mini1111.xm"});
     }
 }

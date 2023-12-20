@@ -23,9 +23,27 @@ serverGame::Rtype::~Rtype()
 
 void serverGame::Rtype::run(void)
 {
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     while(true)
     {
         processMessages();
+
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - begin).count() > 2000) {
+            // std::cout << "Send new enemy" << std::endl;
+            begin = std::chrono::steady_clock::now();
+            
+            serverGame::Message existingPlayerMessage;
+            existingPlayerMessage.setMessageType(Network::MessageType::NewEnemy);
+            existingPlayerMessage.setMessage("Position:800,800");
+
+            for (auto& player : this->players) {
+                // std::cout << "PLAYER ID: " << player.getId() << std::endl;
+                if (player.getId() != 0) {
+                    std::cout << "New enemy to send" << std::endl;
+                    this->server.sendMessage(existingPlayerMessage, player.getEndpoint());
+                }
+            }
+        }
     }
 }
 
@@ -41,6 +59,8 @@ void serverGame::Rtype::processMessages(void)
         std::cout << msg.getEndpoint() << std::endl;
         if (msg.getMessageType() == Network::MessageType::PlayerJoin)
             addPlayer(msg);
+        if (msg.getMessageType() == Network::MessageType::NewMissile)
+            addMissile(msg);
         if (msg.getMessageType() == Network::MessageType::GoRight)
             GoDirection(msg, Network::MessageType::GoRight);
         if (msg.getMessageType() == Network::MessageType::GoLeft)
@@ -125,4 +145,16 @@ void serverGame::Rtype::addPlayer(serverGame::Message msg)
     }
 }
 
+void serverGame::Rtype::addMissile(serverGame::Message msg)
+{
+    serverGame::Message newMissileMessage;
+    newMissileMessage.setMessageType(Network::MessageType::NewMissile);
+    newMissileMessage.setMessage(msg.getMessage());
+
+    for (auto& player : this->players) {
+        if (player.getEndpoint() != msg.getEndpoint()) {
+            this->server.sendMessage(newMissileMessage, player.getEndpoint());
+        }
+    }
+}
 
