@@ -25,9 +25,7 @@
   - [Lobby](#lobby)
   - [Move the player](#move-the-player)
     - [Keyboard](#keyboard)
-    - [Controller](#controller)
   - [Kill enemies](#kill-enemies)
-  - [Pause Game](#pause-game)
   - [Lose condition](#lose-condition)
 - [About all the project](#about-all-the-project)
   - [Protocol documentation](#protocol-documentation)
@@ -129,28 +127,11 @@ After running the script you will have two executable: "./r-type_client" and "./
   | Arrow Left | Left     |
   | Arrow Right | Right   |
 
-#### Controller
-
-  | Button    | Direction |
-  | --------- | --------- |
-  |joystick(left) Up  | Top       |
-  |joystick(left) Down | Down     |
-  |joystick(left) Left | Left     |
-  |joystick(left) Right | Right   |
-
 ### Attack
 
   | Button    | Action    |
   | --------- | --------- |
-  | Space  Or button X(controller)   | Shoot     |
-
-### Pause Game
-
-In the pause game you can quit the game or start. The pause don't stop the game !
-
-  | Button    | Action    |
-  | --------- | --------- |
-  | P         | Pause     |
+  | Space    | Shoot     |
 
 ### Lose condition
 
@@ -187,9 +168,10 @@ Client:
 - [Justin Thibault](https://github.com/jThiba)
 
 Server:
+- [Ethan Saux](https://github.com/Eowiin)
+- [Justin Thibault](https://github.com/jThiba)
 - [Tony Tran](https://github.com/Troxifox)
 - [Alexandre Jankovic](https://github.com/Acovic17)
-- [Hugo Martins-Gandra](https://github.com/Masteruuuuu)
 
 Dev-ops:
 - [Hugo Martins-Gandra](https://github.com/Masteruuuuu)
