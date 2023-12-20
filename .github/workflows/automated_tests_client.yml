@@ -16,7 +16,7 @@ jobs:
 
     - name: Go to the correct file
       run: |
-        cd tests/ecs
+        cd tests/client
 
     - name: Build cmake first part
       run: |
