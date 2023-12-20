@@ -4,13 +4,9 @@
 #include <functional>
 
 namespace ecs {
-    struct Clickable;
-
-    using Clickhandler = std::function<void(Clickable&)>;
-
     struct Clickable {
         bool clickable;
-        Clickhandler onClick;
+        std::function<void(Clickable&)> onClick;
     };
 }
 
