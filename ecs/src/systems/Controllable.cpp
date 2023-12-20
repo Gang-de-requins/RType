@@ -30,6 +30,7 @@ namespace ecs {
                 auto &sound = sceneManager.get<Sound>(*entities);
                 auto &soundData = sceneManager.getSound(sound.path);
 
+                controllable.shootUpdate = std::chrono::steady_clock::now();
                 PlaySound(soundData);
                 Position &position = sceneManager.get<Position>(*entity);
                 Sprite &sprite = sceneManager.get<Sprite>(*entity);
