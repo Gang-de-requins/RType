@@ -107,7 +107,7 @@ namespace ecs {
              */
             template<typename Component>
             void assign(Entity &entity, Component component) {
-                entity.components[typeid(Component).name()] = std::make_any<Component>(component);
+                entity.components[std::type_index(typeid(Component))] = std::make_any<Component>(component);
             }
 
             /**
@@ -119,7 +119,7 @@ namespace ecs {
              */
             template<typename Component>
             void remove(Entity &entity) {
-                entity.components.erase(typeid(Component).name());
+                entity.components.erase(typeid(Component));
             }
 
             /**
@@ -133,7 +133,7 @@ namespace ecs {
             template<typename Component>
             Component &get(Entity &entity) {
                 try {
-                    return std::any_cast<Component &>(entity.components.at(typeid(Component).name()));
+                    return std::any_cast<Component &>(entity.components.at(std::type_index(typeid(Component))));
                 } catch (std::exception &e) {
                     std::cerr << e.what() << std::endl;
                     throw;
