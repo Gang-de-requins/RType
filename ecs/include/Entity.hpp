@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <memory>
 #include <any>
-#include <string_view>
+#include <typeindex>
 
 namespace ecs {
     /**
@@ -22,7 +22,7 @@ namespace ecs {
      */
     struct Entity {
         std::size_t id;
-        std::unordered_map<std::string_view, std::any> components;
+        std::unordered_map<std::type_index, std::any> components;
     };
 }
 
