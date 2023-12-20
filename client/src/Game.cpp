@@ -100,12 +100,12 @@ namespace rtype {
         this->m_world.assign(ParallaxBack1, ecs::Rotation{0});
 
         ecs::Entity &ParallaxBack2 = this->m_world.createEntity(inGame);
-        this->m_world.assign(ParallaxBack2, ecs::Position{0, 0});
-        this->m_world.assign(ParallaxBack2, ecs::Velocity{-1, 0});
+        this->m_world.assign(ParallaxBack2, ecs::Position{1920, 0});
+        this->m_world.assign(ParallaxBack2, ecs::Velocity{-1.5, 0});
         this->m_world.assign(ParallaxBack2, ecs::Sprite{"assets/far-planets.png", ecs::Rectangle{0, 0, 272, 160}, ecs::Vector2{0, 0}});
         this->m_world.assign(ParallaxBack2, ecs::Parallax{true});
         this->m_world.assign(ParallaxBack2, ecs::Acceleration{0, 0, 2});
-        this->m_world.assign(ParallaxBack2, ecs::Scale{1, 1});
+        this->m_world.assign(ParallaxBack2, ecs::Scale{1920 / 272, 1080 / 160});
         this->m_world.assign(ParallaxBack2, ecs::Rotation{0});
 
         ecs::Entity &myPlayer = this->m_world.createEntity(inGame);
