@@ -22,7 +22,7 @@ namespace rtype {
         this->m_socket.connect(this->m_endpoint);
         this->m_threads.emplace_back(std::thread(&Network::receive, this, std::ref(game)));
 
-        this->send(ecs::MessageType::PlayerJoin, "Player3");
+        this->send(ecs::MessageType::PlayerJoin, "Player1");
     }
 
     void Network::send(ecs::MessageType type, std::string message)

@@ -26,6 +26,7 @@ namespace serverGame
         ~Rtype();
         void run(void);
         //void addPlayer(serverGame::Message msg);
+        void addDefault(std::string name);
         void addPlayer(std::string name, boost::asio::ip::udp::endpoint endpoint);
         void GoDirection(serverGame::Message msg, Network::MessageType dir);
         void StopDirection(serverGame::Message msg, Network::MessageType dir);

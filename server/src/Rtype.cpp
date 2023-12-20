@@ -31,6 +31,7 @@ serverGame::Rtype::~Rtype()
 
 void serverGame::Rtype::run(void)
 {
+    this->addDefault("test");
     while(true)
     {
         this->world.update();
@@ -134,6 +135,30 @@ void serverGame::Rtype::StopDirection(serverGame::Message msg, Network::MessageT
     }
 }
 
+void serverGame::Rtype::addDefault(std::string name)
+{
+    ecs::Scene &inGame = world.getCurrentScene();
+    ecs::Entity &entity = world.createEntity(inGame);
+
+    world.assign(entity, ecs::Position{200, 200});
+    world.assign(entity, ecs::Health{100});
+    world.assign(entity, ecs::Velocity{0, 0});
+    world.assign(entity, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}});
+    world.assign(entity, ecs::Acceleration{0, 0, 4});
+    world.assign(entity, ecs::Scale{1, 1});
+    world.assign(entity, ecs::Rotation{0});
+    world.assign(entity, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT});
+    world.assign(entity, ecs::Collision{false, {}});
+    world.assign(entity, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 4, 0, 300, std::chrono::steady_clock::now()});
+    world.assign(entity, ecs::Name{name, ecs::Position{-20, -20}});
+
+    serverGame::Entity newEntity(name, this->id, this->world, entity);
+    newEntity.setType("TEST");
+    this->mutex.lock();
+    this->entities.push_back(newEntity);
+    this->mutex.unlock();
+}
+
 void serverGame::Rtype::addPlayer(std::string name, boost::asio::ip::udp::endpoint endpoint)
 {
     this->id++;
@@ -170,8 +195,8 @@ void serverGame::Rtype::addPlayer(std::string name, boost::asio::ip::udp::endpoi
             existingPlayerMessage.writeMessageType(ecs::MessageType::PlayerJoin);
             existingPlayerMessage.writeString(playerNameMessage);
 
-            this->server.sendMessage(existingPlayerMessage, newEntity.getEndpoint());
-            this->server.sendMessage(playerJoinMessage, entity.getEndpoint());
+            // this->server.sendMessage(existingPlayerMessage, newEntity.getEndpoint());
+            // this->server.sendMessage(playerJoinMessage, entity.getEndpoint());
         }
     }
 }
@@ -181,13 +206,15 @@ void serverGame::Rtype::sendGameState()
     this->mutex.lock();
     for (auto &entity : this->getEntities()) {
         if (entity.getType() == "PLAYER") {
-            for (auto& entity : this->getEntities()) {
-                std::pair<float, float> pos = entity.getPosition(this->world);
-                ecs::Buffer newBuffer;
-                newBuffer.writeMessageType(ecs::MessageType::Ping);
-                std::string posStr = std::to_string(pos.first) + "," + std::to_string(pos.second);
-                newBuffer.writeString(entity.getType() + entity.getName() + posStr);
-                this->server.sendMessage(newBuffer, entity.getEndpoint());
+            for (auto& newEntity : this->getEntities()) {
+                if (newEntity.getType() != "TEST") {
+                    std::pair<float, float> pos = newEntity.getPosition(this->world);
+                    ecs::Buffer newBuffer;
+                    newBuffer.writeMessageType(ecs::MessageType::Ping);
+                    std::string posStr = std::to_string(pos.first) + "," + std::to_string(pos.second);
+                    newBuffer.writeString(newEntity.getType() + newEntity.getName() + posStr);
+                    this->server.sendMessage(newBuffer, entity.getEndpoint());
+                }
             }
         }
     }

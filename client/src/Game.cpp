@@ -21,22 +21,22 @@ namespace rtype {
         while (!WindowShouldClose())
         {
             if (IsKeyPressed(KEY_UP))
-                this->m_network.send(ecs::MessageType::GoTop, "Player3");
+                this->m_network.send(ecs::MessageType::GoTop, "Player1");
             if (IsKeyPressed(KEY_DOWN))
-                this->m_network.send(ecs::MessageType::GoBottom, "Player3");
+                this->m_network.send(ecs::MessageType::GoBottom, "Player1");
             if (IsKeyPressed(KEY_LEFT))
-                this->m_network.send(ecs::MessageType::GoLeft, "Player3");
+                this->m_network.send(ecs::MessageType::GoLeft, "Player1");
             if (IsKeyPressed(KEY_RIGHT))
-                this->m_network.send(ecs::MessageType::GoRight, "Player3");
+                this->m_network.send(ecs::MessageType::GoRight, "Player1");
             
             if (IsKeyReleased(KEY_UP))
-                this->m_network.send(ecs::MessageType::StopTop, "Player3");
+                this->m_network.send(ecs::MessageType::StopTop, "Player1");
             if (IsKeyReleased(KEY_DOWN))
-                this->m_network.send(ecs::MessageType::StopBottom, "Player3");
+                this->m_network.send(ecs::MessageType::StopBottom, "Player1");
             if (IsKeyReleased(KEY_LEFT))
-                this->m_network.send(ecs::MessageType::StopLeft, "Player3");
+                this->m_network.send(ecs::MessageType::StopLeft, "Player1");
             if (IsKeyReleased(KEY_RIGHT))
-                this->m_network.send(ecs::MessageType::StopRight, "Player3");
+                this->m_network.send(ecs::MessageType::StopRight, "Player1");
 
             BeginDrawing();
             ClearBackground(BLACK);

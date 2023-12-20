@@ -69,7 +69,6 @@ void serverGame::Entity::move(std::string name, ecs::MessageType direction, ecs:
             accSpaceship.maxSpeed = 4.0f;
             break;
         case ecs::MessageType::GoRight:
-            std::cout << "HEREE" << std::endl;
             this->isMovingRight = true;
             accSpaceship.ddx = 0.3f;
             accSpaceship.ddy = 0;
