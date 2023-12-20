@@ -93,10 +93,10 @@ namespace rtype {
         ecs::Entity &ParallaxBack1 = this->m_world.createEntity(inGame);
         this->m_world.assign(ParallaxBack1, ecs::Position{0, 0});
         this->m_world.assign(ParallaxBack1, ecs::Velocity{-3, 0});
-        this->m_world.assign(ParallaxBack1, ecs::Sprite{"assets/space.png", ecs::Rectangle{0, 0, 272, 160}, ecs::Vector2{0, 0}});
+        this->m_world.assign(ParallaxBack1, ecs::Sprite{"assets/space-back.png", ecs::Rectangle{0, 0, 7596, 1080}, ecs::Vector2{0, 0}});
         this->m_world.assign(ParallaxBack1, ecs::Parallax{true});
         this->m_world.assign(ParallaxBack1, ecs::Acceleration{0, 0, 3});
-        this->m_world.assign(ParallaxBack1, ecs::Scale{3840 / 272, 1080 / 160});
+        this->m_world.assign(ParallaxBack1, ecs::Scale{1, 1});
         this->m_world.assign(ParallaxBack1, ecs::Rotation{0});
 
         ecs::Entity &ParallaxBack2 = this->m_world.createEntity(inGame);
@@ -105,20 +105,20 @@ namespace rtype {
         this->m_world.assign(ParallaxBack2, ecs::Sprite{"assets/far-planets.png", ecs::Rectangle{0, 0, 272, 160}, ecs::Vector2{0, 0}});
         this->m_world.assign(ParallaxBack2, ecs::Parallax{true});
         this->m_world.assign(ParallaxBack2, ecs::Acceleration{0, 0, 2});
-        this->m_world.assign(ParallaxBack2, ecs::Scale{3840 / 272, 1080 / 160});
+        this->m_world.assign(ParallaxBack2, ecs::Scale{1, 1});
         this->m_world.assign(ParallaxBack2, ecs::Rotation{0});
 
         ecs::Entity &myPlayer = this->m_world.createEntity(inGame);
         this->m_world.assign(myPlayer, ecs::Position{200, 200});
         this->m_world.assign(myPlayer, ecs::Health{100});
         this->m_world.assign(myPlayer, ecs::Velocity{0, 0});
-        this->m_world.assign(myPlayer, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}});
+        this->m_world.assign(myPlayer, ecs::Sprite{"assets/characters2.gif", ecs::Rectangle{0, 0, 32, 32}, ecs::Vector2{0, 0}});
         this->m_world.assign(myPlayer, ecs::Acceleration{0, 0, 4});
-        this->m_world.assign(myPlayer, ecs::Scale{1, 1});
+        this->m_world.assign(myPlayer, ecs::Scale{2, 2});
         this->m_world.assign(myPlayer, ecs::Rotation{0});
         this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, 0.05, std::chrono::steady_clock::now()});
         this->m_world.assign(myPlayer, ecs::Collision{false, {}, false});
-        this->m_world.assign(myPlayer, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 4, 0, 300, std::chrono::steady_clock::now()});
+        this->m_world.assign(myPlayer, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 8, 0, 150, std::chrono::steady_clock::now()});
         this->m_world.assign(myPlayer, ecs::Name{this->c_playerName, ecs::Position{-20, -20}});
 
         this->m_players.push_back(Player(myPlayer, this->c_playerName));
