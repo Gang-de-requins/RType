@@ -196,6 +196,27 @@ namespace ecs {
             }
 
             /**
+             * @fn SceneManager::getSystems
+             * @brief Retrieve systems of specified types from a scene
+             * 
+             * @tparam Systems The types of the systems to retrieve.
+             * @param scene The scene from which the systems will be retrieved.
+             * @return A vector of pointers to the systems of specified types.
+             */
+            template<typename... Systems>
+            auto getSystems(Scene &scene) {
+                std::vector<std::unique_ptr<ISystem> *> matchingSystems;
+
+                for (auto &system : scene.systems) {
+                    if ((dynamic_cast<Systems*>(system.get()) && ...)) {
+                        matchingSystems.push_back(system.get());
+                    }
+                }
+
+                return matchingSystems;
+            }
+
+            /**
              * @fn SceneManager::registerSystems
              * @brief Register systems
              * 
