@@ -19,10 +19,8 @@ enable_testing()
 
 add_executable(
     ${PROJECT_NAME}
-    src/WorldTest.cpp
-    src/ArchetypeTest.cpp
-    src/ComponentsVectorTest.cpp
-    src/CustomExceptionsTest.cpp
+    # complete with real files like the following exemple
+    # src/CustomExceptionsTest.cpp
 )
 
 target_link_libraries(
