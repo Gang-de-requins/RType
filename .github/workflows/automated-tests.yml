@@ -1,0 +1,25 @@
+name: Automated tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  automated_tests_ecs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Go to the correct file
+      run: |
+        cd tests/ecs
+    - name: Build cmake first part
+      run: |
+        cmake -S . -B build
+    - name: Finalize
+      run: |
+        echo "GitHub Action completed successfully for the tests"
