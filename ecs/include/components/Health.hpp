@@ -4,6 +4,24 @@
 namespace ecs {
     struct Health {
         float health;
+
+        Health operator+(const Health& other) const {
+            return { health + other.health };
+        }
+
+        Health &operator+=(const Health& other) {
+            health += other.health;
+            return *this;
+        }
+
+        Health operator-(const Health& other) const {
+            return { health - other.health };
+        }
+
+        Health &operator-=(const Health& other) {
+            health -= other.health;
+            return *this;
+        }
     };
 }
 

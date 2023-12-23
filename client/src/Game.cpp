@@ -21,22 +21,22 @@ namespace rtype {
 
         while (!WindowShouldClose())
         {
-            if (IsKeyPressed(KEY_UP))
-                this->m_network.send(::Network::MessageType::GoTop, this->c_playerName);
-            if (IsKeyPressed(KEY_DOWN))
-                this->m_network.send(::Network::MessageType::GoBottom, this->c_playerName);
-            if (IsKeyPressed(KEY_LEFT))
-                this->m_network.send(::Network::MessageType::GoLeft, this->c_playerName);
-            if (IsKeyPressed(KEY_RIGHT))
-                this->m_network.send(::Network::MessageType::GoRight, this->c_playerName);
-            if (IsKeyReleased(KEY_UP))
-                this->m_network.send(::Network::MessageType::StopTop, this->c_playerName);
-            if (IsKeyReleased(KEY_DOWN))
-                this->m_network.send(::Network::MessageType::StopBottom, this->c_playerName);
-            if (IsKeyReleased(KEY_LEFT))
-                this->m_network.send(::Network::MessageType::StopLeft, this->c_playerName);
-            if (IsKeyReleased(KEY_RIGHT))
-                this->m_network.send(::Network::MessageType::StopRight, this->c_playerName);
+            // if (IsKeyPressed(KEY_UP))
+            //     this->m_network.send(::Network::MessageType::GoTop, this->c_playerName);
+            // if (IsKeyPressed(KEY_DOWN))
+            //     this->m_network.send(::Network::MessageType::GoBottom, this->c_playerName);
+            // if (IsKeyPressed(KEY_LEFT))
+            //     this->m_network.send(::Network::MessageType::GoLeft, this->c_playerName);
+            // if (IsKeyPressed(KEY_RIGHT))
+            //     this->m_network.send(::Network::MessageType::GoRight, this->c_playerName);
+            // if (IsKeyReleased(KEY_UP))
+            //     this->m_network.send(::Network::MessageType::StopTop, this->c_playerName);
+            // if (IsKeyReleased(KEY_DOWN))
+            //     this->m_network.send(::Network::MessageType::StopBottom, this->c_playerName);
+            // if (IsKeyReleased(KEY_LEFT))
+            //     this->m_network.send(::Network::MessageType::StopLeft, this->c_playerName);
+            // if (IsKeyReleased(KEY_RIGHT))
+            //     this->m_network.send(::Network::MessageType::StopRight, this->c_playerName);
             if (IsKeyPressed(KEY_SPACE)) {
                 ecs::SceneManager &sceneManager = this->m_world.getSceneManager();
                 auto entities = sceneManager.view<ecs::Controllable>(sceneManager.getCurrentScene());
@@ -99,7 +99,8 @@ namespace rtype {
             ecs::TextSystem,
             ecs::CollisionSystem,
             ecs::LifeSystem,
-            ecs::ParallaxSystem
+            ecs::ParallaxSystem,
+            ecs::ModifierSystem
         >(inGame);
 
         ecs::Entity &ParallaxBack1 = this->m_world.createEntity(inGame);
@@ -138,7 +139,17 @@ namespace rtype {
         ecs::Entity &SoundPlayer = this->m_world.createEntity(inGame);
         this->m_world.assign(SoundPlayer, ecs::Sound{"assets/weird.wav"});
 
-        ecs::Entity &music = this->m_world.createEntity(inGame);
-        this->m_world.assign(music, ecs::Music{"assets/mini1111.xm"});
+        // ecs::Entity &music = this->m_world.createEntity(inGame);
+        // this->m_world.assign(music, ecs::Music{"assets/mini1111.xm"});
+
+        ecs::Entity &boost = this->m_world.createEntity(inGame);
+        this->m_world.assign(boost, ecs::Position{500, 200});
+        this->m_world.assign(boost, ecs::Collision{false, {}, true});
+        this->m_world.assign(boost, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}});
+        this->m_world.assign(boost, ecs::Scale{1, 1});
+        this->m_world.assign(boost, ecs::Rotation{0});
+        this->m_world.assign(boost, ecs::Modifier{{
+            {std::type_index(typeid(ecs::Scale)), ecs::Scale{-1, -1}},
+        }, false, 5000.0f});
     }
 }

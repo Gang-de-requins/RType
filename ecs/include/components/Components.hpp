@@ -9,6 +9,7 @@
 #include "Damage.hpp"
 #include "FontSize.hpp"
 #include "Health.hpp"
+#include "Modifier.hpp"
 #include "Music.hpp"
 #include "Name.hpp"
 #include "Position.hpp"

@@ -4,6 +4,24 @@
 namespace ecs {
     struct Rotation {
         float angle;
+
+        Rotation operator+(const Rotation& other) const {
+            return { angle + other.angle };
+        }
+
+        Rotation &operator+=(const Rotation& other) {
+            angle += other.angle;
+            return *this;
+        }
+
+        Rotation operator-(const Rotation& other) const {
+            return { angle - other.angle };
+        }
+
+        Rotation &operator-=(const Rotation& other) {
+            angle -= other.angle;
+            return *this;
+        }
     };
 }
 

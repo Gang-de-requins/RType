@@ -15,6 +15,7 @@ set(SRC
     src/ParserJson.cpp
     src/systems/Movement.cpp
     src/systems/Controllable.cpp
+    src/systems/Modifier.cpp
     src/systems/Music.cpp
     src/systems/Sound.cpp
     src/systems/Collision.cpp
