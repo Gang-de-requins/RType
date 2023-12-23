@@ -2,6 +2,19 @@
 #define DAMAGE_COMPONENT_HPP
 
 namespace ecs {
+
+    /**
+     * @struct Damage
+     * @brief Damage component
+     * 
+     * @details
+     * This component is used to store and manage damage information of an entity. It includes arithmetic operators to easily manipulate damage values.
+     * 
+     * @var Damage::damage
+     * The amount of damage.
+     * 
+     * The operators (+, +=, -, -=) are defined to facilitate the addition and subtraction of damage values.
+     */
     struct Damage {
         float damage;
 
