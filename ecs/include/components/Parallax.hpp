@@ -1,10 +1,3 @@
-/*
-** EPITECH PROJECT, 2023
-** RType
-** File description:
-** Parallax
-*/
-
 #ifndef PARALLAX_COMPONENT_HPP
 #define PARALLAX_COMPONENT_HPP
 
