@@ -28,7 +28,7 @@ namespace ecs {
     struct Modifier {
         std::unordered_map<std::type_index, std::any> modifiers;
         bool isPermanent;
-        int duration;
+        int duration = 0;
     };
 }
 
