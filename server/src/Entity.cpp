@@ -124,3 +124,14 @@ std::pair<float, float> serverGame::Entity::getPosition(ecs::World &world)
 
     return pos;
 }
+
+std::pair<float, float> serverGame::Entity::getAcceleration(ecs::World &world)
+{
+    ecs::Acceleration &test = world.get<ecs::Acceleration>(this->_entity);
+    std::pair<float, float> accel;
+
+    accel.first = test.ddx;
+    accel.second = test.ddy;
+
+    return accel;
+}

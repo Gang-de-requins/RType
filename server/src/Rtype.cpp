@@ -61,21 +61,21 @@ void serverGame::Rtype::processMessages(void)
         }
 
         if (it != this->entities.end()) {
-            Entity& matchingPlayer = *it;
+            Entity &matchingPlayer = *it;
             switch (messageType)
             {
                 case ecs::MessageType::GoRight:
                     matchingPlayer.move(messageString, ecs::MessageType::GoRight, this->world);
                     break;
-                case ecs::MessageType::GoLeft:
-                    matchingPlayer.move(messageString, ecs::MessageType::GoLeft, this->world);
-                    break;
-                case ecs::MessageType::GoTop:
-                    matchingPlayer.move(messageString, ecs::MessageType::GoTop, this->world);
-                    break;
-                case ecs::MessageType::GoBottom:
-                    matchingPlayer.move(messageString, ecs::MessageType::GoBottom, this->world);
-                    break;
+                // case ecs::MessageType::GoLeft:
+                //     matchingPlayer.move(messageString, ecs::MessageType::GoLeft, this->world);
+                //     break;
+                // case ecs::MessageType::GoTop:
+                //     matchingPlayer.move(messageString, ecs::MessageType::GoTop, this->world);
+                //     break;
+                // case ecs::MessageType::GoBottom:
+                //     matchingPlayer.move(messageString, ecs::MessageType::GoBottom, this->world);
+                //     break;
                 // case ecs::MessageType::StopRight:
                 //     StopDirection(msg, ecs::MessageType::StopRight);
                 //     break;
@@ -92,46 +92,6 @@ void serverGame::Rtype::processMessages(void)
                     break;
             }
         }
-    }
-}
-
-void serverGame::Rtype::GoDirection(serverGame::Message msg, Network::MessageType dir)
-{
-    auto it = std::find_if(players.begin(), players.end(), [&msg](const Player& player) {
-        return player.getEndpoint() == msg.getEndpoint();
-    });
-
-    if (it != players.end()) {
-        const Player& matchingPlayer = *it;
-
-        serverGame::Message goRightMessage;
-        goRightMessage.setMessageType(dir);
-        goRightMessage.setMessage(matchingPlayer.getName());
-        // for (auto& player : this->players) {
-        //     if (player.getEndpoint() != msg.getEndpoint()) {
-        //         this->server.sendMessage(goRightMessage, player.getEndpoint());
-        //     }
-        // }
-    }
-}
-
-void serverGame::Rtype::StopDirection(serverGame::Message msg, Network::MessageType dir)
-{
-    auto it = std::find_if(players.begin(), players.end(), [&msg](const Player& player) {
-        return player.getEndpoint() == msg.getEndpoint();
-    });
-
-    if (it != players.end()) {
-        const Player& matchingPlayer = *it;
-
-        serverGame::Message goRightMessage;
-        goRightMessage.setMessageType(dir);
-        goRightMessage.setMessage(matchingPlayer.getName());
-        // for (auto& player : this->players) {
-        //     if (player.getEndpoint() != msg.getEndpoint()) {
-        //         this->server.sendMessage(goRightMessage, player.getEndpoint());
-        //     }
-        // }
     }
 }
 
@@ -209,6 +169,9 @@ void serverGame::Rtype::sendGameState()
             for (auto& newEntity : this->getEntities()) {
                 if (newEntity.getType() != "TEST") {
                     std::pair<float, float> pos = newEntity.getPosition(this->world);
+                    std::pair<float, float> accel = newEntity.getAcceleration(this->world);
+                    std::cout << accel.first << " " << accel.second << " ";
+                    std::cout << pos.first << " " << pos.second << std::endl;
                     ecs::Buffer newBuffer;
                     newBuffer.writeMessageType(ecs::MessageType::Ping);
                     std::string posStr = std::to_string(pos.first) + "," + std::to_string(pos.second);
