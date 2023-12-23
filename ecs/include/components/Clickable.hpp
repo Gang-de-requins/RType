@@ -21,6 +21,7 @@ namespace ecs {
     struct Clickable {
         bool clickable;
         std::function<void(Clickable&)> onClick;
+    };
 }
 
 #endif /* CLICKABLE_COMPONENT_HPP_ */
