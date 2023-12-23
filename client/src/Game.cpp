@@ -87,6 +87,34 @@ namespace rtype {
 
     void Game::initScenes()
     {
+
+        /* ------------------------- Scene InMenu --------------------------------*/
+
+        ecs::Scene &inMenu = this->m_world.createScene();
+
+         this->m_world.registerSystems<
+            ecs::MusicSystem,
+            ecs::ControllableSystem,
+            ecs::AnimationSystem,
+            ecs::MovementSystem,
+            ecs::SpriteSystem,
+            ecs::NameSystem,
+            ecs::TextSystem,
+            ecs::CollisionSystem,
+            ecs::LifeSystem,
+            ecs::ParallaxSystem,
+            ecs::ClickableSystem
+        >(inMenu);
+
+
+        ecs::Entity &ButtonPlay = this->m_world.createEntity(inMenu);
+        this->m_world.assign(ButtonPlay, ecs::Position{500, 500});
+        this->m_world.assign(ButtonPlay, ecs::Sprite{"assets/buttonPlay.png", ecs::Rectangle{0, 0, 300, 153}, ecs::Vector2{0, 0}});
+        this->m_world.assign(ButtonPlay, ecs::Scale{1, 1});
+        this->m_world.assign(ButtonPlay, ecs::Rotation{0});
+        this->m_world.assign(ButtonPlay, ecs::Clickable{false, [this](ecs::Clickable&) {this->m_world.switchToScene(1);}});
+
+        /* ------------------------- Scene InGame --------------------------------*/
         ecs::Scene &inGame = this->m_world.createScene();
 
         this->m_world.registerSystems<
