@@ -16,12 +16,24 @@
 namespace ecs {
     class SceneManager;
 
+    struct CollisionInfo {
+        Sprite &sprite1;
+        Position &position1;
+        Scale &scale1;
+        Rotation &rotation1;
+
+        Sprite &sprite2;
+        Position &position2;
+        Scale &scale2;
+        Rotation &rotation2;
+    };
+
     class CollisionSystem : public ISystem {
         public:
             void update(SceneManager &sceneManager) override;
         
         private:
-            bool isColliding(const Position &pos1, const Sprite &sprite1, const Position &pos2, const Sprite &sprite2);
+            bool isColliding(const CollisionInfo &collisionInfo);
     };
 }
 
