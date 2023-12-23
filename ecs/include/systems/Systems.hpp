@@ -8,6 +8,7 @@
 #include "Music.hpp"
 #include "Sound.hpp"
 #include "Parallax.hpp"
+#include "Clickable.hpp"
 #include "rendering/Name.hpp"
 #include "rendering/Animation.hpp"
 #include "rendering/Sprite.hpp"
