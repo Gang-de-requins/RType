@@ -167,8 +167,8 @@ namespace rtype {
         ecs::Entity &SoundPlayer = this->m_world.createEntity(inGame);
         this->m_world.assign(SoundPlayer, ecs::Sound{"assets/weird.wav"});
 
-        // ecs::Entity &music = this->m_world.createEntity(inGame);
-        // this->m_world.assign(music, ecs::Music{"assets/mini1111.xm"});
+        ecs::Entity &music = this->m_world.createEntity(inGame);
+        this->m_world.assign(music, ecs::Music{"assets/mini1111.xm"});
 
         ecs::Entity &boost = this->m_world.createEntity(inGame);
         this->m_world.assign(boost, ecs::Position{500, 200});
@@ -178,6 +178,6 @@ namespace rtype {
         this->m_world.assign(boost, ecs::Rotation{0});
         this->m_world.assign(boost, ecs::Modifier{{
             {std::type_index(typeid(ecs::Scale)), ecs::Scale{-1, -1}},
-        }, false, 5000.0f});
+        }, true});
     }
 }
