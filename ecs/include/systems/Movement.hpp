@@ -11,11 +11,26 @@
 namespace ecs {
     class SceneManager;
 
+    /**
+     * @class MovementSystem
+     * @brief Movement System class
+     * 
+     * @details
+     * Part of the Entity Component System, the MovementSystem class is responsible for updating the position and movement of entities. It works with Position, Velocity, and Acceleration components to calculate and update entity movement based on physics and game logic.
+     * 
+     * Inherits from ISystem and overrides the update method to implement the movement logic for entities.
+     */
     class MovementSystem : public ISystem {
-        public:
-            void update(SceneManager &sceneManager) override;
+    public:
+        /**
+         * @brief Updates the movement and position of entities
+         * 
+         * @param sceneManager Reference to the SceneManager which manages the current scene and its entities.
+         * 
+         * This method iterates through entities with Position, Velocity, and Acceleration components, updating their positions based on their velocities and accelerations. It handles the physics and movement logic for the entities.
+         */
+        void update(SceneManager &sceneManager) override;
     };
 }
-
 
 #endif /* MOVEMENT_SYSTEM_HPP */
