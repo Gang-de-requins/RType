@@ -28,6 +28,6 @@ namespace ecs {
         void update(SceneManager &sceneManager) override;
     };
 
-} // namespace ecs
+}
 
 #endif /* MUSIC_SYSTEM_HPP */
