@@ -10,11 +10,24 @@
 #include "systems/ISystem.hpp"
 
 namespace ecs {
-    class SceneManager;
 
+    /**
+     * @class TextSystem
+     * @brief Text System class
+     * 
+     * @details
+     * Part of the Entity Component System, this class is responsible for updating and rendering text associated with entities. It utilizes Text, Position, Color, and FontSize components to display text elements within the scene.
+     * 
+     */
     class TextSystem : public ISystem {
-        public:
-            void update(SceneManager &sceneManager) override;
+    public:
+        /**
+         * @brief Updates and renders the text of entities
+         * 
+         * @param sceneManager Reference to the SceneManager which manages the current scene and its entities.
+         * 
+         */
+        void update(SceneManager &sceneManager) override;
     };
 }
 
