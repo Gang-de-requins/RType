@@ -4,8 +4,12 @@
 if [ -n "$VCPKG_ROOT" ]; then
     echo "vcpkg already installed"
     
-    # stop script without exiting shell
-    return
+    # return if script is run by source command (return to parent shell) otherwise exit
+    if [ "$0" = "$BASH_SOURCE" ]; then
+        exit 1
+    else
+        return 1
+    fi
 fi
 
 echo "Installing vcpkg..."

@@ -4,6 +4,24 @@
 namespace ecs {
     struct Damage {
         float damage;
+
+        Damage operator+(const Damage& other) const {
+            return { damage + other.damage };
+        }
+
+        Damage &operator+=(const Damage& other) {
+            damage += other.damage;
+            return *this;
+        }
+
+        Damage operator-(const Damage& other) const {
+            return { damage - other.damage };
+        }
+
+        Damage &operator-=(const Damage& other) {
+            damage -= other.damage;
+            return *this;
+        }
     };
 }
 

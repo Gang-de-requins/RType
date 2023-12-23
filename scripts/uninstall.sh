@@ -7,7 +7,7 @@ VCPKG_INSTALLED_DIR=vcpkg_installed
 
 
 # remove vcpkg if it is installed
-if [ -d VCPKG_DIR ]; then
+if [ -d $VCPKG_DIR ]; then
     echo "uninstalling vcpkg..."
     rm -rf $VCPKG_DIR
     rm -rf $VCPKG_INSTALLED_DIR

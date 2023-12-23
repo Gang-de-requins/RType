@@ -22,6 +22,28 @@ namespace ecs {
         float ddx;
         float ddy;
         float maxSpeed;
+
+        Acceleration operator+(const Acceleration &other) const {
+            return { ddx + other.ddx, ddy + other.ddy, maxSpeed + other.maxSpeed };
+        }
+
+        Acceleration &operator+=(const Acceleration &other) {
+            ddx += other.ddx;
+            ddy += other.ddy;
+            maxSpeed += other.maxSpeed;
+            return *this;
+        }
+
+        Acceleration operator-(const Acceleration &other) const {
+            return { ddx - other.ddx, ddy - other.ddy, maxSpeed - other.maxSpeed };
+        };
+
+        Acceleration &operator-=(const Acceleration &other) {
+            ddx -= other.ddx;
+            ddy -= other.ddy;
+            maxSpeed -= other.maxSpeed;
+            return *this;
+        };
     };
 }
 
