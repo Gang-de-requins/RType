@@ -3,6 +3,7 @@
 
 #include "Acceleration.hpp"
 #include "Animation.hpp"
+#include "Clickable.hpp"
 #include "Color.hpp"
 #include "Collision.hpp"
 #include "Controllable.hpp"
