@@ -20,35 +20,43 @@ namespace ecs {
 
             for (auto &modifier : modifiers) {
                 auto &modifierComponent = sceneManager.get<Modifier>(*modifier);
+                bool modifierApplied = false;
 
                 if (std::find(collision.collidingWith.begin(), collision.collidingWith.end(), modifier->id) != collision.collidingWith.end()) {
-                    std::cout << "Found " << modifier->id << " with " << entity->id << std::endl;
                     if (modifierComponent.modifiers.find(std::type_index(typeid(Acceleration))) != modifierComponent.modifiers.end()) {
-                        std::cout << "Updating acceleration..." << std::endl;
+                        modifierApplied = true;
                         applyModifier<Acceleration>(entity, componentsTypes[0], modifierComponent);
                     }
                     if (modifierComponent.modifiers.find(std::type_index(typeid(Damage))) != modifierComponent.modifiers.end()) {
-                        std::cout << "Updating damage..." << std::endl;
+                        modifierApplied = true;
                         applyModifier<Damage>(entity, componentsTypes[1], modifierComponent);
                     }
                     if (modifierComponent.modifiers.find(std::type_index(typeid(Health))) != modifierComponent.modifiers.end()) {
-                        std::cout << "Updating health..." << std::endl;
+                        modifierApplied = true;
                         applyModifier<Health>(entity, componentsTypes[2], modifierComponent);
                     }
                     if (modifierComponent.modifiers.find(std::type_index(typeid(Rotation))) != modifierComponent.modifiers.end()) {
-                        std::cout << "Updating rotation..." << std::endl;
+                        modifierApplied = true;
                         applyModifier<Rotation>(entity, componentsTypes[3], modifierComponent);
                     }
                     if (modifierComponent.modifiers.find(std::type_index(typeid(Scale))) != modifierComponent.modifiers.end()) {
-                        std::cout << "Updating scale..." << std::endl;
+                        modifierApplied = true;
                         applyModifier<Scale>(entity, componentsTypes[4], modifierComponent);
                     }
                     if (modifierComponent.modifiers.find(std::type_index(typeid(Velocity))) != modifierComponent.modifiers.end()) {
-                        std::cout << "Updating velocity..." << std::endl;
+                        modifierApplied = true;
                         applyModifier<Velocity>(entity, componentsTypes[5], modifierComponent);
+                    }
+
+                    if (modifierApplied) {
+                        entitiesToDelete.emplace_back(modifier);
                     }
                 }
             }
+        }
+
+        for (auto &entity : entitiesToDelete) {
+            sceneManager.destroyEntity(sceneManager.getCurrentScene(), *entity);
         }
     }
 }

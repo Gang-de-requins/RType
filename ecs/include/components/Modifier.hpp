@@ -5,13 +5,13 @@
 #include <typeindex>
 #include <any>
 #include <thread>
-#include <mutex>
+#include <chrono>
 
 namespace ecs {
     struct Modifier {
         std::unordered_map<std::type_index, std::any> modifiers;
         bool isPermanent;
-        float duration = 0.0f; // in milliseconds
+        int duration = 0; // in milliseconds
     };
 }
 

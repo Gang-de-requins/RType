@@ -23,17 +23,11 @@ namespace ecs {
                     auto &component = std::any_cast<T &>(entity->components[type]);
 
                     component += modifierComponent;
-
-                    // if (!modifier.isPermanent) {
-                    //     std::thread(&ModifierSystem::unapplyModifierHelper<T>, this, std::ref(entity), std::ref(type), std::ref(modifier), std::ref(modifierComponent)).detach();
-                    // }
                 }
             }
 
             template<typename T>
             void unapplyModifier(Entity *&entity, T &modifierComponent, std::type_index &type, Modifier &modifier) {
-                // std::mutex mutex;
-                // std::unique_lock<std::mutex> lock(mutex);
                 std::cout << "Casting modifier..." << std::endl;
                 try {
                     for (auto &component : entity->components) {
