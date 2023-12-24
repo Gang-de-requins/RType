@@ -2,10 +2,10 @@
 
 namespace rtype {
     Game::Game(const std::string &ip, const unsigned short port, const std::string &playerName) :
-    c_playerName(playerName)
+    m_playerName(playerName)
     {
         initScenes();
-        this->m_network.connect(ip, port, *this, this->c_playerName);
+        this->m_network.connect(ip, port, *this, this->m_playerName);
     }
 
     Game::~Game()
@@ -22,21 +22,21 @@ namespace rtype {
         while (!WindowShouldClose())
         {
             // if (IsKeyPressed(KEY_UP))
-            //     this->m_network.send(::Network::MessageType::GoTop, this->c_playerName);
+            //     this->m_network.send(::Network::MessageType::GoTop, this->m_playerName);
             // if (IsKeyPressed(KEY_DOWN))
-            //     this->m_network.send(::Network::MessageType::GoBottom, this->c_playerName);
+            //     this->m_network.send(::Network::MessageType::GoBottom, this->m_playerName);
             // if (IsKeyPressed(KEY_LEFT))
-            //     this->m_network.send(::Network::MessageType::GoLeft, this->c_playerName);
+            //     this->m_network.send(::Network::MessageType::GoLeft, this->m_playerName);
             // if (IsKeyPressed(KEY_RIGHT))
-            //     this->m_network.send(::Network::MessageType::GoRight, this->c_playerName);
+            //     this->m_network.send(::Network::MessageType::GoRight, this->m_playerName);
             // if (IsKeyReleased(KEY_UP))
-            //     this->m_network.send(::Network::MessageType::StopTop, this->c_playerName);
+            //     this->m_network.send(::Network::MessageType::StopTop, this->m_playerName);
             // if (IsKeyReleased(KEY_DOWN))
-            //     this->m_network.send(::Network::MessageType::StopBottom, this->c_playerName);
+            //     this->m_network.send(::Network::MessageType::StopBottom, this->m_playerName);
             // if (IsKeyReleased(KEY_LEFT))
-            //     this->m_network.send(::Network::MessageType::StopLeft, this->c_playerName);
+            //     this->m_network.send(::Network::MessageType::StopLeft, this->m_playerName);
             // if (IsKeyReleased(KEY_RIGHT))
-            //     this->m_network.send(::Network::MessageType::StopRight, this->c_playerName);
+            //     this->m_network.send(::Network::MessageType::StopRight, this->m_playerName);
             if (IsKeyPressed(KEY_SPACE)) {
                 ecs::SceneManager &sceneManager = this->m_world.getSceneManager();
                 auto entities = sceneManager.view<ecs::Controllable>(sceneManager.getCurrentScene());
@@ -44,7 +44,7 @@ namespace rtype {
                 for (auto &entity : entities) {
                     ecs::Controllable &controllable = sceneManager.get<ecs::Controllable>(*entity);
                     if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - controllable.shootUpdate).count() >= controllable.timeOut) {
-                        this->m_network.send(::Network::MessageType::NewMissile, this->c_playerName);
+                        this->m_network.send(::Network::MessageType::NewMissile, this->m_playerName);
                     }
                 }
 
@@ -114,6 +114,17 @@ namespace rtype {
         this->m_world.assign(ButtonPlay, ecs::Rotation{0});
         this->m_world.assign(ButtonPlay, ecs::Clickable{false, [this](ecs::Clickable&) {this->m_world.switchToScene(1);}});
 
+        // ecs::Entity &PlayerTextInput = this->m_world.createEntity(inMenu);
+        // this->m_world.assign(PlayerTextInput, ecs::Position{500, 300});
+        // this->m_world.assign(PlayerTextInput, ecs::Rectangle{0, 0, 0, 0});
+        // this->m_world.assign(PlayerTextInput, ecs::TextInput{.content = "Player1"});
+        // this->m_world.assign(PlayerTextInput, ecs::Scale{1, 1});
+        // this->m_world.assign(PlayerTextInput, ecs::Rotation{0});
+        // this->m_world.assign(PlayerTextInput, ecs::Clickable{false, [this](ecs::Clickable&) {
+        //     ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(PlayerTextInput);
+        //     textInput.isFocused = true;
+        // }});
+
         /* ------------------------- Scene InGame --------------------------------*/
         ecs::Scene &inGame = this->m_world.createScene();
 
@@ -160,9 +171,9 @@ namespace rtype {
         this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, 0.05, std::chrono::steady_clock::now()});
         this->m_world.assign(myPlayer, ecs::Collision{false, {}, false});
         this->m_world.assign(myPlayer, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 8, 0, 150, std::chrono::steady_clock::now()});
-        this->m_world.assign(myPlayer, ecs::Name{this->c_playerName, ecs::Position{-20, -20}});
+        this->m_world.assign(myPlayer, ecs::Name{this->m_playerName, ecs::Position{-20, -20}});
 
-        this->m_players.push_back(Player(myPlayer, this->c_playerName));
+        this->m_players.push_back(Player(myPlayer, this->m_playerName));
 
         ecs::Entity &SoundPlayer = this->m_world.createEntity(inGame);
         this->m_world.assign(SoundPlayer, ecs::Sound{"assets/weird.wav"});

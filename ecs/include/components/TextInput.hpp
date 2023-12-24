@@ -16,7 +16,8 @@ namespace ecs {
      * The string that stores the current text input content. It represents the text entered by the user.
      */
     struct TextInput {
-        std::string content;
+        bool isFocused = false;
+        std::string content = "";
     };
 
 }
