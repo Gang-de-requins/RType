@@ -159,11 +159,23 @@ namespace rtype {
         this->m_world.assign(Bakckground_Settings, ecs::Rotation{0});
 
         ecs::Entity &ButtonMusic = this->m_world.createEntity(inMenuSettings);
-        this->m_world.assign(ButtonMusic, ecs::Position{810, 460});
+        this->m_world.assign(ButtonMusic, ecs::Position{550, 90});
         this->m_world.assign(ButtonMusic, ecs::Sprite{"assets/Settings/buttonMusic.png", ecs::Rectangle{0, 0, 210, 210}, ecs::Vector2{0, 0}});
         this->m_world.assign(ButtonMusic, ecs::Scale{0.6, 0.6});
         this->m_world.assign(ButtonMusic, ecs::Rotation{0});
         this->m_world.assign(ButtonMusic, ecs::Clickable{false, [this](ecs::Clickable&) {this->m_world.switchToScene(1);}});
+
+        ecs::Entity &ButtonPause = this->m_world.createEntity(inMenuSettings);
+        this->m_world.assign(ButtonPause, ecs::Position{530, 230});
+        this->m_world.assign(ButtonPause, ecs::Sprite{"assets/Settings/buttonPause.png", ecs::Rectangle{0, 0, 210, 210}, ecs::Vector2{0, 0}});
+        this->m_world.assign(ButtonPause, ecs::Scale{0.3, 0.3});
+        this->m_world.assign(ButtonPause, ecs::Rotation{0});
+
+        ecs::Entity &ButtonPlay = this->m_world.createEntity(inMenuSettings);
+        this->m_world.assign(ButtonPlay, ecs::Position{630, 230});
+        this->m_world.assign(ButtonPlay, ecs::Sprite{"assets/Settings/buttonPlay.png", ecs::Rectangle{0, 0, 210, 210}, ecs::Vector2{0, 0}});
+        this->m_world.assign(ButtonPlay, ecs::Scale{0.3, 0.3});
+        this->m_world.assign(ButtonPlay, ecs::Rotation{0});
 
         ecs::Entity &ButtonBackward = this->m_world.createEntity(inMenuSettings);
         this->m_world.assign(ButtonBackward, ecs::Position{5, 995});
