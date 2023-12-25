@@ -18,12 +18,15 @@ namespace ecs {
     }
     
     void SceneManager::switchToScene(std::size_t sceneId) {
-        this->unloadScene(this->m_scenes[this->m_currentSceneId]);
+        std::cout << "Debut fonction de scene " << sceneId << std::endl;
+        this->unloadScene(this->m_scenes.at(m_currentSceneId));
 
         this->m_nextEntityId = 0;
         this->m_currentSceneId = sceneId;
-        if (this->m_scenes[this->m_currentSceneId].loadFromPath) {
-            this->loadEntitiesFromJson(this->m_scenes[this->m_currentSceneId]);
+        std::cout << "currenSceneId " << this->m_currentSceneId << std::endl;
+        if (this->m_scenes.at(m_currentSceneId).loadFromPath) {
+            std::cout << "Je suis dans le if " << std::endl;
+            this->loadEntitiesFromJson(this->m_scenes.at(m_currentSceneId));
         }
     }
     
