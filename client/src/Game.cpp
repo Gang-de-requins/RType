@@ -195,6 +195,17 @@ namespace rtype {
         this->m_world.assign(Nickname, ecs::Scale{0.5, 0.5});
         this->m_world.assign(Nickname, ecs::Rotation{0});
 
+        ecs::Entity &SettingIP = this->m_world.createEntity(inMenuSettings);
+        this->m_world.assign(SettingIP, ecs::Position{900, 350});
+        this->m_world.assign(SettingIP, ecs::Sprite{"assets/Settings/settingIP.png", ecs::Rectangle{0, 0, 210, 210}, ecs::Vector2{0, 0}});
+        this->m_world.assign(SettingIP, ecs::Scale{0.6, 0.6});
+        this->m_world.assign(SettingIP, ecs::Rotation{0});
+
+        ecs::Entity &ChangeIP = this->m_world.createEntity(inMenuSettings);
+        this->m_world.assign(ChangeIP, ecs::Position{857.5, 490});
+        this->m_world.assign(ChangeIP, ecs::Sprite{"assets/Settings/nickname.png", ecs::Rectangle{0, 0, 421, 171}, ecs::Vector2{0, 0}});
+        this->m_world.assign(ChangeIP, ecs::Scale{0.5, 0.5});
+        this->m_world.assign(ChangeIP, ecs::Rotation{0});
 
         /* ------------------------- Scene InGame --------------------------------*/
         ecs::Scene &inGame = this->m_world.createScene();
