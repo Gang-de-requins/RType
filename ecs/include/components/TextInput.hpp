@@ -17,7 +17,7 @@ namespace ecs {
      */
     struct TextInput {
         bool isFocused = false;
-        std::string content = "";
+        int maxLength = 0;
     };
 
 }

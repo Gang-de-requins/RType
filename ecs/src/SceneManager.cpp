@@ -42,8 +42,18 @@ namespace ecs {
         }), scene.entities.end());
     }
 
+    Entity &SceneManager::getEntityById(Scene &scene, std::size_t id) {
+        return *std::find_if(scene.entities.begin(), scene.entities.end(), [&id](const Entity &e) {
+            return e.id == id;
+        });
+    }
+
     void SceneManager::update() {
+        // std::cout << "Updating scene " << this->m_currentSceneId << std::endl;
+        // int i = 0;
+
         for (auto &system : this->m_scenes.at(this->m_currentSceneId).systems) {
+            // std::cout << "Updating system " << i++ << std::endl;
             system->update(*this);
         }
     }
