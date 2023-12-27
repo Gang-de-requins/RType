@@ -26,6 +26,9 @@ set(SRC
     src/systems/rendering/Sprite.cpp
     src/systems/rendering/Text.cpp
     src/systems/rendering/Animation.cpp
+    src/systems/rendering/Rectangle.cpp
+    src/systems/rendering/TextInput.cpp
+    src/systems/rendering/Render.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${SRC})
