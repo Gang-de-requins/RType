@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "raylib.h"
+#include "Entity.hpp"
 #include "components/Position.hpp"
 #include "components/Rectangle.hpp"
 #include "components/Scale.hpp"
@@ -22,14 +23,17 @@ namespace ecs {
      * 
      */
     class TextInputSystem : public ISystem {
-    public:
-        /**
-         * @brief Updates and renders the text inputs of entities
-         * 
-         * @param sceneManager Reference to the SceneManager which manages the current scene and its entities.
-         * 
-         */
-        void update(SceneManager &sceneManager) override;
+        public:
+            /**
+             * @brief Updates and renders the text inputs of entities
+             * 
+             * @param sceneManager Reference to the SceneManager which manages the current scene and its entities.
+             * 
+             */
+            void update(SceneManager &sceneManager) override;
+        
+        private:
+            bool isMouseOver(::Vector2 mousePosition, Entity &entity, SceneManager &sceneManager);
     };
 }
 

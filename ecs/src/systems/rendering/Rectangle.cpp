@@ -14,7 +14,7 @@ namespace ecs {
 
             DrawRectanglePro(
                 ::Rectangle{ position.x, position.y, rectangle.width * scale.x, rectangle.height * scale.y },
-                ::Vector2{ rectangle.width / 2, rectangle.height / 2 },
+                ::Vector2{ 0, 0 },
                 rotation.angle,
                 ::Color{ color.r, color.g, color.b, color.a }
             );

@@ -37,6 +37,14 @@ namespace ecs {
         std::vector<std::unique_ptr<ISystem>> systems;
         std::string_view path;
         bool loadFromPath;
+
+        bool operator==(const Scene &other) const {
+            return this->id == other.id;
+        }
+
+        bool operator!=(const Scene &other) const {
+            return this->id != other.id;
+        }
     };
 }
 
