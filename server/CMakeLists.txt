@@ -29,6 +29,9 @@ set(SRC_ECS
     ../ecs/src/systems/rendering/Sprite.cpp
     ../ecs/src/systems/rendering/Text.cpp
     ../ecs/src/systems/rendering/Animation.cpp
+    ../ecs/src/systems/rendering/Rectangle.cpp
+    ../ecs/src/systems/rendering/TextInput.cpp
+    ../ecs/src/systems/rendering/Render.cpp
 )
 
 set(SRC_SERVER

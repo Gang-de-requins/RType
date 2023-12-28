@@ -16,7 +16,7 @@ namespace rtype {
         ecs::World m_world;
         Network m_network;
         std::vector<Player> m_players;
-        std::string c_playerName;
+        std::string m_playerName;
 
         public:
             Game(const std::string &ip, const unsigned short port, const std::string &playerName);

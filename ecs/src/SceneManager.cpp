@@ -18,17 +18,17 @@ namespace ecs {
     }
     
     void SceneManager::switchToScene(std::size_t sceneId) {
-        this->unloadScene(this->m_scenes[this->m_currentSceneId]);
+        this->unloadScene(this->m_scenes.at(this->m_currentSceneId));
 
         this->m_nextEntityId = 0;
         this->m_currentSceneId = sceneId;
-        if (this->m_scenes[this->m_currentSceneId].loadFromPath) {
-            this->loadEntitiesFromJson(this->m_scenes[this->m_currentSceneId]);
+        if (this->m_scenes.at(this->m_currentSceneId).loadFromPath) {
+            this->loadEntitiesFromJson(this->m_scenes.at(this->m_currentSceneId));
         }
     }
     
     Scene &SceneManager::getCurrentScene() {
-        return this->m_scenes[this->m_currentSceneId];
+        return this->m_scenes.at(this->m_currentSceneId);
     }
     
     Entity &SceneManager::createEntity(Scene &scene) {
@@ -42,8 +42,18 @@ namespace ecs {
         }), scene.entities.end());
     }
 
+    Entity &SceneManager::getEntityById(Scene &scene, std::size_t id) {
+        return *std::find_if(scene.entities.begin(), scene.entities.end(), [&id](const Entity &e) {
+            return e.id == id;
+        });
+    }
+
     void SceneManager::update() {
+        ecs::Scene &scene = this->getCurrentScene();
+
         for (auto &system : this->m_scenes.at(this->m_currentSceneId).systems) {
+            if (scene != this->getCurrentScene())
+                break;
             system->update(*this);
         }
     }
