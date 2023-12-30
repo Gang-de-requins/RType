@@ -2,10 +2,10 @@
 #define GAME_HPP
 
 #include <unordered_map>
-#include "raylib.h"
 #include "GameEngine.hpp"
 #include "Network.hpp"
 #include "Player.hpp"
+#include "raylib.h"
 
 #define SCENE_MENU 0
 #define SCENE_GAME 1

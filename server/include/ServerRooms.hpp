@@ -9,7 +9,17 @@
 #define SERVERROOMS_HPP_
 
 #include <iostream>
+#if defined(_WIN32)
+    #define NOGDI
+    #define NOUSER
+#endif
+
 #include <boost/asio.hpp>
+
+#if defined(_WIN32)
+    #undef near
+    #undef far
+#endif
 #include "Server.hpp"
 
 namespace serverGame
