@@ -52,5 +52,5 @@ int main(int ac, char const * const *av)
     std::shared_ptr<serverGame::Rtype> rtype = std::make_shared<serverGame::Rtype>(std::stoi(av[1]));
     std::thread receive(receiveMessageThread, rtype);
     rtype->run();
-    return 0;
+    return EXIT_SUCCESS;
 }
