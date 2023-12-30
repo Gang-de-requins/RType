@@ -4,7 +4,17 @@
 #include <iostream>
 #include <thread>
 #include <utility>
+#if defined(_WIN32)           
+    #define NOGDI
+    #define NOUSER
+#endif
+
 #include <boost/asio.hpp>
+
+#if defined(_WIN32)
+    #undef near
+    #undef far
+#endif
 
 namespace Network
 {

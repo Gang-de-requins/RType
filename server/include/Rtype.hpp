@@ -9,11 +9,10 @@
 #define RTYPE_HPP_
 
 #include <iostream>
-#include <boost/asio.hpp>
 #include "Server.hpp"
 #include "Player.hpp"
-#include "GameEngine.hpp"
 #include "Message.hpp"
+#include "GameEngine.hpp"
 #include <mutex>
 
 namespace serverGame

@@ -6,7 +6,6 @@
 */
 
 #include <iostream>
-#include <boost/asio.hpp>
 #include "Player.hpp"
 
 serverGame::Player::Player(std::string name, int id, ecs::World &world)

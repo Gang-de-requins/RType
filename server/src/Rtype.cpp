@@ -6,7 +6,6 @@
 */
 
 #include <iostream>
-#include <boost/asio.hpp>
 #include "Rtype.hpp"
 #include "Network.hpp"
 
