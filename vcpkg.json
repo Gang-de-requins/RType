@@ -1,15 +1,22 @@
 {
     "name": "rtype",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "dependencies": [
         {
-            "name": "raylib"
+            "name": "raylib",
+            "version>=": "4.5.0"
         },
         {
-            "name": "boost-asio"
+            "name": "boost-asio",
+            "version>=": "1.83.0"
         },
         {
-            "name": "rapidjson"
+            "name": "asio",
+            "version>=": "1.28.2"
+        },
+        {
+            "name": "rapidjson",
+            "version>=": "2023-07-17"
         }
     ]
 }

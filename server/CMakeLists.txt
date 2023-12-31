@@ -36,10 +36,9 @@ set(SRC_ECS
 
 set(SRC_SERVER
     src/Main.cpp
-    src/Player.cpp
-    src/Rtype.cpp
+    src/CheckArguments.cpp
     src/Server.cpp
-    src/Message.cpp
+    src/Room.cpp
 )
 
 set(SRC
