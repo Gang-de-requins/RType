@@ -24,7 +24,7 @@ serverGame::Server::~Server()
 void serverGame::Server::setupServer(int port)
 {
     this->endpoint = boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port);
-    this->socket = std::make_shared<boost::asio::ip::udp::socket>(this->service, this->endpoint);
+    this->socket = std::make_shared<boost::asio::ip::udp::socket>(this->service, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port));
 }
 
 void serverGame::Server::receiveMessage(Message &message) {
@@ -41,7 +41,7 @@ void serverGame::Server::receiveMessage(Message &message) {
                 std::string msg(receiveBuffer.data() + sizeof(Network::MessageType), bytes_transferred - sizeof(Network::MessageType));
                 message.setMessage(msg);
                 message.setEndpoint(senderEndpoint);
-                std::cout << msg << std::endl;
+                std::cout << "Message: " << msg << std::endl;
             }
         }
     } catch (std::exception &e) {
