@@ -38,6 +38,9 @@ namespace serverGame
         std::vector<Player> players;
         ecs::World world;
         int id;
+
+        int nbEnemiesToSpawn;
+        int nbEnemiesSpawned;
     };
 }
 
