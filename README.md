@@ -25,7 +25,6 @@
   - [Lobby](#lobby)
   - [Move the player](#move-the-player)
     - [Keyboard](#keyboard)
-    - [Controller](#controller)
   - [Kill enemies](#kill-enemies)
   - [Pause Game](#pause-game)
   - [Lose condition](#lose-condition)
@@ -129,20 +128,11 @@ After running the script you will have two executable: "./r-type_client" and "./
   | Arrow Left | Left     |
   | Arrow Right | Right   |
 
-#### Controller
-
-  | Button    | Direction |
-  | --------- | --------- |
-  |joystick(left) Up  | Top       |
-  |joystick(left) Down | Down     |
-  |joystick(left) Left | Left     |
-  |joystick(left) Right | Right   |
-
 ### Attack
 
   | Button    | Action    |
   | --------- | --------- |
-  | Space  Or button X(controller)   | Shoot     |
+  | Space     |  Shoot    |
 
 ### Pause Game
 
