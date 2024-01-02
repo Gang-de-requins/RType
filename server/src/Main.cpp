@@ -5,6 +5,8 @@
 ** Server
 */
 
+#include <cstdlib>
+
 #include "../include/ServerRooms.hpp"
 #include "Rtype.hpp"
 #include "Message.hpp"
@@ -45,6 +47,8 @@ int main(int ac, char const * const *av)
 {
     // serverGame::ServerRooms Rooms;
     // Rooms.start();
+
+    std::srand(std::time(nullptr));
     
     if (checkArguments(ac, av) == EXIT_FAILURE)
         return 84;
