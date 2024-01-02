@@ -17,6 +17,8 @@ namespace rtype {
         Network m_network;
         std::vector<Player> m_players;
         std::string m_playerName;
+        std::string m_ip;
+        unsigned short m_port;
 
         public:
             Game(const std::string &ip, const unsigned short port, const std::string &playerName);
@@ -26,6 +28,7 @@ namespace rtype {
             float getOffsetColorSpaceship() const;
             void addPlayer(Player &player);
             std::vector<Player> &getPlayers();
+            std::string getPlayerName() const;
 
         private:
             void initScenes();

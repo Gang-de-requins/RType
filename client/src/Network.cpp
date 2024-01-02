@@ -27,7 +27,7 @@ namespace rtype {
 
     void Network::send(::Network::MessageType type, std::string message)
     {
-        std::cout << "Sending message: " << message << std::endl;
+        std::cout << "Sending type: " << static_cast<int>(type) << " message: " << message << std::endl;
         
         std::vector<char> sendBuffer(sizeof(::Network::MessageType) + message.size());
 
@@ -52,6 +52,7 @@ namespace rtype {
         };
 
         while (this->m_running) {
+            std::cout << "Receiving messages" << std::endl;
             try {
                 std::array<char, 1024> receiveBuffer;
                 boost::asio::ip::udp::endpoint senderEndpoint;
@@ -62,9 +63,11 @@ namespace rtype {
                     if(bytes_transferred >= sizeof(::Network::MessageType)) {
                         ::Network::MessageType messageType = *reinterpret_cast<::Network::MessageType*>(&receiveBuffer[0]);
                         std::string msg(receiveBuffer.data() + sizeof(::Network::MessageType), bytes_transferred - sizeof(::Network::MessageType));
+                        std::cout << "Received type: " << static_cast<int>(messageType) << " message: " << msg << std::endl;
                         if (messageType == ::Network::MessageType::PlayerJoin) {
                             this->newPlayerConnected(game, msg);
                         } else if (std::find(directions.begin(), directions.end(), messageType) != directions.end()) {
+                            std::cout << "Moving entity" << std::endl;
                             this->moveEntity(game, msg, messageType);
                         } else if (messageType == ::Network::MessageType::NewMissile) {
                             this->newMissile(game, msg);
@@ -104,6 +107,10 @@ namespace rtype {
         world.assign(player, ecs::Scale{1, 1});
         world.assign(player, ecs::Rotation{0});
         world.assign(player, ecs::Name{name, ecs::Position{-20, -20}});
+
+        if (name == game.getPlayerName()) {
+            world.assign(player, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, 0.05, std::chrono::steady_clock::now()});
+        }
 
         Player newPlayer(player, name);
 

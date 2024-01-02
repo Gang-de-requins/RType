@@ -2,10 +2,9 @@
 
 namespace rtype {
     Game::Game(const std::string &ip, const unsigned short port, const std::string &playerName) :
-    m_playerName(playerName)
+    m_playerName(playerName), m_ip(ip), m_port(port)
     {
         initScenes();
-        this->m_network.connect(ip, port, *this, this->m_playerName);
     }
 
     Game::~Game()
@@ -21,26 +20,26 @@ namespace rtype {
 
         while (!WindowShouldClose())
         {
-            // if (IsKeyPressed(KEY_UP))
-            //     this->m_network.send(::Network::MessageType::GoTop, this->m_playerName);
-            // if (IsKeyPressed(KEY_DOWN))
-            //     this->m_network.send(::Network::MessageType::GoBottom, this->m_playerName);
-            // if (IsKeyPressed(KEY_LEFT))
-            //     this->m_network.send(::Network::MessageType::GoLeft, this->m_playerName);
-            // if (IsKeyPressed(KEY_RIGHT))
-            //     this->m_network.send(::Network::MessageType::GoRight, this->m_playerName);
-            // if (IsKeyReleased(KEY_UP))
-            //     this->m_network.send(::Network::MessageType::StopTop, this->m_playerName);
-            // if (IsKeyReleased(KEY_DOWN))
-            //     this->m_network.send(::Network::MessageType::StopBottom, this->m_playerName);
-            // if (IsKeyReleased(KEY_LEFT))
-            //     this->m_network.send(::Network::MessageType::StopLeft, this->m_playerName);
-            // if (IsKeyReleased(KEY_RIGHT))
-            //     this->m_network.send(::Network::MessageType::StopRight, this->m_playerName);
+            if (IsKeyPressed(KEY_UP))
+                this->m_network.send(::Network::MessageType::GoTop, this->m_playerName);
+            if (IsKeyPressed(KEY_DOWN))
+                this->m_network.send(::Network::MessageType::GoBottom, this->m_playerName);
+            if (IsKeyPressed(KEY_LEFT))
+                this->m_network.send(::Network::MessageType::GoLeft, this->m_playerName);
+            if (IsKeyPressed(KEY_RIGHT))
+                this->m_network.send(::Network::MessageType::GoRight, this->m_playerName);
+            if (IsKeyReleased(KEY_UP))
+                this->m_network.send(::Network::MessageType::StopTop, this->m_playerName);
+            if (IsKeyReleased(KEY_DOWN))
+                this->m_network.send(::Network::MessageType::StopBottom, this->m_playerName);
+            if (IsKeyReleased(KEY_LEFT))
+                this->m_network.send(::Network::MessageType::StopLeft, this->m_playerName);
+            if (IsKeyReleased(KEY_RIGHT))
+                this->m_network.send(::Network::MessageType::StopRight, this->m_playerName);
             if (IsKeyPressed(KEY_SPACE)) {
                 ecs::SceneManager &sceneManager = this->m_world.getSceneManager();
                 auto entities = sceneManager.view<ecs::Controllable>(sceneManager.getCurrentScene());
-            
+
                 for (auto &entity : entities) {
                     ecs::Controllable &controllable = sceneManager.get<ecs::Controllable>(*entity);
                     if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - controllable.shootUpdate).count() >= controllable.timeOut) {
@@ -83,6 +82,11 @@ namespace rtype {
         return this->m_players;
     }
 
+    std::string Game::getPlayerName() const
+    {
+        return this->m_playerName;
+    }
+
     /* ---------------------------- PRIVATE FUNCTIONS --------------------------- */
 
     void Game::initScenes()
@@ -92,7 +96,7 @@ namespace rtype {
 
         ecs::Scene &inMenu = this->m_world.createScene();
 
-         this->m_world.registerSystems<
+        this->m_world.registerSystems<
             ecs::MusicSystem,
             ecs::ControllableSystem,
             ecs::MovementSystem,
@@ -112,6 +116,7 @@ namespace rtype {
         this->m_world.assign(ButtonPlay, ecs::Clickable{false, [this](ecs::Clickable&) {
             std::cout << "ButtonPlay clicked" << std::endl;
             this->m_world.switchToScene(1);
+            this->m_network.connect(this->m_ip, this->m_port, *this, this->m_playerName);
         }});
 
         ecs::Entity &PlayerTextInput = this->m_world.createEntity(inMenu);
@@ -167,7 +172,7 @@ namespace rtype {
         this->m_world.assign(ParallaxBack2, ecs::Scale{1920 / 272, 1080 / 160});
         this->m_world.assign(ParallaxBack2, ecs::Rotation{0});
 
-        ecs::Entity &myPlayer = this->m_world.createEntity(inGame);
+        /*ecs::Entity &myPlayer = this->m_world.createEntity(inGame);
         this->m_world.assign(myPlayer, ecs::Position{200, 200});
         this->m_world.assign(myPlayer, ecs::Health{100});
         this->m_world.assign(myPlayer, ecs::Velocity{0, 0});
@@ -178,9 +183,9 @@ namespace rtype {
         this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, 0.05, std::chrono::steady_clock::now()});
         this->m_world.assign(myPlayer, ecs::Collision{false, {}, false});
         this->m_world.assign(myPlayer, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 8, 0, 150, std::chrono::steady_clock::now()});
-        this->m_world.assign(myPlayer, ecs::Name{this->m_playerName, ecs::Position{-20, -20}});
+        this->m_world.assign(myPlayer, ecs::Name{this->m_playerName, ecs::Position{-20, -20}});*/
 
-        this->m_players.push_back(Player(myPlayer, this->m_playerName));
+        //this->m_players.push_back(Player(myPlayer, this->m_playerName));
 
         ecs::Entity &SoundPlayer = this->m_world.createEntity(inGame);
         this->m_world.assign(SoundPlayer, ecs::Sound{"assets/weird.wav"});
@@ -188,7 +193,7 @@ namespace rtype {
         ecs::Entity &music = this->m_world.createEntity(inGame);
         this->m_world.assign(music, ecs::Music{"assets/mini1111.xm"});
 
-        ecs::Entity &boost = this->m_world.createEntity(inGame);
+        /*ecs::Entity &boost = this->m_world.createEntity(inGame);
         this->m_world.assign(boost, ecs::Position{500, 200});
         this->m_world.assign(boost, ecs::Collision{false, {}, true});
         this->m_world.assign(boost, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}});
@@ -196,6 +201,6 @@ namespace rtype {
         this->m_world.assign(boost, ecs::Rotation{0});
         this->m_world.assign(boost, ecs::Modifier{{
             {std::type_index(typeid(ecs::Scale)), ecs::Scale{-1, -1}},
-        }, true});
+        }, true});*/
     }
 }
