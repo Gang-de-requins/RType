@@ -5,22 +5,22 @@
 
 #Description
 
-R-TYPE est un jeu vidéo de type shoot-em-up en 2D où les joueurs pilotent un vaisseau spatial, participant à des batailles contre divers ennemis et redoutables boss. Les joueurs ont la possibilité d'améliorer leur vaisseau en collectant des améliorations tout au long du jeu. La fonctionnalité multijoueur permet une collaboration jusqu'à quatre joueurs.
+R-TYPE is a 2D shoot-em-up video game where players pilot a spaceship, participating in battles against various enemies and fearsome bosses. Players have the ability to upgrade their ship by collecting power-ups throughout the game. The multiplayer feature allows for up to four players in the same game.
 
-L'architecture du jeu se compose de deux composants essentiels : le client et le serveur. Le serveur agit comme le centre névralgique, gérant les mécanismes du jeu et les interactions entre les joueurs. En revanche, le client fonctionne comme l'interface graphique, affichant l'environnement de jeu et traitant les entrées des utilisateurs.
+The game architecture consists of two essential components: the client and the server. The server acts as the brain, managing the game mechanics and interactions between players. On the other hand, the client functions as the graphical interface, displaying the game environment and processing user inputs. The client and server always communicate with each other to ensure the good functionning of the game.
 
-Pour la communication, le protocole R-TYPE est conçu pour fonctionner de manière transparente sur TCP et UDP. TCP facilite la connexion entre le client et le serveur, tandis que UDP est utilisé pour la communication in-game.
+Concerning the communication, the R-TYPE protocol is designed to work seamlessly on TCP and UDP. TCP facilitates the connection between the client and the server, while UDP is used for in-game communication.
 
-L'objectif principal de ce protocole est de fournir une spécification complète du Protocole Client-Serveur R-TYPE.
+The main objective of this protocol is to provide a complete specification of the R-TYPE Client-Server Protocol.
 
-The terms are used in this document:
+Definition of the terms used in this document:
 
-- Client: The client is the graphical part of the game. It displays the
-        game and handles the user inputs.
-- Server: The server is the main part of the game. It manages the game
-    and the players.
+- Client: The client is the graphical part of the game. It displays the game and handles the user inputs.
+
+- Server: The server is the main part of the game. It manages the game and the players.
+
 - Player: A player is a client connected to the server.
-- Game: A game is a game session. It is composed of a server and one or
-    more players.
-- Lobby: A lobby is a waiting room. It is composed of a server and one or
-    more players.
+
+- Game: A game is a game session. It is composed of a server and one or more players.
+
+- Lobby: A lobby is a waiting room. It is composed of a server and one or more players.
