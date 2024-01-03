@@ -49,7 +49,7 @@ set(SRC
     ${SRC_CLIENT}
 )
 
-# add_compile_options(-Wall -Wextra -Werror -std=c++17)
+add_compile_options(-Wall -Wextra -Werror -std=c++17)
 
 message("Compiling ${PROJECT_NAME}...")
 

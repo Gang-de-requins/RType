@@ -19,7 +19,7 @@ namespace ecs {
                     if (std::find(collision.collidingWith.begin(), collision.collidingWith.end(), entityDamage->id) != collision.collidingWith.end()) {
                         health.health -= damage.damage;
                         collision.collidingWith.erase(std::remove(collision.collidingWith.begin(), collision.collidingWith.end(), entityDamage->id), collision.collidingWith.end());
-                        // entitiesToDelete.emplace_back(entityDamage);
+                        // change event to check if entity is an enemy, sprite or something else
                         scene.events[EventType::Destroy].push_back({
                             Event::EnemyDeath,
                             {entityDamage}

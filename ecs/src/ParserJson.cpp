@@ -64,7 +64,7 @@ namespace ecs {
                 return;
             }
 
-            for (int i = 0; i < componentsNames.size(); i++) {
+            for (std::size_t i = 0; i < componentsNames.size(); i++) {
                 if (component.HasMember(componentsNames[i].data()) && component[componentsNames[i].data()].IsObject()) {
                     (this->*componentsLoaders[i])(sceneManager, scene, entity, component[componentsNames[i].data()]);
                 }
@@ -94,7 +94,7 @@ namespace ecs {
         std::array<std::string_view, 4> animationNames = {"offset", "frames", "currentFrame", "frameTime"};
         std::array<std::string_view, 4> offsetNames = {"x", "y", "width", "height"};
 
-        for (int i = 0; i < animationNames.size(); i++) {
+        for (std::size_t i = 0; i < animationNames.size(); i++) {
             if (i == 0 && (!animation.HasMember(animationNames[i].data()) || !animation[animationNames[i].data()].IsObject())) {
                 std::cerr << "Animation has no " << animationNames[i] << " or is not an object in file: " << scene.path << std::endl;
                 return;
@@ -129,17 +129,18 @@ namespace ecs {
         std::array<std::string_view, 4> colorNames = {"r", "g", "b", "a"};
         std::array<unsigned char, 4> colorValues = {0, 0, 0, 0};
 
-        for (int i = 0; i < colorNames.size(); i++) {
+        for (std::size_t i = 0; i < colorNames.size(); i++) {
             if (!color.HasMember(colorNames[i].data()) || !color[colorNames[i].data()].IsInt()) {
                 std::cerr << "Color has no " << colorNames[i] << " or is not an integer in file: " << scene.path << std::endl;
                 return;
             }
 
-            colorValues[i] = color[colorNames[i].data()].GetInt();
-            if (colorValues[i] < 0 || colorValues[i] > 255) {
+            int colorValue = color[colorNames[i].data()].GetInt();
+            if (colorValue < 0 || colorValue > 255) {
                 std::cerr << "Color " << colorNames[i] << " is not between 0 and 255 in file: " << scene.path << std::endl;
                 return;
             }
+            colorValues[i] = colorValue;
         }
 
         sceneManager.assign<Color>(entity, Color{colorValues[0], colorValues[1], colorValues[2], colorValues[3]});
@@ -151,23 +152,43 @@ namespace ecs {
             return;
         }
 
-        sceneManager.assign<Collision>(entity, Collision{collision["isColliding"].GetBool(), std::vector<std::size_t>()});
+        sceneManager.assign<Collision>(entity, Collision{collision["isColliding"].GetBool(), std::vector<std::size_t>(), false});
     }
 
     void ParserJson::loadControllable(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &controllable) {
-        std::array<std::string_view, 4> controllableNames = {"keyUp", "keyDown", "keyLeft", "keyRight"};
-        std::array<int, 4> controllableValues = {0, 0, 0, 0};
+        std::array<std::string_view, 6> controllableNames = {"keyUp", "keyDown", "keyLeft", "keyRight", "keySpace", "timeOut"};
+        std::array<int, 5> controllableValues = {0, 0, 0, 0, 0};
+        float timeOut = 0;
 
-        for (int i = 0; i < controllableNames.size(); i++) {
-            if (!controllable.HasMember(controllableNames[i].data()) || !controllable[controllableNames[i].data()].IsInt()) {
+        for (std::size_t i = 0; i < controllableNames.size(); i++) {
+            if (i != 5 && (!controllable.HasMember(controllableNames[i].data()) || !controllable[controllableNames[i].data()].IsInt())) {
                 std::cerr << "Controllable has no " << controllableNames[i] << " or is not a valid key in file: " << scene.path << std::endl;
                 return;
             }
+            if (i == 5 && (!controllable.HasMember(controllableNames[i].data()) || !controllable[controllableNames[i].data()].IsNumber())) {
+                std::cerr << "Controllable has no " << controllableNames[i] << " or is not a number in file: " << scene.path << std::endl;
+                return;
+            }
 
-            controllableValues[i] = controllable[controllableNames[i].data()].GetInt();
+            if (i != 5) {
+                controllableValues[i] = controllable[controllableNames[i].data()].GetInt();
+            } else {
+                timeOut = controllable[controllableNames[i].data()].GetFloat();
+            }
         }
 
-        sceneManager.assign<Controllable>(entity, Controllable{controllableValues[0], controllableValues[1], controllableValues[2], controllableValues[3]});
+        sceneManager.assign<Controllable>(
+            entity,
+            Controllable{
+                controllableValues[0],
+                controllableValues[1],
+                controllableValues[2],
+                controllableValues[3],
+                controllableValues[4],
+                timeOut,
+                std::chrono::steady_clock::now()
+            }
+        );
     }
 
     void ParserJson::loadDamage(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &damage) {
@@ -273,7 +294,7 @@ namespace ecs {
         std::array<std::string_view, 4> sourceNames = {"x", "y", "width", "height"};
         std::array<std::string_view, 2> originNames = {"x", "y"};
 
-        for (int i = 0; i < spriteNames.size(); i++) {
+        for (std::size_t i = 0; i < spriteNames.size(); i++) {
             if (i == 0 && (!sprite.HasMember(spriteNames[i].data()) || !sprite[spriteNames[i].data()].IsString())) {
                 std::cerr << "Sprite has no " << spriteNames[i] << " or is not a string in file: " << scene.path << std::endl;
                 return;

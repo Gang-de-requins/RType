@@ -7,11 +7,15 @@
 #include "components/Components.hpp"
 #include "ISystem.hpp"
 #include "Entity.hpp"
+#include "Scene.hpp"
 
 namespace ecs {
     class SpawnerSystem : public ISystem {
         public:
             void update(SceneManager &sceneManager) override;
+
+        private:
+            void spawnBullet(SceneManager &sceneManager, Entity &entity, Scene &scene, bool isPlayer);
     };
 }
 

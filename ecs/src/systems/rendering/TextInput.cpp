@@ -7,7 +7,6 @@ namespace ecs {
 
         for (auto &entity : entities) {
             auto &textInput = sceneManager.get<TextInput>(*entity);
-            auto &position = sceneManager.get<Position>(*entity);
             auto &textColor = sceneManager.get<TextColor>(*entity);
             auto &fontSize = sceneManager.get<FontSize>(*entity);
 
@@ -61,7 +60,6 @@ namespace ecs {
     bool TextInputSystem::isMouseOver(::Vector2 mousePosition, Entity &entity, SceneManager &sceneManager) {
         Position &position = sceneManager.get<Position>(entity);
         Scale &scale = sceneManager.get<Scale>(entity);
-        TextInput &textInput = sceneManager.get<TextInput>(entity);
         Rectangle &rectangle = sceneManager.get<Rectangle>(entity);
         ::Rectangle rec {position.x, position.y, rectangle.width * scale.x, rectangle.height * scale.y};
 

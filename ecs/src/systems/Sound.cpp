@@ -3,12 +3,25 @@
 
 namespace ecs {
     void SoundSystem::update(SceneManager &sceneManager) {
-        auto entities = sceneManager.view<Sound>(sceneManager.getCurrentScene());
+        ecs::Scene &scene = sceneManager.getCurrentScene();
 
-        for (auto &entity : entities) {
-            auto &sound = sceneManager.get<Sound>(*entity);
-            auto &soundData = sceneManager.getSound(sound.path);
-            PlaySound(soundData);
+        for (auto &event : scene.events.at(EventType::Audio)) {
+            switch (event.event) {
+                case Event::PlaySound:
+                    for (auto &entity : event.entities) {
+                        Sound &sound = sceneManager.get<Sound>(*entity);
+                        ::Sound &soundData = sceneManager.getSound(sound.path);
+
+                        ::PlaySound(soundData);
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            event.entities.clear();
         }
+
+        scene.events.at(EventType::Audio).clear();
     }
 }

@@ -5,7 +5,6 @@ namespace ecs {
     bool ClickableSystem::mouseInSprite(::Vector2 mousePosition, Entity &entity, SceneManager &sceneManager) {
         Position &position = sceneManager.get<Position>(entity);
         Scale &scale = sceneManager.get<Scale>(entity) ;
-        Clickable &clickable = sceneManager.get<Clickable>(entity);
         ::Rectangle rec = {position.x, position.y, 0, 0};
         bool hasSprite = sceneManager.has<Sprite>(entity);
         bool hasRectangle = sceneManager.has<Rectangle>(entity);
