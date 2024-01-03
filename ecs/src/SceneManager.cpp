@@ -2,7 +2,13 @@
 
 namespace ecs {
     Scene &SceneManager::createScene() {
-        this->m_scenes.emplace_back(Scene{this->m_nextSceneId++, {}, {}, "", false});
+        this->m_scenes.emplace_back(Scene{this->m_nextSceneId++, {}, {}, {
+            {EventType::Collisionnnnnn, {}},
+            {EventType::Death, {}},
+            {EventType::Input, {}},
+            {EventType::Spawn, {}},
+            {EventType::Timer, {}}
+        }, "", false});
         return this->m_scenes.back();
     }
     

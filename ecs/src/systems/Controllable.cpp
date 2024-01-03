@@ -3,36 +3,41 @@
 
 namespace ecs {
     void ControllableSystem::update(SceneManager &sceneManager) {
-        std::vector<Entity *> entities = sceneManager.view<Controllable, Acceleration>(sceneManager.getCurrentScene());
+        ecs::Scene &scene = sceneManager.getCurrentScene();
+        std::vector<Entity *> entities = sceneManager.view<Controllable, Acceleration>(scene);
 
         for (auto &entity : entities) {
             Controllable &controllable = sceneManager.get<Controllable>(*entity);
-            Acceleration &acceleration = sceneManager.get<Acceleration>(*entity);
             bool actionFound = false;
 
             if (IsKeyDown(controllable.keyUp)) {
                 actionFound = true;
-                acceleration.ddx = 0;
-                acceleration.ddy = -0.3f;
-                acceleration.maxSpeed = 4.0f;
+                scene.events[EventType::Input].push_back({
+                    Event::MoveUp,
+                    {entity}
+                });
+
             }
             if (IsKeyDown(controllable.keyDown)) {
                 actionFound = true;
-                acceleration.ddx = 0;
-                acceleration.ddy = 0.3f;
-                acceleration.maxSpeed = 4.0f;
+                scene.events[EventType::Input].push_back({
+                    Event::MoveDown,
+                    {entity}
+                });
             }
             if (IsKeyDown(controllable.keyLeft)) {
                 actionFound = true;
-                acceleration.ddx = -0.3f;
-                acceleration.ddy = 0;
-                acceleration.maxSpeed = 4.0f;
+                scene.events[EventType::Input].push_back({
+                    Event::MoveLeft,
+                    {entity}
+                });
             }
             if (IsKeyDown(controllable.keyRight)) {
                 actionFound = true;
-                acceleration.ddx = 0.3f;
-                acceleration.ddy = 0;
-                acceleration.maxSpeed = 4.0f;
+                scene.events[EventType::Input].push_back({
+                    Event::MoveRight,
+                    {entity}
+                });
             }
             if (IsKeyPressed(controllable.keySpace) && std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - controllable.shootUpdate).count() >= controllable.timeOut){
                 auto entities = sceneManager.view<Sound>(sceneManager.getCurrentScene())[0];
@@ -56,11 +61,10 @@ namespace ecs {
                 sceneManager.assign(Shoot, Damage{10});
             }
             if (!actionFound) {
-                acceleration.ddx *= -1;
-                acceleration.ddy *= -1;
-
-                acceleration.maxSpeed -= 0.1f;
-                acceleration.maxSpeed = std::max(acceleration.maxSpeed, 0.0f);
+                scene.events[EventType::Input].push_back({
+                    Event::StopMoving,
+                    {entity}
+                });
             }
         }
     }

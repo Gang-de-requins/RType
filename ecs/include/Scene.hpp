@@ -5,6 +5,7 @@
 #include <memory>
 #include <string_view>
 #include "Entity.hpp"
+#include "Events.hpp"
 
 namespace ecs {
     class ISystem;
@@ -35,6 +36,7 @@ namespace ecs {
         std::size_t id;
         std::vector<Entity> entities;
         std::vector<std::unique_ptr<ISystem>> systems;
+        std::unordered_map<EventType, std::vector<EventData>> events;
         std::string_view path;
         bool loadFromPath;
 
