@@ -6,6 +6,7 @@
 #include "components/Position.hpp"
 #include "components/Velocity.hpp"
 #include "components/Acceleration.hpp"
+#include "Entity.hpp"
 #include "ISystem.hpp"
 
 namespace ecs {
@@ -30,6 +31,8 @@ namespace ecs {
          * This method iterates through entities with Position, Velocity, and Acceleration components, updating their positions based on their velocities and accelerations. It handles the physics and movement logic for the entities.
          */
         void update(SceneManager &sceneManager) override;
+
+        void move(SceneManager &sceneManager, Entity *entity);
     };
 }
 

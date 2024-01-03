@@ -172,7 +172,7 @@ namespace rtype {
         this->m_world.assign(myPlayer, ecs::Health{100});
         this->m_world.assign(myPlayer, ecs::Velocity{0, 0});
         this->m_world.assign(myPlayer, ecs::Sprite{"assets/characters2.gif", ecs::Rectangle{0, 0, 32, 32}, ecs::Vector2{0, 0}});
-        this->m_world.assign(myPlayer, ecs::Acceleration{0, 0, 4});
+        this->m_world.assign(myPlayer, ecs::Acceleration{0, 0, 8});
         this->m_world.assign(myPlayer, ecs::Scale{2, 2});
         this->m_world.assign(myPlayer, ecs::Rotation{0});
         this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, 0.05, std::chrono::steady_clock::now()});
