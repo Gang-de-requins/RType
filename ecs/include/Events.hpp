@@ -31,6 +31,7 @@ namespace ecs {
         EnemyDeath,
         BulletDeath,
         EnemyBulletDeath,
+        ModifierDisparition,
     };
 
     struct EventData {

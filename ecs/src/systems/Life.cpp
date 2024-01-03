@@ -20,7 +20,10 @@ namespace ecs {
                         health.health -= damage.damage;
                         collision.collidingWith.erase(std::remove(collision.collidingWith.begin(), collision.collidingWith.end(), entityDamage->id), collision.collidingWith.end());
                         // entitiesToDelete.emplace_back(entityDamage);
-
+                        scene.events[EventType::Destroy].push_back({
+                            Event::EnemyDeath,
+                            {entityDamage}
+                        });
                     }
 
                     if (health.health <= 0) {
