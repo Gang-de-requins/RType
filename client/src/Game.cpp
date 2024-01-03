@@ -14,6 +14,7 @@ namespace rtype {
 
     void Game::run()
     {
+        SetTraceLogLevel(LOG_NONE);
         InitAudioDevice();
         InitWindow(1920, 1080, "rtype");
         SetTargetFPS(60);
@@ -137,6 +138,7 @@ namespace rtype {
 
         this->m_world.registerSystems<
             ecs::MusicSystem,
+            ecs::SoundSystem,
             ecs::ControllableSystem,
             ecs::AnimationSystem,
             ecs::MovementSystem,
@@ -146,7 +148,9 @@ namespace rtype {
             ecs::CollisionSystem,
             ecs::LifeSystem,
             ecs::ParallaxSystem,
-            ecs::ModifierSystem
+            ecs::ModifierSystem,
+            ecs::DestructionSystem,
+            ecs::SpawnerSystem
         >(inGame);
 
         ecs::Entity &ParallaxBack1 = this->m_world.createEntity(inGame);
@@ -175,15 +179,15 @@ namespace rtype {
         this->m_world.assign(myPlayer, ecs::Acceleration{0, 0, 8});
         this->m_world.assign(myPlayer, ecs::Scale{2, 2});
         this->m_world.assign(myPlayer, ecs::Rotation{0});
-        this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, 0.05, std::chrono::steady_clock::now()});
+        this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, 500, std::chrono::steady_clock::now()});
         this->m_world.assign(myPlayer, ecs::Collision{false, {}, false});
         this->m_world.assign(myPlayer, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 8, 0, 150, std::chrono::steady_clock::now()});
         this->m_world.assign(myPlayer, ecs::Name{this->m_playerName, ecs::Position{-20, -20}});
 
         this->m_players.push_back(Player(myPlayer, this->m_playerName));
 
-        ecs::Entity &SoundPlayer = this->m_world.createEntity(inGame);
-        this->m_world.assign(SoundPlayer, ecs::Sound{"assets/weird.wav"});
+        // ecs::Entity &SoundPlayer = this->m_world.createEntity(inGame);
+        // this->m_world.assign(SoundPlayer, ecs::Sound{"assets/weird.wav"});
 
         ecs::Entity &music = this->m_world.createEntity(inGame);
         this->m_world.assign(music, ecs::Music{"assets/mini1111.xm"});

@@ -3,9 +3,9 @@
 
 namespace ecs {
     void ModifierSystem::update(SceneManager &sceneManager) {
-        auto entities = sceneManager.view<Collision, Sprite, Controllable>(sceneManager.getCurrentScene());
-        auto modifiers = sceneManager.view<Modifier, Collision, Sprite>(sceneManager.getCurrentScene());
-        std::vector<Entity *> entitiesToDelete;
+        ecs::Scene &scene = sceneManager.getCurrentScene();
+        auto entities = sceneManager.view<Collision, Sprite, Controllable>(scene);
+        auto modifiers = sceneManager.view<Modifier, Collision, Sprite>(scene);
         std::vector<std::type_index> componentsTypes = {
             std::type_index(typeid(Acceleration)),
             std::type_index(typeid(Damage)),
@@ -49,14 +49,13 @@ namespace ecs {
                     }
 
                     if (modifierApplied) {
-                        entitiesToDelete.emplace_back(modifier);
+                        scene.events[EventType::Destroy].push_back({
+                            Event::ModifierDisparition,
+                            {modifier}
+                        });
                     }
                 }
             }
-        }
-
-        for (auto &entity : entitiesToDelete) {
-            sceneManager.destroyEntity(sceneManager.getCurrentScene(), *entity);
         }
     }
 }

@@ -25,6 +25,8 @@ set(SRC_ECS
     ../ecs/src/systems/Parallax.cpp
     ../ecs/src/systems/Clickable.cpp
     ../ecs/src/systems/Modifier.cpp
+    ../ecs/src/systems/Spawner.cpp
+    ../ecs/src/systems/Destruction.cpp
     ../ecs/src/systems/rendering/Name.cpp
     ../ecs/src/systems/rendering/Sprite.cpp
     ../ecs/src/systems/rendering/Text.cpp
@@ -47,7 +49,7 @@ set(SRC
     ${SRC_CLIENT}
 )
 
-# add_compile_options(-Wall -Wextra -Werror -std=c++17)
+add_compile_options(-Wall -Wextra -Werror -std=c++17)
 
 message("Compiling ${PROJECT_NAME}...")
 

@@ -8,7 +8,7 @@
 namespace ecs {
     enum EventType {
         Collisionnnnnn,
-        Death,
+        Destroy,
         Input,
         Spawn,
         Timer,
@@ -31,6 +31,8 @@ namespace ecs {
         EnemyDeath,
         BulletDeath,
         EnemyBulletDeath,
+        ModifierDisparition,
+        PlaySound,
     };
 
     struct EventData {
