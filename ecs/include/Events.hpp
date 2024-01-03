@@ -33,6 +33,7 @@ namespace ecs {
         EnemyBulletDeath,
         ModifierDisparition,
         PlaySound,
+        DealDamage,
     };
 
     struct EventData {

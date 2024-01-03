@@ -27,9 +27,9 @@ namespace ecs {
     void SceneManager::switchToScene(std::size_t sceneId) {
         this->unloadScene(this->m_scenes.at(this->m_currentSceneId));
 
-        this->m_nextEntityId = 0;
         this->m_currentSceneId = sceneId;
         if (this->m_scenes.at(this->m_currentSceneId).loadFromPath) {
+            this->m_nextEntityId = 0;
             this->loadEntitiesFromJson(this->m_scenes.at(this->m_currentSceneId));
         }
     }
