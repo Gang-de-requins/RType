@@ -14,6 +14,7 @@ namespace rtype {
 
     void Game::run()
     {
+        SetTraceLogLevel(LOG_NONE);
         InitAudioDevice();
         InitWindow(1920, 1080, "rtype");
         SetTargetFPS(60);
@@ -146,7 +147,8 @@ namespace rtype {
             ecs::CollisionSystem,
             ecs::LifeSystem,
             ecs::ParallaxSystem,
-            ecs::ModifierSystem
+            ecs::ModifierSystem,
+            ecs::DestructionSystem
         >(inGame);
 
         ecs::Entity &ParallaxBack1 = this->m_world.createEntity(inGame);

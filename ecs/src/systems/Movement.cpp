@@ -14,7 +14,7 @@ namespace ecs {
                         acceleration.ddy = -0.5f;
                         acceleration.maxSpeed = 8.0f;
 
-                        this->move(sceneManager, entity);
+                        // this->move(sceneManager, entity);
                     }
                     break;
                 case Event::MoveDown:
@@ -24,7 +24,7 @@ namespace ecs {
                         acceleration.ddy = 0.5f;
                         acceleration.maxSpeed = 8.0f;
 
-                        this->move(sceneManager, entity);
+                        // this->move(sceneManager, entity);
                     }
                     break;
                 case Event::MoveLeft:
@@ -34,7 +34,7 @@ namespace ecs {
                         acceleration.ddy = 0;
                         acceleration.maxSpeed = 8.0f;
 
-                        this->move(sceneManager, entity);
+                        // this->move(sceneManager, entity);
                     }
                     break;
                 case Event::MoveRight:
@@ -44,7 +44,7 @@ namespace ecs {
                         acceleration.ddy = 0;
                         acceleration.maxSpeed = 8.0f;
 
-                        this->move(sceneManager, entity);
+                        // this->move(sceneManager, entity);
                     }
                     break;
                 case Event::StopMoving:
@@ -56,15 +56,20 @@ namespace ecs {
                         acceleration.maxSpeed -= 0.1f;
                         acceleration.maxSpeed = std::max(acceleration.maxSpeed, 0.0f);
 
-                        this->move(sceneManager, entity);
+                        // this->move(sceneManager, entity);
                     }
+                    break;
+                default:
                     break;
             }
 
             event.entities.clear();
         }
-
         scene.events.at(EventType::Input).clear();
+
+        for (auto &entity : sceneManager.view<Acceleration, Velocity, Position>(scene)) {
+            this->move(sceneManager, entity);
+        }
     }
 
     void MovementSystem::move(SceneManager &sceneManager, Entity *entity) {

@@ -8,7 +8,7 @@
 namespace ecs {
     enum EventType {
         Collisionnnnnn,
-        Death,
+        Destroy,
         Input,
         Spawn,
         Timer,

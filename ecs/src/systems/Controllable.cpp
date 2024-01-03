@@ -59,6 +59,11 @@ namespace ecs {
                 sceneManager.assign(Shoot, Rotation{0});;
                 sceneManager.assign(Shoot, Collision{false, {}, true});
                 sceneManager.assign(Shoot, Damage{10});
+
+                scene.events[EventType::Input].push_back({
+                    Event::Shoot,
+                    {&Shoot}
+                });
             }
             if (!actionFound) {
                 scene.events[EventType::Input].push_back({
