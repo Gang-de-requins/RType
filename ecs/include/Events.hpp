@@ -11,15 +11,26 @@ namespace ecs {
         Death,
         Input,
         Spawn,
-        Timer
+        Timer,
+        Audio
     };
 
     enum Event {
+        Overlap,
         MoveUp,
         MoveDown,
         MoveLeft,
         MoveRight,
-        StopMoving
+        StopMoving,
+        Shoot,
+        SpawnEnemy,
+        SpawnPlayer,
+        SpawnEnemyBullet,
+        SpawnPlayerBullet,
+        PlayerDeath,
+        EnemyDeath,
+        BulletDeath,
+        EnemyBulletDeath,
     };
 
     struct EventData {

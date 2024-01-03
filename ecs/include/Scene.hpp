@@ -36,7 +36,6 @@ namespace ecs {
         std::size_t id;
         std::vector<Entity> entities;
         std::vector<std::unique_ptr<ISystem>> systems;
-        // std::vector<EventData> events;
         std::unordered_map<EventType, std::vector<EventData>> events;
         std::string_view path;
         bool loadFromPath;

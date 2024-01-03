@@ -8,15 +8,9 @@ namespace ecs {
 
         for (auto &entity : entities) {
             Controllable &controllable = sceneManager.get<Controllable>(*entity);
-            Acceleration &acceleration = sceneManager.get<Acceleration>(*entity);
             bool actionFound = false;
 
             if (IsKeyDown(controllable.keyUp)) {
-                // actionFound = true;
-                // acceleration.ddx = 0;
-                // acceleration.ddy = -0.3f;
-                // acceleration.maxSpeed = 4.0f;
-
                 actionFound = true;
                 scene.events[EventType::Input].push_back({
                     Event::MoveUp,
@@ -25,11 +19,6 @@ namespace ecs {
 
             }
             if (IsKeyDown(controllable.keyDown)) {
-                // actionFound = true;
-                // acceleration.ddx = 0;
-                // acceleration.ddy = 0.3f;
-                // acceleration.maxSpeed = 4.0f;
-
                 actionFound = true;
                 scene.events[EventType::Input].push_back({
                     Event::MoveDown,
@@ -37,11 +26,6 @@ namespace ecs {
                 });
             }
             if (IsKeyDown(controllable.keyLeft)) {
-                // actionFound = true;
-                // acceleration.ddx = -0.3f;
-                // acceleration.ddy = 0;
-                // acceleration.maxSpeed = 4.0f;
-
                 actionFound = true;
                 scene.events[EventType::Input].push_back({
                     Event::MoveLeft,
@@ -49,11 +33,6 @@ namespace ecs {
                 });
             }
             if (IsKeyDown(controllable.keyRight)) {
-                // actionFound = true;
-                // acceleration.ddx = 0.3f;
-                // acceleration.ddy = 0;
-                // acceleration.maxSpeed = 4.0f;
-
                 actionFound = true;
                 scene.events[EventType::Input].push_back({
                     Event::MoveRight,
@@ -82,12 +61,6 @@ namespace ecs {
                 sceneManager.assign(Shoot, Damage{10});
             }
             if (!actionFound) {
-                // acceleration.ddx *= -1;
-                // acceleration.ddy *= -1;
-
-                // acceleration.maxSpeed -= 0.1f;
-                // acceleration.maxSpeed = std::max(acceleration.maxSpeed, 0.0f);
-
                 scene.events[EventType::Input].push_back({
                     Event::StopMoving,
                     {entity}
