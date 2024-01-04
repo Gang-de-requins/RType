@@ -4,41 +4,34 @@
 namespace ecs {
     void LifeSystem::update(SceneManager &sceneManager) {
         ecs::Scene &scene = sceneManager.getCurrentScene();
-        std::vector<Entity *> entitiesHealth = sceneManager.view<Health, Collision>(scene);
-        std::vector<Entity *> entitiesDamage = sceneManager.view<Damage, Collision>(scene);
 
-        for (auto &entityHealth : entitiesHealth) {
-            Collision &collision = sceneManager.get<Collision>(*entityHealth);
+        for (auto &event : scene.events.at(EventType::Collisionnnnnn)) {
+            if (event.event == Event::DealDamage) {
+                Damage &damage = sceneManager.get<Damage>(*event.entities.at(0));
+                Health &health = sceneManager.get<Health>(*event.entities.at(1));
 
-            if (collision.isColliding) {
-                Health &health = sceneManager.get<Health>(*entityHealth);
+                health.health -= damage.damage;
 
-                for (auto &entityDamage : entitiesDamage) {
-                    Damage &damage = sceneManager.get<Damage>(*entityDamage);
-
-                    if (std::find(collision.collidingWith.begin(), collision.collidingWith.end(), entityDamage->id) != collision.collidingWith.end()) {
-                        health.health -= damage.damage;
-                        collision.collidingWith.erase(std::remove(collision.collidingWith.begin(), collision.collidingWith.end(), entityDamage->id), collision.collidingWith.end());
-                        // change event to check if entity is an enemy, sprite or something else
+                if (health.health <= 0) {
+                    if (sceneManager.has<Controllable>(*event.entities.at(1))) {
+                        scene.events[EventType::Destroy].push_back({
+                            Event::PlayerDeath,
+                            {event.entities.at(1)}
+                        });
+                    } else {
                         scene.events[EventType::Destroy].push_back({
                             Event::EnemyDeath,
-                            {entityDamage}
+                            {event.entities.at(1)}
                         });
                     }
-
-                    if (health.health <= 0) {
-                        collision.collidingWith.erase(std::remove(collision.collidingWith.begin(), collision.collidingWith.end(), entityHealth->id), collision.collidingWith.end());
-                        if (sceneManager.has<Controllable>(*entityHealth)) {
-                            scene.events[EventType::Destroy].push_back({
-                                Event::PlayerDeath,
-                                {entityHealth}
-                            });
-                        }
-                    }
                 }
+                scene.events[EventType::Destroy].push_back({
+                    Event::EnemyDeath,
+                    {event.entities.at(0)}
+                });
             }
-
-            collision.isColliding = false;
         }
+
+        scene.events[EventType::Collisionnnnnn].clear();
     }
 }
