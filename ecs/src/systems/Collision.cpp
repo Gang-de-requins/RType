@@ -13,29 +13,37 @@ namespace ecs {
                     continue;
                 }
 
-                Position &position1 = sceneManager.get<Position>(*entity1);
-                Position &position2 = sceneManager.get<Position>(*entity2);
-                Sprite &sprite1 = sceneManager.get<Sprite>(*entity1);
-                Sprite &sprite2 = sceneManager.get<Sprite>(*entity2);
+                CollisionInfo collisionInfo = {
+                    sceneManager.get<Sprite>(*entity1),
+                    sceneManager.get<Position>(*entity1),
+                    sceneManager.get<Scale>(*entity1),
+                    sceneManager.get<Rotation>(*entity1),
+                    sceneManager.get<Sprite>(*entity2),
+                    sceneManager.get<Position>(*entity2),
+                    sceneManager.get<Scale>(*entity2),
+                    sceneManager.get<Rotation>(*entity2)
+                };
 
-                if (isColliding(position1, sprite1, position2, sprite2)) {
+                Collision &collision2 = sceneManager.get<Collision>(*entity2);
+
+                if (this->isColliding(collisionInfo)) {
                     collision1.isColliding = true;
                     collision1.collidingWith.push_back(entity2->id);
 
-                    if (sceneManager.has<Velocity>(*entity1)) {
+                    if (!collision1.isOverlap && !collision2.isOverlap && sceneManager.has<Velocity>(*entity1)) {
                         Velocity &velocity1 = sceneManager.get<Velocity>(*entity1);
                         velocity1.dx = 0;
                         velocity1.dy = 0;
 
-                        float overlapX = (position1.x + sprite1.source.width) - position2.x;
-                        float overlapY = (position1.y + sprite1.source.height) - position2.y;
+                        float overlapX = (collisionInfo.position1.x + collisionInfo.sprite1.source.width) - collisionInfo.position2.x;
+                        float overlapY = (collisionInfo.position1.y + collisionInfo.sprite1.source.height) - collisionInfo.position2.y;
 
                         if (std::abs(overlapX) < std::abs(overlapY)) {
-                            position1.x -= overlapX / 2;
-                            position2.x += overlapX / 2;
+                            collisionInfo.position1.x -= overlapX / 2;
+                            collisionInfo.position2.x += overlapX / 2;
                         } else {
-                            position1.y -= overlapY / 2;
-                            position2.y += overlapY / 2;
+                            collisionInfo.position1.y -= overlapY / 2;
+                            collisionInfo.position2.y += overlapY / 2;
                         }
                     }
                 }
@@ -45,10 +53,20 @@ namespace ecs {
 
     /* ------------------------- PRIVATE FUCNTIONS -------------------------- */
 
-    bool CollisionSystem::isColliding(const Position &pos1, const Sprite &sprite1, const Position &pos2, const Sprite &sprite2) {
-        return pos1.x < pos2.x + sprite2.source.width &&
-            pos1.x + sprite1.source.width > pos2.x &&
-            pos1.y < pos2.y + sprite2.source.height &&
-            pos1.y + sprite1.source.height > pos2.y;
+    bool CollisionSystem::isColliding(const CollisionInfo &collisionInfo) {
+        ::Rectangle rectangle1 = {
+            collisionInfo.position1.x,
+            collisionInfo.position1.y,
+            collisionInfo.sprite1.source.width * collisionInfo.scale1.x,
+            collisionInfo.sprite1.source.height * collisionInfo.scale1.y
+        };
+        ::Rectangle rectangle2 = {
+            collisionInfo.position2.x,
+            collisionInfo.position2.y,
+            collisionInfo.sprite2.source.width * collisionInfo.scale2.x,
+            collisionInfo.sprite2.source.height * collisionInfo.scale2.y
+        };
+
+        return CheckCollisionRecs(rectangle1, rectangle2);
     }
 }

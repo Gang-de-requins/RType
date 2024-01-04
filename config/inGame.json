@@ -1,0 +1,116 @@
+[
+    {
+        "components": [
+            {
+                "Position": {
+                    "x": 200,
+                    "y": 200
+                },
+                "Velocity": {
+                    "dx": 0,
+                    "dy": 0
+                },
+                "Sprite": {
+                    "path": "assets/characters.gif",
+                    "source": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 32,
+                        "height": 16
+                    },
+                    "origin": {
+                        "x": 0,
+                        "y": 0
+                    }
+                },
+                "Acceleration": {
+                    "ddx": 0,
+                    "ddy": 0,
+                    "maxSpeed": 4
+                },
+                "Controllable": {
+                    "keyUp": 265,
+                    "keyDown": 264,
+                    "keyLeft": 263,
+                    "keyRight": 262
+                },
+                "Scale": {
+                    "x": 1,
+                    "y": 1
+                },
+                "Rotation": {
+                    "angle": 0
+                },
+                "Animation": {
+                    "offset": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 32,
+                        "height": 0
+                    },
+                    "frames": 4,
+                    "currentFrame": 0,
+                    "frameTime": 300
+                }
+            }
+        ]
+    },
+    {
+        "components": [
+            {
+                "Text": {
+                    "content": "Player 1"
+                }
+            },
+            {
+                "Position": {
+                    "x": 180,
+                    "y": 180
+                }
+            },
+            {
+                "Color": {
+                    "r": 255,
+                    "g": 255,
+                    "b": 255,
+                    "a": 255
+                }
+            },
+            {
+                "FontSize": {
+                    "size": 20
+                }
+            },
+            {
+                "Velocity": {
+                    "dx": 0,
+                    "dy": 0
+                }
+            },
+            {
+                "Acceleration": {
+                    "ddx": 0,
+                    "ddy": 0,
+                    "maxSpeed": 4
+                }
+            },
+            {
+                "Controllable": {
+                    "keyUp": 265,
+                    "keyDown": 264,
+                    "keyLeft": 263,
+                    "keyRight": 262
+                }
+            }
+        ]
+    },
+    {
+        "components": [
+            {
+                "Music": {
+                    "path": "assets/mini1111.xm"
+                }
+            }
+        ]
+    }
+]

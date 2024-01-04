@@ -78,6 +78,8 @@ namespace ecs {
              */
             Scene &getCurrentScene();
 
+            SceneManager &getSceneManager();
+
             /**
              * @fn World::createEntity
              * @brief Create an entity
@@ -96,6 +98,16 @@ namespace ecs {
             void destroyEntity(Scene &scene, Entity &entity);
 
             /**
+             * @fn World::getEntityById
+             * @brief Get an entity by its id
+             * 
+             * @param scene The scene in which the entity is.
+             * @param id The id of the entity.
+             * @return The entity.
+             */
+            ecs::Entity &getEntityById(Scene &scene, std::size_t id);
+
+            /**
              * @fn World::assign
              * @brief Assign a component to an entity
              * 
@@ -105,7 +117,7 @@ namespace ecs {
              */
             template<typename Component>
             void assign(Entity &entity, Component component) {
-                entity.components[typeid(Component).name()] = std::make_any<Component>(component);
+                entity.components[std::type_index(typeid(Component))] = std::make_any<Component>(component);
             }
 
             /**
@@ -117,7 +129,7 @@ namespace ecs {
              */
             template<typename Component>
             void remove(Entity &entity) {
-                entity.components.erase(typeid(Component).name());
+                entity.components.erase(typeid(Component));
             }
 
             /**
@@ -131,7 +143,7 @@ namespace ecs {
             template<typename Component>
             Component &get(Entity &entity) {
                 try {
-                    return std::any_cast<Component &>(entity.components.at(typeid(Component).name()));
+                    return std::any_cast<Component &>(entity.components.at(std::type_index(typeid(Component))));
                 } catch (std::exception &e) {
                     std::cerr << e.what() << std::endl;
                     throw;

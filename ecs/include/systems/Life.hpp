@@ -11,9 +11,23 @@
 namespace ecs {
     class SceneManager;
 
+    /**
+     * @class LifeSystem
+     * @brief Life System class
+     * 
+     * @details
+     * Part of the Entity Component System, the LifeSystem class is responsible for managing the health and damage aspects of entities. It works with Health, Damage, and Collision components to handle health reduction, entity damage, and possibly death or destruction of entities.
+     * 
+     */
     class LifeSystem : public ISystem {
-        public:
-            void update(SceneManager &sceneManager) override;
+    public:
+        /**
+         * @brief Updates the life state of entities
+         * 
+         * @param sceneManager Reference to the SceneManager which manages the current scene and its entities.
+         * 
+         */
+        void update(SceneManager &sceneManager) override;
     };
 }
 

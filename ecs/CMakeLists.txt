@@ -16,14 +16,20 @@ set(SRC
     src/Buffer.cpp
     src/systems/Movement.cpp
     src/systems/Controllable.cpp
+    src/systems/Modifier.cpp
     src/systems/Music.cpp
     src/systems/Sound.cpp
     src/systems/Collision.cpp
     src/systems/Life.cpp
+    src/systems/Parallax.cpp
+    src/systems/Clickable.cpp
     src/systems/rendering/Name.cpp
     src/systems/rendering/Sprite.cpp
     src/systems/rendering/Text.cpp
     src/systems/rendering/Animation.cpp
+    src/systems/rendering/Rectangle.cpp
+    src/systems/rendering/TextInput.cpp
+    src/systems/rendering/Render.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${SRC})

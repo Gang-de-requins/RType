@@ -17,12 +17,20 @@ namespace ecs {
         return this->m_sceneManager.getCurrentScene();
     }
 
+    SceneManager &World::getSceneManager() {
+        return this->m_sceneManager;
+    }
+
     Entity &World::createEntity(Scene &scene) {
         return this->m_sceneManager.createEntity(scene);
     }
 
     void World::destroyEntity(Scene &scene, Entity &entity) {
         this->m_sceneManager.destroyEntity(scene, entity);
+    }
+
+    Entity &World::getEntityById(Scene &scene, std::size_t id) {
+        return this->m_sceneManager.getEntityById(scene, id);
     }
 
     void World::update() {

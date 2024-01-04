@@ -22,12 +22,13 @@ namespace serverGame
     class Rtype
     {
     public:
-        Rtype();
+        Rtype(int port);
         ~Rtype();
         void run(void);
         //void addPlayer(serverGame::Message msg);
         void addDefault(std::string name);
         void addPlayer(std::string name, boost::asio::ip::udp::endpoint endpoint);
+        void addMissile(serverGame::Message msg);
         void GoDirection(serverGame::Message msg, Network::MessageType dir);
         void StopDirection(serverGame::Message msg, Network::MessageType dir);
         void processMessages(void);
