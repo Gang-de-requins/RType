@@ -14,6 +14,7 @@ namespace rtype {
 
     void Game::run()
     {
+        SetTraceLogLevel(LOG_NONE);
         InitAudioDevice();
         InitWindow(1920, 1080, "rtype");
         SetTargetFPS(60);
@@ -162,6 +163,7 @@ namespace rtype {
             ecs::SpriteSystem,
             ecs::NameSystem,
             ecs::TextSystem,
+            ecs::TextInputSystem,
             ecs::CollisionSystem,
             ecs::LifeSystem,
             ecs::ParallaxSystem,
@@ -237,7 +239,8 @@ namespace rtype {
             ecs::LifeSystem,
             ecs::ParallaxSystem,
             ecs::RenderSystem,
-            ecs::ClickableSystem
+            ecs::ClickableSystem,
+            ecs::TextInputSystem
         >(chooseName);
 
         ecs::Entity &Bakckground_2 = this->m_world.createEntity(chooseName);
@@ -253,8 +256,7 @@ namespace rtype {
         this->m_world.assign(PlayerTextInput, ecs::Scale{1, 1});
         this->m_world.assign(PlayerTextInput, ecs::Rotation{0});
         this->m_world.assign(PlayerTextInput, ecs::Clickable{false, [this](ecs::Clickable&) {
-            std::cout << "PlayerTextInput clicked" << std::endl;
-            ecs::Entity &PlayerTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 2);
+            ecs::Entity &PlayerTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 14);
             ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(PlayerTextInput);
 
             this->m_playerName = textInput.content;
