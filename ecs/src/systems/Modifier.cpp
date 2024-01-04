@@ -56,7 +56,7 @@ namespace ecs {
         }
 
         for (auto &entity : entitiesToDelete) {
-            sceneManager.destroyEntity(sceneManager.getCurrentScene(), *entity);
+            //sceneManager.destroyEntity(sceneManager.getCurrentScene(), *entity);
         }
     }
 }

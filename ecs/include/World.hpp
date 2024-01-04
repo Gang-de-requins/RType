@@ -108,6 +108,16 @@ namespace ecs {
             ecs::Entity &getEntityById(Scene &scene, std::size_t id);
 
             /**
+             * @fn World::getEntityByName
+             * @brief Get an entity by its name
+             * 
+             * @param scene The scene in which the entity is.
+             * @param name The name of the entity.
+             * @return The entity.
+             */
+            ecs::Entity &getEntityByName(Scene &scene, std::string name);
+
+            /**
              * @fn World::assign
              * @brief Assign a component to an entity
              * 

@@ -48,6 +48,17 @@ namespace ecs {
         });
     }
 
+    Entity &SceneManager::getEntityByName(Scene &scene, std::string name) {
+        std::vector<ecs::Entity *> entities = this->view<ecs::Name>(scene);
+
+        for (auto &entity : entities) {
+            if (this->get<ecs::Name>(*entity).name == name)
+                return *entity;
+        }
+
+        throw std::runtime_error("Entity not found");
+    }
+
     void SceneManager::update() {
         ecs::Scene &scene = this->getCurrentScene();
 
