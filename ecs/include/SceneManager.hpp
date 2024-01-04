@@ -39,7 +39,6 @@ namespace ecs {
         std::vector<Scene> m_scenes; // Scenes
         std::size_t m_nextSceneId; // Next scene id
         std::size_t m_currentSceneId; // Current scene id
-        std::size_t m_nextEntityId; // Next entity id
         std::unordered_map<std::string, Texture2D> m_textures; // Textures
         std::unordered_map<std::string, ::Music> m_musics; // Musics
         std::unordered_map<std::string, ::Sound> m_sounds; // Sounds
@@ -50,7 +49,7 @@ namespace ecs {
              * @brief Construct a new Scene Manager object
              * 
              */
-            SceneManager() : m_scenes(), m_nextSceneId(0), m_currentSceneId(0), m_nextEntityId(0) {
+            SceneManager() : m_scenes(), m_nextSceneId(0), m_currentSceneId(0) {
                 this->m_scenes.reserve(DEFAULT_NB_SCENES);
             }
 

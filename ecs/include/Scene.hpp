@@ -34,6 +34,7 @@ namespace ecs {
      */
     struct Scene {
         std::size_t id;
+        std::size_t nextEntityId;
         std::vector<Entity> entities;
         std::vector<std::unique_ptr<ISystem>> systems;
         std::unordered_map<EventType, std::vector<EventData>> events;
