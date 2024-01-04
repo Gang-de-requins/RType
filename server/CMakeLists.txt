@@ -40,6 +40,7 @@ set(SRC_SERVER
     src/Main.cpp
     src/Player.cpp
     src/Rtype.cpp
+    src/Entity.cpp
     src/Server.cpp
     src/Message.cpp
 )

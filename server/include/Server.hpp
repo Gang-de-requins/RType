@@ -21,6 +21,7 @@
     #undef far
 #endif
 #include "Message.hpp"
+#include "GameEngine.hpp"
 
 namespace serverGame
 {
@@ -30,8 +31,9 @@ namespace serverGame
         Server();
         ~Server();
         void setupServer(int port);
-        void receiveMessage(serverGame::Message &message);
-        void sendMessage(const serverGame::Message &message, const boost::asio::ip::udp::endpoint &recipientEndpoint);
+        //void receiveMessage(serverGame::Message &message);
+        void receiveMessage(ecs::Buffer& buffer);
+        void sendMessage(ecs::Buffer &buffer, const boost::asio::ip::udp::endpoint &recipientEndpoint);
 
     private:
         std::shared_ptr<boost::asio::ip::udp::socket> socket;

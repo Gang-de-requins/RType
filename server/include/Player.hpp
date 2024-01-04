@@ -24,7 +24,7 @@
 
 namespace serverGame
 {
-    class Player
+    class Player : public ecs::Entity
     {
     public:
         Player(std::string name, int id, ecs::World &world);
@@ -56,8 +56,7 @@ namespace serverGame
 
 
     private:
-        ecs::Entity entityChar;
-        ecs::Entity entityName;
+        ecs::Entity entity;
         int _id;
         std::string _name;
         boost::asio::ip::udp::endpoint _endpoint;

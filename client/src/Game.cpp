@@ -22,22 +22,14 @@ namespace rtype {
 
         while (!WindowShouldClose())
         {
-            // if (IsKeyPressed(KEY_UP))
-            //     this->m_network.send(::Network::MessageType::GoTop, this->m_playerName);
-            // if (IsKeyPressed(KEY_DOWN))
-            //     this->m_network.send(::Network::MessageType::GoBottom, this->m_playerName);
-            // if (IsKeyPressed(KEY_LEFT))
-            //     this->m_network.send(::Network::MessageType::GoLeft, this->m_playerName);
-            // if (IsKeyPressed(KEY_RIGHT))
-            //     this->m_network.send(::Network::MessageType::GoRight, this->m_playerName);
-            // if (IsKeyReleased(KEY_UP))
-            //     this->m_network.send(::Network::MessageType::StopTop, this->m_playerName);
-            // if (IsKeyReleased(KEY_DOWN))
-            //     this->m_network.send(::Network::MessageType::StopBottom, this->m_playerName);
-            // if (IsKeyReleased(KEY_LEFT))
-            //     this->m_network.send(::Network::MessageType::StopLeft, this->m_playerName);
-            // if (IsKeyReleased(KEY_RIGHT))
-            //     this->m_network.send(::Network::MessageType::StopRight, this->m_playerName);
+            if (IsKeyPressed(KEY_UP))
+                this->m_network.send(ecs::MessageType::GoTop, this->m_playerName);
+            if (IsKeyPressed(KEY_DOWN))
+                this->m_network.send(ecs::MessageType::GoBottom, this->m_playerName);
+            if (IsKeyPressed(KEY_LEFT))
+                this->m_network.send(ecs::MessageType::GoLeft, this->m_playerName);
+            if (IsKeyPressed(KEY_RIGHT))
+                this->m_network.send(ecs::MessageType::GoRight, this->m_playerName);
             if (IsKeyPressed(KEY_SPACE)) {
                 ecs::SceneManager &sceneManager = this->m_world.getSceneManager();
                 auto entities = sceneManager.view<ecs::Controllable>(sceneManager.getCurrentScene());

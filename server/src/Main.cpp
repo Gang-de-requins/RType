@@ -13,13 +13,21 @@ void receiveMessageThread(std::shared_ptr<serverGame::Rtype> rtype)
 {
 	while(true)
 	{
-		serverGame::Message msg;
-        rtype->server.receiveMessage(msg);
+		ecs::Buffer buffer;
+        rtype->server.receiveMessage(buffer);
 		rtype->mutex.lock();
-		rtype->msgList.push_back(msg);
+		rtype->bufferList.push_back(buffer);
 		rtype->mutex.unlock();
 	}
 }
+
+void sendGameStateThread(std::shared_ptr<serverGame::Rtype> rtype) {
+    while (true) {
+        rtype->sendGameState();
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 32));
+    }
+}
+
 
 int checkArguments(int ac, char const * const *av)
 {
@@ -51,6 +59,7 @@ int main(int ac, char const * const *av)
 
     std::shared_ptr<serverGame::Rtype> rtype = std::make_shared<serverGame::Rtype>(std::stoi(av[1]));
     std::thread receive(receiveMessageThread, rtype);
+    std::thread send(sendGameStateThread, rtype);
     rtype->run();
     return 0;
 }

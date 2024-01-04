@@ -10,6 +10,7 @@
 #endif
 
 #include <boost/asio.hpp>
+#include <GameEngine.hpp>
 
 #if defined(_WIN32)
     #undef near
@@ -80,6 +81,9 @@ namespace rtype {
         public:
             Network();
             ~Network();
+            void connect(std::string ip, int port, Game &game);
+            //void send(::Network::MessageType type, std::string message);
+            void send(ecs::MessageType type, std::string message);
             void connect(const std::string &ip, const unsigned short port, Game &game, const std::string &playerName);
             void send(::Network::MessageType type, std::string message);
             void receive(Game &game);
@@ -87,6 +91,8 @@ namespace rtype {
         
         private:
             void newPlayerConnected(Game &game, std::string name);
+            //void moveEntity(Game &game, std::string name, ::Network::MessageType type);
+            void moveEntity(Game &game, std::string name, ecs::MessageType direction);
             void moveEntity(Game &game, std::string name, ::Network::MessageType type);
             void newMissile(Game &game, std::string name);
             void newEnemy(Game &game, std::string name);

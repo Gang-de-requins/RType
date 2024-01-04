@@ -22,33 +22,30 @@ namespace rtype {
         this->m_socket.connect(this->m_endpoint);
         this->m_threads.emplace_back(std::thread(&Network::receive, this, std::ref(game)));
 
-        this->send(::Network::MessageType::PlayerJoin, playerName);
+        this->send(ecs::MessageType::PlayerJoin, playerName);
     }
 
-    void Network::send(::Network::MessageType type, std::string message)
+    void Network::send(ecs::MessageType type, std::string message)
     {
-        std::cout << "Sending message: " << message << std::endl;
-        
-        std::vector<char> sendBuffer(sizeof(::Network::MessageType) + message.size());
+        ecs::Buffer buffer;
 
-        *reinterpret_cast<::Network::MessageType*>(&sendBuffer[0]) = type;
-
-        std::copy(message.begin(), message.end(), sendBuffer.begin() + sizeof(::Network::MessageType));
-
-        this->m_socket.send_to(boost::asio::buffer(sendBuffer), this->m_endpoint);
+        buffer.writeMessageType(type);
+        buffer.writeString(message);
+        std::cout << "Received MessageType: " << static_cast<int>(buffer.readMessageType()) << std::endl;
+        this->m_socket.send_to(boost::asio::buffer(buffer.getData()), this->m_endpoint);
     }
 
     void Network::receive(Game &game)
     {
-        std::vector<::Network::MessageType> directions = {
-            ::Network::MessageType::GoRight,
-            ::Network::MessageType::GoLeft,
-            ::Network::MessageType::GoTop,
-            ::Network::MessageType::GoBottom,
-            ::Network::MessageType::StopRight,
-            ::Network::MessageType::StopLeft,
-            ::Network::MessageType::StopTop,
-            ::Network::MessageType::StopBottom,
+        std::vector<ecs::MessageType> directions = {
+        ecs::MessageType::GoRight,
+        ecs::MessageType::GoLeft,
+        ecs::MessageType::GoTop,
+        ecs::MessageType::GoBottom,
+        ecs::MessageType::StopRight,
+        ecs::MessageType::StopLeft,
+        ecs::MessageType::StopTop,
+        ecs::MessageType::StopBottom,
         };
 
         while (this->m_running) {
@@ -66,12 +63,26 @@ namespace rtype {
                             this->newPlayerConnected(game, msg);
                         } else if (std::find(directions.begin(), directions.end(), messageType) != directions.end()) {
                             this->moveEntity(game, msg, messageType);
-                        } else if (messageType == ::Network::MessageType::NewMissile) {
-                            this->newMissile(game, msg);
-                        } else if (messageType == ::Network::MessageType::NewEnemy) {
-                            this->newEnemy(game, msg);
                         }
+                        // } else if (messageType == ::Network::MessageType::NewMissile) {
+                        //     this->newMissile(game, msg);
+                        // } else if (messageType == ::Network::MessageType::NewEnemy) {
+                        //     this->newEnemy(game, msg);
+                        // }
+                    ecs::Buffer buffer;
+                    buffer.getData() = std::vector<char>(receiveBuffer.begin(), receiveBuffer.begin() + bytes_transferred);
+
+                    ecs::MessageType messageType = buffer.readMessageType();
+                    std::string msg = buffer.readString();
+
+                    std::cout << msg << std::endl;
+
+                    if (messageType == ecs::MessageType::PlayerJoin) {
+                        this->newPlayerConnected(game, msg);
+                    } else if (std::find(directions.begin(), directions.end(), messageType) != directions.end()) {
+                        this->moveEntity(game, msg, messageType);
                     }
+                }
                 }
             } catch (const std::exception &e) {
                 std::cerr << "Error: " << e.what() << std::endl;
@@ -110,7 +121,7 @@ namespace rtype {
         game.addPlayer(newPlayer);
     }
 
-    void Network::moveEntity(Game &game, std::string name, ::Network::MessageType direction)
+    void Network::moveEntity(Game &game, std::string name, ecs::MessageType direction)
     {
         for (auto &player : game.getPlayers()) {
             if (player.getName() == name) {
