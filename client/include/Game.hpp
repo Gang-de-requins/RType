@@ -19,7 +19,7 @@ namespace rtype {
         std::string m_playerName;
 
         public:
-            Game(const std::string &ip, const unsigned short port, const std::string &playerName);
+            Game(const std::string &ip, const unsigned short port);
             ~Game();
             void run();
             ecs::World &getWorld();

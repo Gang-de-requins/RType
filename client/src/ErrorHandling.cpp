@@ -16,8 +16,8 @@ static int checkPort(char const * const *av)
 
 int checkArguments(int ac, char const * const *av)
 {
-    if (ac != 4) {
-        std::cerr << "Usage: ./rtype_server <ip> <port> <playerName>" << std::endl;
+    if (ac != 3) {
+        std::cerr << "Usage: ./rtype_server <ip> <port>" << std::endl;
         return EXIT_FAILURE;
     }
 
