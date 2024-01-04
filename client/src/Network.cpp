@@ -57,13 +57,13 @@ namespace rtype {
 
                 if (bytes_transferred > 0) {
                     if(bytes_transferred >= sizeof(::Network::MessageType)) {
-                        ::Network::MessageType messageType = *reinterpret_cast<::Network::MessageType*>(&receiveBuffer[0]);
-                        std::string msg(receiveBuffer.data() + sizeof(::Network::MessageType), bytes_transferred - sizeof(::Network::MessageType));
-                        if (messageType == ::Network::MessageType::PlayerJoin) {
-                            this->newPlayerConnected(game, msg);
-                        } else if (std::find(directions.begin(), directions.end(), messageType) != directions.end()) {
-                            this->moveEntity(game, msg, messageType);
-                        }
+                        //::Network::MessageType messageType = *reinterpret_cast<::Network::MessageType*>(&receiveBuffer[0]);
+                        //std::string msg(receiveBuffer.data() + sizeof(::Network::MessageType), bytes_transferred - sizeof(::Network::MessageType));
+                        // if (messageType == ::Network::MessageType::PlayerJoin) {
+                        //     this->newPlayerConnected(game, msg);
+                        // } else if (std::find(directions.begin(), directions.end(), messageType) != directions.end()) {
+                        //     this->moveEntity(game, msg, messageType);
+                        // }
                         // } else if (messageType == ::Network::MessageType::NewMissile) {
                         //     this->newMissile(game, msg);
                         // } else if (messageType == ::Network::MessageType::NewEnemy) {

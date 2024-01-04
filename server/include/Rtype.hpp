@@ -14,7 +14,7 @@
 #include "Message.hpp"
 #include "GameEngine.hpp"
 #include <mutex>
-#include "Entity.hpp"
+#include "EntityServer.hpp"
 
 namespace serverGame
 {

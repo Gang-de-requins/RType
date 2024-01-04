@@ -6,7 +6,7 @@
 #include "components/Position.hpp"
 #include "components/Velocity.hpp"
 #include "components/Acceleration.hpp"
-#include "Entity.hpp"
+#include "../Entity.hpp"
 #include "ISystem.hpp"
 
 namespace ecs {

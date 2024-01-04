@@ -8,7 +8,6 @@
 #include <iostream>
 #include "Rtype.hpp"
 #include "Network.hpp"
-#include "Entity.hpp"
 
 serverGame::Rtype::Rtype(int port)
 {
@@ -30,7 +29,7 @@ serverGame::Rtype::~Rtype()
 
 void serverGame::Rtype::run(void)
 {
-    this->addDefault("test");
+    //this->addDefault("test");
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     while(true)
     {
@@ -73,7 +72,7 @@ void serverGame::Rtype::processMessages(void)
         });
 
         if (messageType == ecs::MessageType::PlayerJoin) {
-            addPlayer(messageString, buffer.getEndpoint());
+            //addPlayer(messageString, buffer.getEndpoint());
             return;
         }
 
@@ -111,6 +110,73 @@ void serverGame::Rtype::processMessages(void)
         }
     }
 }
+
+// void serverGame::Rtype::addDefault(std::string name)
+// {
+//     ecs::Scene &inGame = world.getCurrentScene();
+//     ecs::Entity &entity = world.createEntity(inGame);
+
+//     world.assign(entity, ecs::Position{200, 200});
+//     world.assign(entity, ecs::Health{100});
+//     world.assign(entity, ecs::Velocity{0, 0});
+//     world.assign(entity, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}});
+//     world.assign(entity, ecs::Acceleration{0, 0, 4});
+//     world.assign(entity, ecs::Scale{1, 1});
+//     world.assign(entity, ecs::Rotation{0});
+//     world.assign(entity, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT});
+//     world.assign(entity, ecs::Collision{false, {}});
+//     world.assign(entity, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 4, 0, 300, std::chrono::steady_clock::now()});
+//     world.assign(entity, ecs::Name{name, ecs::Position{-20, -20}});
+
+//     serverGame::Entity newEntity(name, this->id, this->world, entity);
+//     newEntity.setType("TEST");
+//     this->mutex.lock();
+//     this->entities.push_back(newEntity);
+//     this->mutex.unlock();
+// }
+
+// void serverGame::Rtype::addPlayer(std::string name, boost::asio::ip::udp::endpoint endpoint)
+// {
+//     this->id++;
+//     ecs::Scene &inGame = world.getCurrentScene();
+//     ecs::Entity &entity = world.createEntity(inGame);
+
+//     world.assign(entity, ecs::Position{200, 200});
+//     world.assign(entity, ecs::Health{100});
+//     world.assign(entity, ecs::Velocity{0, 0});
+//     world.assign(entity, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}});
+//     world.assign(entity, ecs::Acceleration{0, 0, 4});
+//     world.assign(entity, ecs::Scale{1, 1});
+//     world.assign(entity, ecs::Rotation{0});
+//     world.assign(entity, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT});
+//     world.assign(entity, ecs::Collision{false, {}});
+//     world.assign(entity, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 4, 0, 300, std::chrono::steady_clock::now()});
+//     world.assign(entity, ecs::Name{name, ecs::Position{-20, -20}});
+
+//     serverGame::Entity newEntity(name, this->id, this->world, entity);
+//     newEntity.setEndpoint(endpoint);
+//     newEntity.setType("PLAYER");
+//     this->mutex.lock();
+//     this->entities.push_back(newEntity);
+//     this->mutex.unlock();
+
+//     ecs::Buffer playerJoinMessage;
+//     playerJoinMessage.writeMessageType(ecs::MessageType::PlayerJoin);
+//     playerJoinMessage.writeString(newEntity.getName());
+
+//     for (auto& entity : this->entities) {
+//         if (entity.getName() != newEntity.getName()) {
+//             std::string playerNameMessage = entity.getName();
+//             ecs::Buffer existingPlayerMessage;
+//             existingPlayerMessage.writeMessageType(ecs::MessageType::PlayerJoin);
+//             existingPlayerMessage.writeString(playerNameMessage);
+
+//             // this->server.sendMessage(existingPlayerMessage, newEntity.getEndpoint());
+//             // this->server.sendMessage(playerJoinMessage, entity.getEndpoint());
+//         }
+//     }
+// }
+
 
 // void serverGame::Rtype::GoDirection(serverGame::Message msg, Network::MessageType dir)
 // {
@@ -180,10 +246,10 @@ void serverGame::Rtype::addMissile(serverGame::Message msg)
     newMissileMessage.setMessageType(Network::MessageType::NewMissile);
     newMissileMessage.setMessage(msg.getMessage());
 
-    for (auto& player : this->players) {
-        if (player.getEndpoint() != msg.getEndpoint()) {
-            this->server.sendMessage(newMissileMessage, player.getEndpoint());
-        }
-    }
+    // for (auto& player : this->players) {
+    //     if (player.getEndpoint() != msg.getEndpoint()) {
+    //         this->server.sendMessage(newMissileMessage, player.getEndpoint());
+    //     }
+    // }
 }
 

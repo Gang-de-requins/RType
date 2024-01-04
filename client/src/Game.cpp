@@ -34,12 +34,12 @@ namespace rtype {
                 ecs::SceneManager &sceneManager = this->m_world.getSceneManager();
                 auto entities = sceneManager.view<ecs::Controllable>(sceneManager.getCurrentScene());
             
-                for (auto &entity : entities) {
-                    ecs::Controllable &controllable = sceneManager.get<ecs::Controllable>(*entity);
-                    if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - controllable.shootUpdate).count() >= controllable.timeOut) {
-                        this->m_network.send(::Network::MessageType::NewMissile, this->m_playerName);
-                    }
-                }
+                // for (auto &entity : entities) {
+                //     ecs::Controllable &controllable = sceneManager.get<ecs::Controllable>(*entity);
+                //     if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - controllable.shootUpdate).count() >= controllable.timeOut) {
+                //         this->m_network.send(::Network::MessageType::NewMissile, this->m_playerName);
+                //     }
+                // }
 
             }
 
