@@ -9,7 +9,7 @@
 #define PLAYER_HPP_
 
 #include <iostream>
-#if defined(_WIN32)           
+#if defined(_WIN32)
     #define NOGDI
     #define NOUSER
 #endif

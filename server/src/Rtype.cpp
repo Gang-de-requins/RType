@@ -19,17 +19,6 @@ serverGame::Rtype::Rtype(int port)
     this->nbEnemiesSpawned = 0;
 
     ecs::Scene &game = this->world.createScene();
-
-    this->world.registerSystems<
-            ecs::MusicSystem,
-            ecs::ControllableSystem,
-            ecs::MovementSystem,
-            ecs::CollisionSystem,
-            ecs::LifeSystem,
-            ecs::ParallaxSystem,
-            ecs::RenderSystem,
-            ecs::ClickableSystem
-        >(game);
 }
 
 serverGame::Rtype::~Rtype()
@@ -42,21 +31,15 @@ void serverGame::Rtype::run(void)
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     while(true)
     {
-        // simulate 60 fps
-        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-        std::chrono::duration<double> elapsed_seconds = end - begin;
-        if (elapsed_seconds.count() < 0.016 && this->players.size() >= 2) {
-            this->world.update();
-        }
+        this->world.update();
 
         processMessages();
 
-        std::cout << "Nb players: " << this->players.size() << std::endl;
-        std::cout << "Nb enemies: " << this->nbEnemiesSpawned << std::endl;
+        // std::cout << "Nb players: " << this->players.size() << std::endl;
+        // std::cout << "Nb enemies: " << this->nbEnemiesSpawned << std::endl;
 
         if (this->nbEnemiesSpawned == 0 && this->players.size() >= 2) {
             for (int i = 0; i < this->nbEnemiesToSpawn; i++) {
-                int randomX = 1920;
                 int randomY = std::rand() % 1080;
 
                 serverGame::Message existingPlayerMessage;
@@ -66,12 +49,16 @@ void serverGame::Rtype::run(void)
 
                 for (auto& player : this->players) {
                     if (player.getId() != 0) {
-                        std::cout << "New enemy to send" << std::endl;
                         this->server.sendMessage(existingPlayerMessage, player.getEndpoint());
                     }
                 }
 
                 this->nbEnemiesSpawned++;
+
+                ecs::Scene &game = this->world.getCurrentScene();
+                ecs::Entity &enemy = this->world.createEntity(game);
+                world.assign(enemy, ecs::Position{static_cast<float>(0), static_cast<float>(randomY)});
+                world.assign(enemy, ecs::Name{"enemy", ecs::Position{-20, -20}});
             }
         }
     }
@@ -81,13 +68,11 @@ void serverGame::Rtype::processMessages(void)
 {
     while (this->msgList.size() != 0)
     {
-        std::cout << "Process message" << std::endl;
         this->mutex.lock();
         serverGame::Message msg = this->msgList.front();
         this->msgList.erase(this->msgList.begin());
         this->mutex.unlock();
 
-        std::cout << msg.getEndpoint() << std::endl;
         if (msg.getMessageType() == Network::MessageType::PlayerJoin)
             addPlayer(msg);
         if (msg.getMessageType() == Network::MessageType::NewMissile)
@@ -109,6 +94,9 @@ void serverGame::Rtype::processMessages(void)
             StopDirection(msg, Network::MessageType::StopTop);
         if (msg.getMessageType() == Network::MessageType::StopBottom)
             StopDirection(msg, Network::MessageType::StopBottom);
+
+        if (msg.getMessageType() == Network::MessageType::EnemyDead)
+            EnemyDead(msg);
     }
 }
 
@@ -156,12 +144,25 @@ void serverGame::Rtype::addPlayer(serverGame::Message msg)
     newPlayer.setEndpoint(msg.getEndpoint());
     players.push_back(newPlayer);
 
+    float randomX = std::rand() % 800;
+    float randomY = std::rand() % 450;
+
+    ecs::Scene &game = this->world.getCurrentScene();
+    ecs::Entity &player = this->world.createEntity(game);
+    world.assign(player, ecs::Position{randomX, randomY});
+    world.assign(player, ecs::Name{newPlayer.getName(), ecs::Position{-20, -20}});
+    world.assign(player, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, 0.05, std::chrono::steady_clock::now()});
+
     serverGame::Message playerJoinMessage;
     playerJoinMessage.setMessageType(Network::MessageType::PlayerJoin);
-    playerJoinMessage.setMessage(newPlayer.getName());
+    playerJoinMessage.setMessage(newPlayer.getName() + "|" + std::to_string(randomX) + "," + std::to_string(randomY));
 
+    std::vector<ecs::Entity *> entities = this->world.getSceneManager().view<ecs::Controllable>(game);
+    int i = 0;
     for (auto& player : this->players) {
-        std::string playerNameMessage = player.getName();
+        auto &pos = this->world.get<ecs::Position>(*entities[i]);
+
+        std::string playerNameMessage = player.getName() + "|" + std::to_string(pos.x) + "," + std::to_string(pos.y);
         serverGame::Message existingPlayerMessage;
         existingPlayerMessage.setMessageType(Network::MessageType::PlayerJoin);
         existingPlayerMessage.setMessage(playerNameMessage);
@@ -169,6 +170,8 @@ void serverGame::Rtype::addPlayer(serverGame::Message msg)
         this->server.sendMessage(playerJoinMessage, player.getEndpoint());
         if (newPlayer.getId() != player.getId())
             this->server.sendMessage(existingPlayerMessage, newPlayer.getEndpoint());
+
+        i++;
     }
 }
 
@@ -178,8 +181,24 @@ void serverGame::Rtype::addMissile(serverGame::Message msg)
     newMissileMessage.setMessageType(Network::MessageType::NewMissile);
     newMissileMessage.setMessage(msg.getMessage());
 
+    ecs::Scene &game = this->world.getCurrentScene();
+    ecs::Entity &Shoot = world.createEntity(game);
+
     for (auto& player : this->players) {
         this->server.sendMessage(newMissileMessage, player.getEndpoint());
+    }
+}
+
+void serverGame::Rtype::EnemyDead(serverGame::Message msg)
+{
+    serverGame::Message deadMessage;
+    deadMessage.setMessageType(Network::MessageType::EnemyDead);
+    deadMessage.setMessage(msg.getMessage());
+
+    //ecs::Entity entity = this->world.getSceneManager().getEntityById(this->world.getCurrentScene(), std::stoi(msg.getMessage()));
+
+    for (auto& player : this->players) {
+        this->server.sendMessage(deadMessage, player.getEndpoint());
     }
 }
 

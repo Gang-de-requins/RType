@@ -28,7 +28,8 @@ namespace serverGame
         void GoDirection(serverGame::Message msg, Network::MessageType dir);
         void StopDirection(serverGame::Message msg, Network::MessageType dir);
         void processMessages(void);
-        
+        void EnemyDead(serverGame::Message msg);
+
         Server server;
         std::vector<serverGame::Message> msgList;
         std::mutex mutex;
