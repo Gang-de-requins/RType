@@ -4,7 +4,7 @@
 #include <iostream>
 #include <thread>
 #include <utility>
-#if defined(_WIN32)           
+#if defined(_WIN32)
     #define NOGDI
     #define NOUSER
 #endif
@@ -84,12 +84,13 @@ namespace rtype {
             void send(::Network::MessageType type, std::string message);
             void receive(Game &game);
             void setRunning(bool running);
-        
+
         private:
-            void newPlayerConnected(Game &game, std::string name);
+            void newPlayerConnected(Game &game, std::string msg);
             void moveEntity(Game &game, std::string name, ::Network::MessageType type);
             void newMissile(Game &game, std::string name);
             void newEnemy(Game &game, std::string name);
+            void deleteEntity(Game &game, std::string msg);
     };
 }
 

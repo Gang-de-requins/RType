@@ -54,6 +54,24 @@ namespace rtype {
 
             this->m_world.update();
 
+            // Send dead entities
+            ecs::SceneManager &sceneManager = this->m_world.getSceneManager();
+            auto entities = sceneManager.view<ecs::Health, ecs::Name>(sceneManager.getCurrentScene());
+
+            for (auto &entity : entities) {
+                ecs::Health &health = sceneManager.get<ecs::Health>(*entity);
+                ecs::Name &name = sceneManager.get<ecs::Name>(*entity);
+
+                if (health.health == 0 && name.name == "enemy") {
+                    this->m_network.send(::Network::MessageType::EnemyDead, std::to_string(entity->id));
+                    health.health = -1;
+                    break;
+                } else if (health.health <= -24 && name.name == "enemy") {
+                    this->m_world.destroyEntity(sceneManager.getCurrentScene(), *entity);
+                    break;
+                }
+            }
+
             EndDrawing();
         }
 

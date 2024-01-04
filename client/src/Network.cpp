@@ -28,7 +28,7 @@ namespace rtype {
     void Network::send(::Network::MessageType type, std::string message)
     {
         std::cout << "Sending type: " << static_cast<int>(type) << " message: " << message << std::endl;
-        
+
         std::vector<char> sendBuffer(sizeof(::Network::MessageType) + message.size());
 
         *reinterpret_cast<::Network::MessageType*>(&sendBuffer[0]) = type;
@@ -52,7 +52,6 @@ namespace rtype {
         };
 
         while (this->m_running) {
-            std::cout << "Receiving messages" << std::endl;
             try {
                 std::array<char, 1024> receiveBuffer;
                 boost::asio::ip::udp::endpoint senderEndpoint;
@@ -67,12 +66,13 @@ namespace rtype {
                         if (messageType == ::Network::MessageType::PlayerJoin) {
                             this->newPlayerConnected(game, msg);
                         } else if (std::find(directions.begin(), directions.end(), messageType) != directions.end()) {
-                            std::cout << "Moving entity" << std::endl;
                             this->moveEntity(game, msg, messageType);
                         } else if (messageType == ::Network::MessageType::NewMissile) {
                             this->newMissile(game, msg);
                         } else if (messageType == ::Network::MessageType::NewEnemy) {
                             this->newEnemy(game, msg);
+                        } else if (messageType == ::Network::MessageType::EnemyDead) {
+                            this->deleteEntity(game, msg);
                         }
                     }
                 }
@@ -91,12 +91,16 @@ namespace rtype {
 
     /* ---------------------------- PRIVATE FUNCTIONS --------------------------- */
 
-    void Network::newPlayerConnected(Game &game, std::string name)
+    void Network::newPlayerConnected(Game &game, std::string msg)
     {
+        // msg format = name|posX,posY
+        std::string name = msg.substr(0, msg.find("|"));
+        std::string rawPos = msg.substr(msg.find("|") + 1);
+        std::pair<float, float> pos = std::make_pair(std::stof(rawPos.substr(0, rawPos.find(","))), std::stof(rawPos.substr(rawPos.find(",") + 1)));
+
         std::cout << "New player connected: " << name << std::endl;
         auto &world = game.getWorld();
         float offset = game.getOffsetColorSpaceship();
-        std::pair<float, float> pos = std::make_pair(static_cast<float>(rand() % 800), static_cast<float>(rand() % 450));
 
         ecs::Scene &inGame = world.getCurrentScene();
         ecs::Entity &player = world.createEntity(inGame);
@@ -144,7 +148,7 @@ namespace rtype {
 
         ecs::Entity &enemy = world.createEntity(inGame);
         world.assign(enemy, ecs::Position{pos.first, pos.second});
-        world.assign(enemy, ecs::Velocity{-3, 0});
+        world.assign(enemy, ecs::Velocity{0, 0});
         world.assign(enemy, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}});
         world.assign(enemy, ecs::Acceleration{0, 0, 4});
         world.assign(enemy, ecs::Scale{1, 1});
@@ -153,5 +157,22 @@ namespace rtype {
         world.assign(enemy, ecs::Health{50});
         world.assign(enemy, ecs::Collision{false, {}, true});
         world.assign(enemy, ecs::Damage{30});
+    }
+
+    void Network::deleteEntity(Game &game, std::string msg)
+    {
+        int id = std::stoi(msg);
+
+        ecs::SceneManager &sceneManager = game.getWorld().getSceneManager();
+
+        auto entities = sceneManager.view<ecs::Health, ecs::Name>(sceneManager.getCurrentScene());
+
+        for (auto &entity : entities) {
+            if (entity->id != id)
+                continue;
+
+            ecs::Health &health = sceneManager.get<ecs::Health>(*entity);
+            health.health = -24;
+        }
     }
 }
