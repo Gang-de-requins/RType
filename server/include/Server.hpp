@@ -39,6 +39,7 @@ namespace serverGame
         std::shared_ptr<boost::asio::ip::udp::socket> socket;
         boost::asio::ip::udp::endpoint endpoint;
         boost::asio::io_service service;
+        boost::system::error_code ec;
         //std::vector<Client> clients;
     };
 }
