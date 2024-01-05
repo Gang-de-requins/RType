@@ -21,34 +21,23 @@ namespace rtype {
 
         while (!WindowShouldClose())
         {
-            // if (IsKeyPressed(KEY_UP))
-            //     this->m_network.send(::Network::MessageType::GoTop, this->c_playerName);
-            // if (IsKeyPressed(KEY_DOWN))
-            //     this->m_network.send(::Network::MessageType::GoBottom, this->c_playerName);
-            // if (IsKeyPressed(KEY_LEFT))
-            //     this->m_network.send(::Network::MessageType::GoLeft, this->c_playerName);
-            // if (IsKeyPressed(KEY_RIGHT))
-            //     this->m_network.send(::Network::MessageType::GoRight, this->c_playerName);
-            // if (IsKeyReleased(KEY_UP))
-            //     this->m_network.send(::Network::MessageType::StopTop, this->c_playerName);
-            // if (IsKeyReleased(KEY_DOWN))
-            //     this->m_network.send(::Network::MessageType::StopBottom, this->c_playerName);
-            // if (IsKeyReleased(KEY_LEFT))
-            //     this->m_network.send(::Network::MessageType::StopLeft, this->c_playerName);
-            // if (IsKeyReleased(KEY_RIGHT))
-            //     this->m_network.send(::Network::MessageType::StopRight, this->c_playerName);
-            if (IsKeyPressed(KEY_SPACE)) {
-                ecs::SceneManager &sceneManager = this->m_world.getSceneManager();
-                auto entities = sceneManager.view<ecs::Controllable>(sceneManager.getCurrentScene());
+            if (IsKeyPressed(KEY_UP))
+                this->m_network.send(ecs::MessageType::GoTop, "Player1");
+            if (IsKeyPressed(KEY_DOWN))
+                this->m_network.send(ecs::MessageType::GoBottom, "Player1");
+            if (IsKeyPressed(KEY_LEFT))
+                this->m_network.send(ecs::MessageType::GoLeft, "Player1");
+            if (IsKeyPressed(KEY_RIGHT))
+                this->m_network.send(ecs::MessageType::GoRight, "Player1");
             
-                for (auto &entity : entities) {
-                    ecs::Controllable &controllable = sceneManager.get<ecs::Controllable>(*entity);
-                    if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - controllable.shootUpdate).count() >= controllable.timeOut) {
-                        this->m_network.send(::Network::MessageType::NewMissile, this->c_playerName);
-                    }
-                }
-
-            }
+            if (IsKeyReleased(KEY_UP))
+                this->m_network.send(ecs::MessageType::StopTop, "Player1");
+            if (IsKeyReleased(KEY_DOWN))
+                this->m_network.send(ecs::MessageType::StopBottom, "Player1");
+            if (IsKeyReleased(KEY_LEFT))
+                this->m_network.send(ecs::MessageType::StopLeft, "Player1");
+            if (IsKeyReleased(KEY_RIGHT))
+                this->m_network.send(ecs::MessageType::StopRight, "Player1");
 
             BeginDrawing();
             ClearBackground(BLACK);

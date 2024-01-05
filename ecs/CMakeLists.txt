@@ -13,6 +13,7 @@ set(SRC
     src/World.cpp
     src/SceneManager.cpp
     src/ParserJson.cpp
+    src/Buffer.cpp
     src/systems/Movement.cpp
     src/systems/Controllable.cpp
     src/systems/Modifier.cpp

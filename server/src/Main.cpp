@@ -13,35 +13,23 @@ void receiveMessageThread(std::shared_ptr<serverGame::Rtype> rtype)
 {
 	while(true)
 	{
-		serverGame::Message msg;
-        rtype->server.receiveMessage(msg);
+		ecs::Buffer buffer;
+        rtype->server.receiveMessage(buffer);
 		rtype->mutex.lock();
-		rtype->msgList.push_back(msg);
+		rtype->bufferList.push_back(buffer);
 		rtype->mutex.unlock();
 	}
 }
 
-int checkArguments(int ac, char const * const *av)
-{
-    if (ac != 2) {
-        std::cerr << "Usage: ./rtype_server <port>" << std::endl;
-        return EXIT_FAILURE;
+void sendGameStateThread(std::shared_ptr<serverGame::Rtype> rtype) {
+    while (true) {
+        rtype->sendGameState();
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 32));
     }
-
-    try {
-        int port = std::stoi(av[1]);
-
-        if (port < 0 || port > 65535)
-            throw std::invalid_argument("Port must be between 0 and 65535");
-    } catch (std::invalid_argument const &e) {
-        std::cerr << "Invalid port: " << e.what() << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    return EXIT_SUCCESS;
 }
 
-int main(int ac, char const * const *av)
+
+int main()
 {
     // serverGame::ServerRooms Rooms;
     // Rooms.start();
@@ -51,6 +39,7 @@ int main(int ac, char const * const *av)
 
     std::shared_ptr<serverGame::Rtype> rtype = std::make_shared<serverGame::Rtype>(std::stoi(av[1]));
     std::thread receive(receiveMessageThread, rtype);
+    std::thread send(sendGameStateThread, rtype);
     rtype->run();
     return 0;
 }
