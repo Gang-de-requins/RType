@@ -23,10 +23,15 @@ set(SRC
     src/systems/Life.cpp
     src/systems/Parallax.cpp
     src/systems/Clickable.cpp
+    src/systems/Spawner.cpp
+    src/systems/Destruction.cpp
     src/systems/rendering/Name.cpp
     src/systems/rendering/Sprite.cpp
     src/systems/rendering/Text.cpp
     src/systems/rendering/Animation.cpp
+    src/systems/rendering/Rectangle.cpp
+    src/systems/rendering/TextInput.cpp
+    src/systems/rendering/Render.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${SRC})

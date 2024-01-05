@@ -3,7 +3,8 @@
 
 namespace ecs {
     void CollisionSystem::update(SceneManager &sceneManager) {
-        std::vector<Entity *> entities = sceneManager.view<Collision, Position, Sprite>(sceneManager.getCurrentScene());
+        ecs::Scene &scene = sceneManager.getCurrentScene();
+        std::vector<Entity *> entities = sceneManager.view<Collision, Position, Sprite>(scene);
 
         for (auto &entity1 : entities) {
             Collision &collision1 = sceneManager.get<Collision>(*entity1);
@@ -27,8 +28,35 @@ namespace ecs {
                 Collision &collision2 = sceneManager.get<Collision>(*entity2);
 
                 if (this->isColliding(collisionInfo)) {
-                    collision1.isColliding = true;
-                    collision1.collidingWith.push_back(entity2->id);
+                    bool alreadyColliding = false;
+
+                    for (auto &event : scene.events[EventType::Collisionnnnnn]) {
+                        if ((event.entities[0]->id == entity1->id && event.entities[1]->id == entity2->id) || (event.entities[0]->id == entity2->id && event.entities[1]->id == entity1->id)) {
+                            alreadyColliding = true;
+                            break;
+                        }
+                    }
+
+                    if (!alreadyColliding) {
+                        bool entity1Damage = sceneManager.has<Damage>(*entity1);
+                        bool entity2Damage = sceneManager.has<Damage>(*entity2);
+                        bool entity1Health = sceneManager.has<Health>(*entity1);
+                        bool entity2Health = sceneManager.has<Health>(*entity2);
+
+                        if (entity1Damage && entity2Health) {
+                            scene.events[EventType::Collisionnnnnn].push_back({
+                                Event::DealDamage,
+                                {entity1, entity2}
+                            });
+                        }
+                        if (entity2Damage && entity1Health) {
+                            scene.events[EventType::Collisionnnnnn].push_back({
+                                Event::DealDamage,
+                                {entity2, entity1}
+                            });
+                        }
+                    }
+
 
                     if (!collision1.isOverlap && !collision2.isOverlap && sceneManager.has<Velocity>(*entity1)) {
                         Velocity &velocity1 = sceneManager.get<Velocity>(*entity1);

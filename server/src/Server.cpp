@@ -6,7 +6,6 @@
 */
 
 #include <iostream>
-#include <boost/asio.hpp>
 #include "../include/Server.hpp"
 #include "Network.hpp"
 #include <iomanip>

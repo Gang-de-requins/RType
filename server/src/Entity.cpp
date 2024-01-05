@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <boost/asio.hpp>
-#include "Entity.hpp"
+#include "EntityServer.hpp"
 
 serverGame::Entity::Entity(std::string name, int id, ecs::World &world, ecs::Entity &entity) : _entity(entity)
 {

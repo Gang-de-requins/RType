@@ -9,13 +9,12 @@
 #define RTYPE_HPP_
 
 #include <iostream>
-#include <boost/asio.hpp>
 #include "Server.hpp"
 #include "Player.hpp"
-#include "GameEngine.hpp"
 #include "Message.hpp"
+#include "GameEngine.hpp"
 #include <mutex>
-#include "Entity.hpp"
+#include "EntityServer.hpp"
 
 namespace serverGame
 {
@@ -28,6 +27,7 @@ namespace serverGame
         //void addPlayer(serverGame::Message msg);
         void addDefault(std::string name);
         void addPlayer(std::string name, boost::asio::ip::udp::endpoint endpoint);
+        void addMissile(serverGame::Message msg);
         void GoDirection(serverGame::Message msg, Network::MessageType dir);
         void StopDirection(serverGame::Message msg, Network::MessageType dir);
         void processMessages(void);

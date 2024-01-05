@@ -16,6 +16,7 @@ set(SRC_ECS
     ../ecs/src/World.cpp
     ../ecs/src/SceneManager.cpp
     ../ecs/src/ParserJson.cpp
+    ../ecs/src/Buffer.cpp
     ../ecs/src/systems/Movement.cpp
     ../ecs/src/systems/Controllable.cpp
     ../ecs/src/systems/Music.cpp
@@ -25,10 +26,15 @@ set(SRC_ECS
     ../ecs/src/systems/Parallax.cpp
     ../ecs/src/systems/Clickable.cpp
     ../ecs/src/systems/Modifier.cpp
+    ../ecs/src/systems/Spawner.cpp
+    ../ecs/src/systems/Destruction.cpp
     ../ecs/src/systems/rendering/Name.cpp
     ../ecs/src/systems/rendering/Sprite.cpp
     ../ecs/src/systems/rendering/Text.cpp
     ../ecs/src/systems/rendering/Animation.cpp
+    ../ecs/src/systems/rendering/Rectangle.cpp
+    ../ecs/src/systems/rendering/TextInput.cpp
+    ../ecs/src/systems/rendering/Render.cpp
 )
 
 set(SRC_CLIENT
@@ -44,7 +50,7 @@ set(SRC
     ${SRC_CLIENT}
 )
 
-# add_compile_options(-Wall -Wextra -Werror -std=c++17)
+add_compile_options(-Wall -Wextra -Werror -std=c++17)
 
 message("Compiling ${PROJECT_NAME}...")
 

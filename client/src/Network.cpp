@@ -22,7 +22,7 @@ namespace rtype {
         this->m_socket.connect(this->m_endpoint);
         this->m_threads.emplace_back(std::thread(&Network::receive, this, std::ref(game)));
 
-        this->send(ecs::MessageType::PlayerJoin, "Player1");
+        this->send(ecs::MessageType::PlayerJoin, playerName);
     }
 
     void Network::send(ecs::MessageType type, std::string message)
@@ -56,6 +56,19 @@ namespace rtype {
                 std::size_t bytes_transferred = this->m_socket.receive_from(boost::asio::buffer(receiveBuffer), senderEndpoint);
 
                 if (bytes_transferred > 0) {
+                    if(bytes_transferred >= sizeof(::Network::MessageType)) {
+                        //::Network::MessageType messageType = *reinterpret_cast<::Network::MessageType*>(&receiveBuffer[0]);
+                        //std::string msg(receiveBuffer.data() + sizeof(::Network::MessageType), bytes_transferred - sizeof(::Network::MessageType));
+                        // if (messageType == ::Network::MessageType::PlayerJoin) {
+                        //     this->newPlayerConnected(game, msg);
+                        // } else if (std::find(directions.begin(), directions.end(), messageType) != directions.end()) {
+                        //     this->moveEntity(game, msg, messageType);
+                        // }
+                        // } else if (messageType == ::Network::MessageType::NewMissile) {
+                        //     this->newMissile(game, msg);
+                        // } else if (messageType == ::Network::MessageType::NewEnemy) {
+                        //     this->newEnemy(game, msg);
+                        // }
                     ecs::Buffer buffer;
                     buffer.getData() = std::vector<char>(receiveBuffer.begin(), receiveBuffer.begin() + bytes_transferred);
 
@@ -69,6 +82,7 @@ namespace rtype {
                     } else if (std::find(directions.begin(), directions.end(), messageType) != directions.end()) {
                         this->moveEntity(game, msg, messageType);
                     }
+                }
                 }
             } catch (const std::exception &e) {
                 std::cerr << "Error: " << e.what() << std::endl;

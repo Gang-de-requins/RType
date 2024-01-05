@@ -98,6 +98,16 @@ namespace ecs {
             void destroyEntity(Scene &scene, Entity &entity);
 
             /**
+             * @fn World::getEntityById
+             * @brief Get an entity by its id
+             * 
+             * @param scene The scene in which the entity is.
+             * @param id The id of the entity.
+             * @return The entity.
+             */
+            ecs::Entity &getEntityById(Scene &scene, std::size_t id);
+
+            /**
              * @fn World::assign
              * @brief Assign a component to an entity
              * 
