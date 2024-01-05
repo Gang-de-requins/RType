@@ -34,6 +34,7 @@ namespace ecs {
         ModifierDisparition,
         PlaySound,
         DealDamage,
+        ApplyModifier,
     };
 
     struct EventData {

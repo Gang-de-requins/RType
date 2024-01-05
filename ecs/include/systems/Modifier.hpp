@@ -43,10 +43,10 @@ namespace ecs {
              * This method applies the specified modifier to the specified component of an entity if the modifier exists.
              */
             template<typename T>
-            void applyModifier(Entity *&entity, std::type_index &type, Modifier &modifier) {
+            void applyModifier(Entity &entity, std::type_index &type, Modifier &modifier) {
                 if (modifier.modifiers.find(type) != modifier.modifiers.end()) {
                     auto &modifierComponent = std::any_cast<T &>(modifier.modifiers.at(type));
-                    auto &component = std::any_cast<T &>(entity->components[type]);
+                    auto &component = std::any_cast<T &>(entity.components[type]);
 
                     component += modifierComponent;
                 }
@@ -98,6 +98,10 @@ namespace ecs {
 
                 std::cout << "Unapplying modifier..." << std::endl;
                 unapplyModifier<T>(entity, modifierComponent, type, modifier);
+            }
+
+            bool hasModifier(Modifier &modifier, std::type_index &type) {
+                return modifier.modifiers.find(type) != modifier.modifiers.end();
             }
     };
 }

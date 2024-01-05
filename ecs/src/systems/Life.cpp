@@ -4,6 +4,8 @@
 namespace ecs {
     void LifeSystem::update(SceneManager &sceneManager) {
         ecs::Scene &scene = sceneManager.getCurrentScene();
+        int index = 0;
+        std::vector<int> eventsToRemove = {};
 
         for (auto &event : scene.events.at(EventType::Collisionnnnnn)) {
             if (event.event == Event::DealDamage) {
@@ -29,9 +31,13 @@ namespace ecs {
                     Event::EnemyDeath,
                     {event.entities.at(0)}
                 });
+                eventsToRemove.push_back(index);
             }
+            index++;
         }
 
-        scene.events[EventType::Collisionnnnnn].clear();
+        for (auto &event : eventsToRemove) {
+            scene.events.at(EventType::Collisionnnnnn).erase(scene.events.at(EventType::Collisionnnnnn).begin() + event);
+        }
     }
 }

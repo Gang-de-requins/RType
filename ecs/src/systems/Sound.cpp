@@ -4,6 +4,8 @@
 namespace ecs {
     void SoundSystem::update(SceneManager &sceneManager) {
         ecs::Scene &scene = sceneManager.getCurrentScene();
+        int index = 0;
+        std::vector<int> eventsToRemove = {};
 
         for (auto &event : scene.events.at(EventType::Audio)) {
             switch (event.event) {
@@ -14,14 +16,16 @@ namespace ecs {
 
                         ::PlaySound(soundData);
                     }
+                    eventsToRemove.push_back(index);
                     break;
                 default:
                     break;
             }
-
-            event.entities.clear();
+            index++;
         }
 
-        scene.events.at(EventType::Audio).clear();
+        for (auto &event : eventsToRemove) {
+            scene.events.at(EventType::Audio).erase(scene.events.at(EventType::Audio).begin() + event);
+        }
     }
 }
