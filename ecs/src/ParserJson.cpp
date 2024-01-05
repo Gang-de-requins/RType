@@ -223,8 +223,16 @@ namespace ecs {
             std::cerr << "Music has no path or is not a string in file: " << scene.path << std::endl;
             return;
         }
+        if (!music.HasMember("volume") || !music["volume"].IsNumber()) {
+            std::cerr << "Music has no volume or is not a number in file: " << scene.path << std::endl;
+            return;
+        }
+        if (!music.HasMember("toPlayAtStart") || !music["toPlayAtStart"].IsBool()) {
+            std::cerr << "Music has no toPlayAtStart or is not a boolean in file: " << scene.path << std::endl;
+            return;
+        }
 
-        sceneManager.assign<Music>(entity, Music{music["path"].GetString()});
+        sceneManager.assign<Music>(entity, Music{music["path"].GetString(), music["volume"].GetFloat(), music["toPlayAtStart"].GetBool()});
     }
 
     void ParserJson::loadPosition(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &position) {

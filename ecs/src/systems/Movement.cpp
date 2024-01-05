@@ -4,6 +4,8 @@
 namespace ecs {
     void MovementSystem::update(SceneManager &sceneManager) {
         ecs::Scene &scene = sceneManager.getCurrentScene();
+        int index = 0;
+        std::vector<int> eventsToRemove = {};
 
         for (auto &event : scene.events.at(EventType::Input)) {
             switch (event.event) {
@@ -15,6 +17,7 @@ namespace ecs {
                         acceleration.maxSpeed = 8.0f;
 
                         // this->move(sceneManager, entity);
+                        eventsToRemove.push_back(index);
                     }
                     break;
                 case Event::MoveDown:
@@ -25,6 +28,7 @@ namespace ecs {
                         acceleration.maxSpeed = 8.0f;
 
                         // this->move(sceneManager, entity);
+                        eventsToRemove.push_back(index);
                     }
                     break;
                 case Event::MoveLeft:
@@ -35,6 +39,7 @@ namespace ecs {
                         acceleration.maxSpeed = 8.0f;
 
                         // this->move(sceneManager, entity);
+                        eventsToRemove.push_back(index);
                     }
                     break;
                 case Event::MoveRight:
@@ -45,6 +50,7 @@ namespace ecs {
                         acceleration.maxSpeed = 8.0f;
 
                         // this->move(sceneManager, entity);
+                        eventsToRemove.push_back(index);
                     }
                     break;
                 case Event::StopMoving:
@@ -57,18 +63,21 @@ namespace ecs {
                         acceleration.maxSpeed = std::max(acceleration.maxSpeed, 0.0f);
 
                         // this->move(sceneManager, entity);
+                        eventsToRemove.push_back(index);
                     }
                     break;
                 default:
                     break;
             }
-
-            event.entities.clear();
+            index++;
         }
-        scene.events.at(EventType::Input).clear();
 
         for (auto &entity : sceneManager.view<Acceleration, Velocity, Position>(scene)) {
             this->move(sceneManager, entity);
+        }
+
+        for (auto &event : eventsToRemove) {
+            scene.events.at(EventType::Input).erase(scene.events.at(EventType::Input).begin() + event);
         }
     }
 

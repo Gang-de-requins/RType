@@ -2,7 +2,7 @@
 
 namespace ecs {
     Scene &SceneManager::createScene() {
-        this->m_scenes.emplace_back(Scene{this->m_nextSceneId++, {}, {}, {
+        this->m_scenes.emplace_back(Scene{this->m_nextSceneId++, 0, {}, {}, {
             {EventType::Collisionnnnnn, {}},
             {EventType::Destroy, {}},
             {EventType::Input, {}},
@@ -22,6 +22,8 @@ namespace ecs {
     void SceneManager::unloadScene(Scene &scene) {
         scene.entities.clear();
         scene.systems.clear();
+        scene.events.clear();
+        scene.nextEntityId = 0;
     }
     
     void SceneManager::switchToScene(std::size_t sceneId) {
@@ -29,7 +31,6 @@ namespace ecs {
 
         this->m_currentSceneId = sceneId;
         if (this->m_scenes.at(this->m_currentSceneId).loadFromPath) {
-            this->m_nextEntityId = 0;
             this->loadEntitiesFromJson(this->m_scenes.at(this->m_currentSceneId));
         }
     }
@@ -39,7 +40,7 @@ namespace ecs {
     }
     
     Entity &SceneManager::createEntity(Scene &scene) {
-        scene.entities.emplace_back(Entity{this->m_nextEntityId++, {}});
+        scene.entities.emplace_back(Entity{scene.nextEntityId++, {}});
         return scene.entities.back();
     }
     

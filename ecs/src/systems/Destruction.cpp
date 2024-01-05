@@ -9,7 +9,6 @@ namespace ecs {
             for (auto &entity : event.entities) {
                 sceneManager.destroyEntity(scene, *entity);
             }
-            event.entities.clear();
         }
         scene.events.at(EventType::Destroy).clear();
     }

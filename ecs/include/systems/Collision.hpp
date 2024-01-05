@@ -11,6 +11,10 @@
 #include "components/Acceleration.hpp"
 #include "components/Scale.hpp"
 #include "components/Rotation.hpp"
+#include "components/Health.hpp"
+#include "components/Damage.hpp"
+#include "Entity.hpp"
+#include "Scene.hpp"
 #include "ISystem.hpp"
 
 namespace ecs {
@@ -62,25 +66,29 @@ namespace ecs {
      * 
      */
     class CollisionSystem : public ISystem {
-    public:
-        /**
-         * @brief Updates the state of entity collisions
-         * 
-         * @param sceneManager Reference to the SceneManager which manages the current scene and its entities.
-         * 
-         */
-        void update(SceneManager &sceneManager) override;
+        public:
+            /**
+             * @brief Updates the state of entity collisions
+             * 
+             * @param sceneManager Reference to the SceneManager which manages the current scene and its entities.
+             * 
+             */
+            void update(SceneManager &sceneManager) override;
 
-    private:
-        /**
-         * @brief Checks if two entities are colliding
-         * 
-         * @param collisionInfo A CollisionInfo structure containing references to the components of the two entities being checked for collision.
-         * 
-         * @return bool True if there is a collision between the two entities, false otherwise.
-         * 
-         */
-        bool isColliding(const CollisionInfo &collisionInfo);
+        private:
+            /**
+             * @brief Checks if two entities are colliding
+             * 
+             * @param collisionInfo A CollisionInfo structure containing references to the components of the two entities being checked for collision.
+             * 
+             * @return bool True if there is a collision between the two entities, false otherwise.
+             * 
+             */
+            bool isColliding(const CollisionInfo &collisionInfo);
+
+            bool isDamageCollision(SceneManager &sceneManager, Scene &scene, Entity *&entity1, Entity *&entity2, bool alreadyColliding);
+
+            bool isModifierCollision(SceneManager &sceneManager, Scene &scene, Entity *&entity1, Entity *&entity2, bool alreadyColliding);
     };
 }
 

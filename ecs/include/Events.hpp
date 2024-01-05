@@ -33,7 +33,14 @@ namespace ecs {
         EnemyBulletDeath,
         ModifierDisparition,
         PlaySound,
+        PlayMusic,
+        StopMusic,
+        UpdateMusic,
+        PauseMusic,
+        ResumeMusic,
+        SetVolumeMusic,
         DealDamage,
+        ApplyModifier,
     };
 
     struct EventData {
