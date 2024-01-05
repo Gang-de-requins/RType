@@ -72,6 +72,7 @@ void serverGame::Rtype::processMessages(void)
         });
 
         if (messageType == ecs::MessageType::PlayerJoin) {
+            std::cout << "player joined" << std::endl;
             //addPlayer(messageString, buffer.getEndpoint());
             return;
         }
