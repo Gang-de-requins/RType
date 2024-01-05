@@ -17,6 +17,8 @@ namespace ecs {
      */
     struct Music {
         std::string path;
+        float volume;
+        bool toPlayAtStart;
     };
 }
 
