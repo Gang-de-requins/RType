@@ -78,6 +78,12 @@ namespace ecs {
 
         for (auto &event : eventsToRemove) {
             scene.events.at(EventType::Input).erase(scene.events.at(EventType::Input).begin() + event);
+
+            for (auto& i : eventsToRemove) {
+                if (i > event) {
+					i--;
+				}
+			}
         }
     }
 
