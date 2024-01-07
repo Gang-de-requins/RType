@@ -56,7 +56,7 @@ R-tpye is composed of two parts: the server and the client, both in C++.
 ## 🔮 Installation 🔮
 
 ### Clone the project
-    git@github.com:EpitechPromo2026/B-CPP-500-PAR-5-2-rtype-ethan.saux.git
+    git clone --recursive git@github.com:EpitechPromo2026/B-CPP-500-PAR-5-2-rtype-ethan.saux.git
 
 ### Launch the script
 
@@ -64,10 +64,15 @@ R-tpye is composed of two parts: the server and the client, both in C++.
 
   To get started, issue this command to root :
   ```bash
-  ./scripts/install_dependencies.sh
+  git submodule update --init --recursive
   ```
 
-  Then run this command, still as root :
+  Go to vcpkg directory and run this command :
+  ```bash
+./bootstrap-vcpkg.sh
+  ```
+
+  Go to the root of the project and run this command :
   ```bash
   ./scripts/build_project.sh
   ```
@@ -75,12 +80,17 @@ R-tpye is composed of two parts: the server and the client, both in C++.
   #### Windows
 
   To get started, issue this command to root :
-  ```bash
-  ./scripts/install_dependencies.bat
+  ```powershell
+  git submodule update --init --recursive
   ```
 
-  Then run this command, still as root :
-  ```bash
+  Go to vcpkg directory and run this command :
+  ```powershell
+  ./bootstrap-vcpkg.bat
+  ```
+
+  Go to the root of the project and run this command :
+  ```powershell
   ./scripts/build_project.bat
   ``` 
 
@@ -89,19 +99,38 @@ R-tpye is composed of two parts: the server and the client, both in C++.
 
 After running the script you will have two executable: "./r-type_client" and "./r-type_server
 
-### Server
+### Linux
+
+#### Server
 
   In the terminal launched:
   ```bash
-  ./r-type_server.
+  ./r-type_server [PORT]
   ```
 
-### Client
+#### Client
 
   In an another terminal launched
   ```bash
-  ./r-type_client
+  ./r-type_client [ADDRESS] [PORT] [NAME]
   ```
+
+### Windows
+
+#### Server
+
+  Go to bin directory and run this command :
+  ```powershell
+  ./r-type_server.exe [PORT]
+  ```
+
+#### Client
+
+  Go to bin directory and run this command :
+  ```powershell
+  ./r-type_client.exe [ADDRESS] [PORT] [NAME]
+  ```
+
   > *You can change the [PORT] and the [ADRESSE] on the settings of the game.*
 
 ## :brain: How to play :brain:
