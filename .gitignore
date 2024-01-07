@@ -36,14 +36,12 @@
 .vs/
 
 # Build
-build
-vcpkg_installed/
-vcpkg.zip
+build/
+bin/
 
 # Executables
 r-type_client
 r-type_server
-tests/ecs/tests_ecs
 
 # Documentation
 docs/html/

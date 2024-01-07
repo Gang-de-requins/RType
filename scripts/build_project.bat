@@ -1,16 +1,11 @@
 @echo off
 
 set PROJECT_CLIENT_DIR=client
-set PROJECT_CLIENT_NAME=r-type_client
-
 set PROJECT_SERVER_DIR=server
-set PROJECT_SERVER_NAME=r-type_server
 
-if not exist "build" mkdir build
-
-cmake --preset=windows
+cmake -S . -B build -D CMAKE_BUILD_TYPE=Release
 
 cmake --build build
 
-copy build\%PROJECT_CLIENT_DIR%\%PROJECT_CLIENT_NAME% .
-copy build\%PROJECT_SERVER_DIR%\%PROJECT_SERVER_NAME% .
+xcopy /s /y build\%PROJECT_CLIENT_DIR%\Debug\* .\bin\client\
+xcopy /s /y build\%PROJECT_SERVER_DIR%\Debug\* .\bin\server\

@@ -1,14 +1,11 @@
 @echo off
 
-set PROJECT_CLIENT_NAME=r-type_client
-set PROJECT_SERVER_NAME=r-type_server
 set VCPKG_DIR=vcpkg
-set VCPKG_INSTALLED_DIR=vcpkg_installed 
+set BIN_DIR=bin
+set BUILD_DIR=build
 
 rd /s /q build
-del %PROJECT_CLIENT_NAME%
-del %PROJECT_SERVER_NAME%
-del %VCPKG_DIR%
-del %VCPKG_INSTALLED_DIR%
+rd /s /q bin
+rd /s /q %VCPKG_DIR%\
 
 echo Cleanup complete.
