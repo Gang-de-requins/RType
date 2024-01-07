@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(_ecs)
+project(ecs)
 
 message("Building ECS Library...")
 message("Looking for raylib...")
@@ -34,10 +34,14 @@ set(SRC
     src/systems/rendering/Render.cpp
 )
 
-add_library(${PROJECT_NAME} SHARED ${SRC})
+add_library(${PROJECT_NAME} STATIC ${SRC})
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC raylib)
 
 message("ECS Library built successfully!")
+
+if (WIN32)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE _WIN32_WINNT=0x0601)
+endif()
