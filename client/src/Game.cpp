@@ -63,7 +63,7 @@ namespace rtype {
 
     float Game::getOffsetColorSpaceship() const
     {
-        return this->m_players.size() * 16;
+        return static_cast<float>(this->m_players.size() * 16);
     }
 
     void Game::addPlayer(Player &player)
