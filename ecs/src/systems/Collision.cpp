@@ -67,8 +67,6 @@ namespace ecs {
                 }
             }
         }
-
-        // std::cout << "Nb events: " << scene.events[EventType::Collisionnnnnn].size() << std::endl;
     }
 
     /* ------------------------- PRIVATE FUCNTIONS -------------------------- */
@@ -100,7 +98,6 @@ namespace ecs {
             bool entity2Health = sceneManager.has<Health>(*entity2);
 
             if (entity1Damage && entity2Health) {
-                std::cout << "entity1Damage && entity2Health" << std::endl;
                 modification = true;
                 scene.events[EventType::Collisionnnnnn].push_back({
                     Event::DealDamage,
@@ -108,7 +105,6 @@ namespace ecs {
                 });
             }
             if (entity2Damage && entity1Health) {
-                std::cout << "entity2Damage && entity1Health" << std::endl;
                 modification = true;
                 scene.events[EventType::Collisionnnnnn].push_back({
                     Event::DealDamage,

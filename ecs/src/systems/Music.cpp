@@ -94,6 +94,12 @@ namespace ecs {
 
         for (auto &event : eventsToRemove) {
             scene.events.at(EventType::Audio).erase(scene.events.at(EventType::Audio).begin() + event);
+
+            for (auto &i : eventsToRemove) {
+                if (i > event) {
+                    i--;
+                }
+            }
         }
 
         for (auto &entity : entitiesUpdateEvent) {
