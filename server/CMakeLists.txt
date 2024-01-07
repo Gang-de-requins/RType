@@ -11,31 +11,7 @@ message("Boost found!")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-set(SRC_ECS
-    ../ecs/src/World.cpp
-    ../ecs/src/SceneManager.cpp
-    ../ecs/src/ParserJson.cpp
-    ../ecs/src/Buffer.cpp
-    ../ecs/src/systems/Movement.cpp
-    ../ecs/src/systems/Controllable.cpp
-    ../ecs/src/systems/Music.cpp
-    ../ecs/src/systems/Sound.cpp
-    ../ecs/src/systems/Collision.cpp
-    ../ecs/src/systems/Life.cpp
-    ../ecs/src/systems/Parallax.cpp
-    ../ecs/src/systems/Clickable.cpp
-    ../ecs/src/systems/Modifier.cpp
-    ../ecs/src/systems/Spawner.cpp
-    ../ecs/src/systems/Destruction.cpp
-    ../ecs/src/systems/rendering/Name.cpp
-    ../ecs/src/systems/rendering/Sprite.cpp
-    ../ecs/src/systems/rendering/Text.cpp
-    ../ecs/src/systems/rendering/Animation.cpp
-    ../ecs/src/systems/rendering/Rectangle.cpp
-    ../ecs/src/systems/rendering/TextInput.cpp
-    ../ecs/src/systems/rendering/Render.cpp
-)
+set(ECS_LIBRARY ecs)
 
 set(SRC_SERVER
     src/Main.cpp
@@ -47,7 +23,6 @@ set(SRC_SERVER
 )
 
 set(SRC
-    ${SRC_ECS}
     ${SRC_SERVER}
 )
 
@@ -66,6 +41,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ../ecs/include)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Boost::system)
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${ECS_LIBRARY})
 
 message("Compiling ${PROJECT_NAME} done successfully!")
 
@@ -82,6 +58,9 @@ elseif (UNIX)
 endif()
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+if (WIN32)
+    install(FILES ${CMAKE_BINARY_DIR}/server/Debug/raylib.dll DESTINATION bin)
+endif()
 
 set(CPACK_GENERATOR "ZIP")
 set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PLATFORM_NAME}")
