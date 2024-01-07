@@ -23,9 +23,18 @@ serverGame::Server::~Server()
 
 void serverGame::Server::setupServer(int port)
 {
-    this->endpoint = boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port);
-    this->socket = std::make_shared<boost::asio::ip::udp::socket>(this->service, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port));
-    this->socket->bind(this->endpoint, this->ec);
+    this->endpoint = boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string("172.18.101.26"), port);
+    this->socket = std::make_shared<boost::asio::ip::udp::socket>(this->service, this->endpoint);
+    std::cout << "Endpoint: " << this->endpoint << std::endl;
+
+    // this->endpoint = boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string("172.18.101.26"), 4444);
+    // this->socket = std::make_shared<boost::asio::ip::udp::socket>(this->service, this->endpoint);
+    // this->socket->bind(this->endpoint, this->ec);
+    // this->socket->set_option(boost::asio::ip::udp::socket::reuse_address(true));
+
+    // if (this->ec) {
+    //     std::cerr << "Error binding socket: " << this->ec.message() << std::endl;
+    // }
 }
 
 void serverGame::Server::receiveMessage(ecs::Buffer& buffer) {
