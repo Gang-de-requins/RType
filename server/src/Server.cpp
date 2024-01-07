@@ -23,9 +23,11 @@ serverGame::Server::~Server()
 
 void serverGame::Server::setupServer(int port)
 {
-    this->endpoint = boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string("172.18.101.26"), port);
-    this->socket = std::make_shared<boost::asio::ip::udp::socket>(this->service, this->endpoint);
-    std::cout << "Endpoint: " << this->endpoint << std::endl;
+    // this->context = boost::asio::io_context();
+    this->socket = std::make_shared<boost::asio::ip::udp::socket>(this->context, boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string("127.0.0.1"), port));
+    this->context.run();
+    this->service.run();
+    // std::cout << "Endpoint: " << this->endpoint << std::endl;
 
     // this->endpoint = boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string("172.18.101.26"), 4444);
     // this->socket = std::make_shared<boost::asio::ip::udp::socket>(this->service, this->endpoint);
