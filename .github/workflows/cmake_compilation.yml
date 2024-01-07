@@ -1,8 +1,8 @@
 name: CMake on multiple platforms
 
 on:
-  push:
-    branches: [ "main" ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
@@ -12,35 +12,35 @@ jobs:
       fail-fast: false
 
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        # os: [windows-latest]
+        # os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [windows-latest]
         build_type: [Release]
-        c_compiler: [gcc, clang, cl]
-        # c_compiler: [cl]
+        # c_compiler: [gcc, clang, cl]
+        c_compiler: [cl]
         include:
           - os: windows-latest
             c_compiler: cl
             cpp_compiler: cl
-          - os: ubuntu-latest
-            c_compiler: gcc
-            cpp_compiler: g++
-          - os: ubuntu-latest
-            c_compiler: clang
-            cpp_compiler: clang++
-          - os: macos-latest
-            c_compiler: clang
-            cpp_compiler: clang++
-        exclude:
-          - os: windows-latest
-            c_compiler: gcc
-          - os: windows-latest
-            c_compiler: clang
-          - os: ubuntu-latest
-            c_compiler: cl
-          - os: macos-latest
-            c_compiler: cl
-          - os: macos-latest
-            c_compiler: gcc
+        #  - os: ubuntu-latest
+        #    c_compiler: gcc
+        #    cpp_compiler: g++
+        #  - os: ubuntu-latest
+        #    c_compiler: clang
+        #    cpp_compiler: clang++
+        #  - os: macos-latest
+        #    c_compiler: clang
+        #    cpp_compiler: clang++
+        #exclude:
+        #  - os: windows-latest
+        #    c_compiler: gcc
+        #  - os: windows-latest
+        #    c_compiler: clang
+        #  - os: ubuntu-latest
+        #    c_compiler: cl
+        #  - os: macos-latest
+        #    c_compiler: cl
+        #  - os: macos-latest
+        #    c_compiler: gcc
 
     steps:
     - uses: actions/checkout@v3
@@ -64,31 +64,20 @@ jobs:
     #       ${{ runner.os }}-
     #       ${{ runner.os }}
 
-    - name: Install vcpkg on Windows
-      if: matrix.os == 'windows-latest'
+    - name: Init vcpkg submodule
       run: |
-        if (-not (Test-Path "vcpkg" -PathType Container)) {
-          git clone https://github.com/microsoft/vcpkg.git
-          cd vcpkg
-          .\bootstrap-vcpkg.bat
-        }
-        else {
-          cd vcpkg
-          git pull
-        }
-
+        git submodule update --init --recursive
+        cd vcpkg
+        ./bootstrap-vcpkg.bat
+        cd ..
 
     - name: Install vcpkg on Linux and MacOS
       if: matrix.os != 'windows-latest'
       run: |
-        if [ ! -d "vcpkg" ]; then
-          git clone https://github.com/microsoft/vcpkg.git
-          cd vcpkg
-          ./bootstrap-vcpkg.sh
-        else
-          cd vcpkg
-          git pull
-        fi
+        git submodule update --init --recursive
+        cd vcpkg
+        ./bootstrap-vcpkg.sh
+        cd ..
 
     - name: Install GLFW dependencies
       if: matrix.os == 'ubuntu-latest'
