@@ -156,39 +156,43 @@ namespace ecs {
     }
 
     void ParserJson::loadControllable(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &controllable) {
-        std::array<std::string_view, 6> controllableNames = {"keyUp", "keyDown", "keyLeft", "keyRight", "keySpace", "timeOut"};
-        std::array<int, 5> controllableValues = {0, 0, 0, 0, 0};
-        float timeOut = 0;
+        static_cast<void>(sceneManager);
+        static_cast<void>(scene);
+        static_cast<void>(entity);
+        static_cast<void>(controllable);
+        // std::array<std::string_view, 6> controllableNames = {"keyUp", "keyDown", "keyLeft", "keyRight", "keySpace", "timeOut"};
+        // std::array<int, 5> controllableValues = {0, 0, 0, 0, 0};
+        // float timeOut = 0;
 
-        for (std::size_t i = 0; i < controllableNames.size(); i++) {
-            if (i != 5 && (!controllable.HasMember(controllableNames[i].data()) || !controllable[controllableNames[i].data()].IsInt())) {
-                std::cerr << "Controllable has no " << controllableNames[i] << " or is not a valid key in file: " << scene.path << std::endl;
-                return;
-            }
-            if (i == 5 && (!controllable.HasMember(controllableNames[i].data()) || !controllable[controllableNames[i].data()].IsNumber())) {
-                std::cerr << "Controllable has no " << controllableNames[i] << " or is not a number in file: " << scene.path << std::endl;
-                return;
-            }
+        // for (std::size_t i = 0; i < controllableNames.size(); i++) {
+        //     if (i != 5 && (!controllable.HasMember(controllableNames[i].data()) || !controllable[controllableNames[i].data()].IsInt())) {
+        //         std::cerr << "Controllable has no " << controllableNames[i] << " or is not a valid key in file: " << scene.path << std::endl;
+        //         return;
+        //     }
+        //     if (i == 5 && (!controllable.HasMember(controllableNames[i].data()) || !controllable[controllableNames[i].data()].IsNumber())) {
+        //         std::cerr << "Controllable has no " << controllableNames[i] << " or is not a number in file: " << scene.path << std::endl;
+        //         return;
+        //     }
 
-            if (i != 5) {
-                controllableValues[i] = controllable[controllableNames[i].data()].GetInt();
-            } else {
-                timeOut = controllable[controllableNames[i].data()].GetFloat();
-            }
-        }
+        //     if (i != 5) {
+        //         controllableValues[i] = controllable[controllableNames[i].data()].GetInt();
+        //     } else {
+        //         timeOut = controllable[controllableNames[i].data()].GetFloat();
+        //     }
+        // }
 
-        sceneManager.assign<Controllable>(
-            entity,
-            Controllable{
-                controllableValues[0],
-                controllableValues[1],
-                controllableValues[2],
-                controllableValues[3],
-                controllableValues[4],
-                timeOut,
-                std::chrono::steady_clock::now()
-            }
-        );
+        // sceneManager.assign<Controllable>(
+        //     entity,
+        //     Controllable{
+        //         controllableValues[0],
+        //         controllableValues[1],
+        //         controllableValues[2],
+        //         controllableValues[3],
+        //         controllableValues[4],
+        //         timeOut,
+        //         std::chrono::steady_clock::now()
+        //     }
+        // );
     }
 
     void ParserJson::loadDamage(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &damage) {

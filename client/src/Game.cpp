@@ -22,26 +22,26 @@ namespace rtype {
 
         while (!WindowShouldClose())
         {
-            if (IsKeyPressed(KEY_UP))
-                this->m_network.send(ecs::MessageType::GoTop, this->m_playerName);
-            if (IsKeyPressed(KEY_DOWN))
-                this->m_network.send(ecs::MessageType::GoBottom, this->m_playerName);
-            if (IsKeyPressed(KEY_LEFT))
-                this->m_network.send(ecs::MessageType::GoLeft, this->m_playerName);
-            if (IsKeyPressed(KEY_RIGHT))
-                this->m_network.send(ecs::MessageType::GoRight, this->m_playerName);
-            if (IsKeyPressed(KEY_SPACE)) {
-                ecs::SceneManager &sceneManager = this->m_world.getSceneManager();
-                auto entities = sceneManager.view<ecs::Controllable>(sceneManager.getCurrentScene());
+            // if (IsKeyPressed(KEY_UP))
+            //     this->m_network.send(ecs::MessageType::GoTop, this->m_playerName);
+            // if (IsKeyPressed(KEY_DOWN))
+            //     this->m_network.send(ecs::MessageType::GoBottom, this->m_playerName);
+            // if (IsKeyPressed(KEY_LEFT))
+            //     this->m_network.send(ecs::MessageType::GoLeft, this->m_playerName);
+            // if (IsKeyPressed(KEY_RIGHT))
+            //     this->m_network.send(ecs::MessageType::GoRight, this->m_playerName);
+            // if (IsKeyPressed(KEY_SPACE)) {
+            //     ecs::SceneManager &sceneManager = this->m_world.getSceneManager();
+            //     auto entities = sceneManager.view<ecs::Controllable>(sceneManager.getCurrentScene());
             
-                // for (auto &entity : entities) {
-                //     ecs::Controllable &controllable = sceneManager.get<ecs::Controllable>(*entity);
-                //     if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - controllable.shootUpdate).count() >= controllable.timeOut) {
-                //         this->m_network.send(::Network::MessageType::NewMissile, this->m_playerName);
-                //     }
-                // }
+            //     // for (auto &entity : entities) {
+            //     //     ecs::Controllable &controllable = sceneManager.get<ecs::Controllable>(*entity);
+            //     //     if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - controllable.shootUpdate).count() >= controllable.timeOut) {
+            //     //         this->m_network.send(::Network::MessageType::NewMissile, this->m_playerName);
+            //     //     }
+            //     // }
 
-            }
+            // }
 
             BeginDrawing();
             ClearBackground(BLACK);
@@ -87,11 +87,8 @@ namespace rtype {
 
          this->m_world.registerSystems<
             ecs::MusicSystem,
-            ecs::ControllableSystem,
-            ecs::MovementSystem,
+            ecs::InputSystem,
             ecs::CollisionSystem,
-            ecs::LifeSystem,
-            ecs::ParallaxSystem,
             ecs::RenderSystem,
             ecs::ClickableSystem
         >(inMenu);
@@ -131,6 +128,7 @@ namespace rtype {
         this->m_world.registerSystems<
             ecs::MusicSystem,
             ecs::SoundSystem,
+            ecs::InputSystem,
             ecs::ControllableSystem,
             ecs::AnimationSystem,
             ecs::MovementSystem,
@@ -171,7 +169,18 @@ namespace rtype {
         this->m_world.assign(myPlayer, ecs::Acceleration{0, 0, 8});
         this->m_world.assign(myPlayer, ecs::Scale{2, 2});
         this->m_world.assign(myPlayer, ecs::Rotation{0});
-        this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, 500, std::chrono::steady_clock::now()});
+        // this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, 500, std::chrono::steady_clock::now()});
+        this->m_world.assign(myPlayer, ecs::PControllable{ecs::EntityType::Player, {
+            {ecs::Event::KEY_W, [this]() {
+                // static_cast<void>(entity);
+                std::cout << "Entity " << entity.id << " is moving up" << std::endl;
+                ecs::Scene &scene = this->m_world.getCurrentScene();
+                scene.events[ecs::EventType::Input].push_back(ecs::EventData{
+                    ecs::Event::MoveUp,
+                    {&entity}
+                });
+            }}
+        }});
         this->m_world.assign(myPlayer, ecs::Collision{false, {}, false});
         this->m_world.assign(myPlayer, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 8, 0, 150, std::chrono::steady_clock::now()});
         this->m_world.assign(myPlayer, ecs::Name{this->m_playerName, ecs::Position{-20, -20}});

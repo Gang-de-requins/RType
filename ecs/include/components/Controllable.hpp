@@ -2,8 +2,15 @@
 #define CONTROLLABLE_COMPONENT_HPP
 
 #include <chrono>
+#include <unordered_map>
+#include <functional>
+#include "Events.hpp"
 
 namespace ecs {
+    enum EntityType {
+        Player,
+        Enemy
+    };
 
     /**
      * @struct Controllable
@@ -34,13 +41,23 @@ namespace ecs {
      * A time point used to track the last update or action (e.g., last shot fired).
      */
     struct Controllable {
-        int keyUp;
-        int keyDown;
-        int keyLeft;
-        int keyRight;
-        int keySpace;
-        float timeOut;
-        std::chrono::steady_clock::time_point shootUpdate;
+        // int keyUp;
+        // int keyDown;
+        // int keyLeft;
+        // int keyRight;
+        // int keySpace;
+        // float timeOut;
+        // std::chrono::steady_clock::time_point shootUpdate;
+        EntityType type;
+    };
+
+    struct PControllable : public Controllable {
+        std::unordered_map<Event, std::function<void()>> actions;
+    };
+
+    struct EControllable : public Controllable {
+        std::unordered_map<Event, bool> actionsTriggered;
+        std::unordered_map<Event, std::function<void()>> actions;
     };
 }
 

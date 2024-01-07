@@ -2,7 +2,8 @@
 #define SYSTEMS_HPP
 
 #include "Collision.hpp"
-#include "Controllable.hpp"
+// #include "Controllable.hpp"
+#include "Input.hpp"
 #include "Life.hpp"
 #include "Movement.hpp"
 #include "Modifier.hpp"

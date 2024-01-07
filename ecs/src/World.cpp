@@ -33,6 +33,10 @@ namespace ecs {
         return this->m_sceneManager.getEntityById(scene, id);
     }
 
+    void World::emit(Scene &scene, EventType eventType, Event event, std::vector<Entity *> entities) {
+        this->m_sceneManager.emit(scene, eventType, event, entities);
+    }
+
     void World::update() {
         this->m_sceneManager.update();
     }

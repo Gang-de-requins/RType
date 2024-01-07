@@ -18,7 +18,8 @@ set(SRC_ECS
     ../ecs/src/ParserJson.cpp
     ../ecs/src/Buffer.cpp
     ../ecs/src/systems/Movement.cpp
-    ../ecs/src/systems/Controllable.cpp
+    # ../ecs/src/systems/Controllable.cpp
+    ../ecs/src/systems/Input.cpp
     ../ecs/src/systems/Music.cpp
     ../ecs/src/systems/Sound.cpp
     ../ecs/src/systems/Collision.cpp
@@ -43,6 +44,7 @@ set(SRC_CLIENT
     src/Game.cpp
     src/Network.cpp
     src/Player.cpp
+    src/ControllableSystem.cpp
 )
 
 set(SRC
@@ -50,7 +52,7 @@ set(SRC
     ${SRC_CLIENT}
 )
 
-add_compile_options(-Wall -Wextra -Werror -std=c++17)
+add_compile_options(-Wall -Wextra -Werror -Wpedantic -std=c++17)
 
 message("Compiling ${PROJECT_NAME}...")
 

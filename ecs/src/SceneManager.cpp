@@ -56,6 +56,10 @@ namespace ecs {
         });
     }
 
+    void SceneManager::emit(Scene &scene, EventType eventType, Event event, std::vector<Entity *> entities) {
+        scene.events[eventType].push_back({event, entities});
+    }
+
     void SceneManager::update() {
         ecs::Scene &scene = this->getCurrentScene();
 
