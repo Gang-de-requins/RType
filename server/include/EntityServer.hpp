@@ -9,12 +9,22 @@
 #define ENTITY_HPP_
 
 #include <iostream>
+#if defined(_WIN32)
+    #define NOGDI
+    #define NOUSER
+#endif
+
 #include <boost/asio.hpp>
-#include "GameEngine.hpp"
-#include "Network.hpp"
+
+#if defined(_WIN32)
+    #undef near
+    #undef far
+#endif
 #include <thread>
 #include <chrono>
 #include <utility>
+#include "Network.hpp"
+#include "GameEngine.hpp"
 
 namespace serverGame
 {

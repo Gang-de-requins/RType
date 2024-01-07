@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.8)
 project(r-type_server)
 
 message("Configuring ${PROJECT_NAME}...")
@@ -51,7 +51,11 @@ set(SRC
     ${SRC_SERVER}
 )
 
-# add_compile_options(-Wall -Wextra -std=c++17)
+if (WIN32)
+	add_compile_options(/W4 /WX /std:c++17)
+else()
+	add_compile_options(-Wall -Wextra -Werror -std=c++17)
+endif()
 
 message("Compiling ${PROJECT_NAME}...")
 
@@ -64,3 +68,24 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Boost::system)
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
 
 message("Compiling ${PROJECT_NAME} done successfully!")
+
+if (WIN32)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE _WIN32_WINNT=0x0601)
+endif()
+
+if (WIN32)
+    set(PLATFORM_NAME "windows")
+elseif (APPLE)
+    set(PLATFORM_NAME "macos")
+elseif (UNIX)
+    set(PLATFORM_NAME "linux")
+endif()
+
+install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+
+set(CPACK_GENERATOR "ZIP")
+set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PLATFORM_NAME}")
+set(CPACK_SOURCE_GENERATOR "ZIP")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PLATFORM_NAME}")
+
+include(CPack)

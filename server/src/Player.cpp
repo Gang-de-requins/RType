@@ -11,7 +11,7 @@
 serverGame::Player::Player(std::string name, int id, ecs::World &world)
 {
     ecs::Scene &inGame = world.createScene();
-    ecs::Entity &entity = world.createEntity(inGame);
+    world.createEntity(inGame);
 
     // this->entityChar = world.createEntity(inGame);
     // ecs::Position position{200, 200};

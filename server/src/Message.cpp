@@ -6,8 +6,7 @@
 */
 
 #include <iostream>
-#include <boost/asio.hpp>
-#include "../include/Server.hpp"
+#include "Server.hpp"
 #include "Message.hpp"
 
 serverGame::Message::Message()

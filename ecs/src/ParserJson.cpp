@@ -140,7 +140,7 @@ namespace ecs {
                 std::cerr << "Color " << colorNames[i] << " is not between 0 and 255 in file: " << scene.path << std::endl;
                 return;
             }
-            colorValues[i] = colorValue;
+            colorValues[i] = static_cast<unsigned char>(colorValue);
         }
 
         sceneManager.assign<Color>(entity, Color{colorValues[0], colorValues[1], colorValues[2], colorValues[3]});

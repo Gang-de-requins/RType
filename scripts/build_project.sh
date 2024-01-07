@@ -6,11 +6,7 @@ PROJECT_CLIENT_NAME=r-type_client
 PROJECT_SERVER_DIR=server
 PROJECT_SERVER_NAME=r-type_server
 
-if [ ! -d "build" ]; then
-  mkdir build
-fi
-
-cmake --preset=linux
+cmake -S . -B build -D CMAKE_BUILD_TYPE=Release
 
 cmake --build build
 
