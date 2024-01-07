@@ -25,7 +25,7 @@ namespace ecs {
                 DrawTextEx(
                     GetFontDefault(),
                     "_",
-                    ::Vector2{ textInput.textPosition.x + MeasureText(textInput.content.c_str(), fontSize.size), textInput.textPosition.y },
+                    ::Vector2{ textInput.textPosition.x + static_cast<float>(MeasureText(textInput.content.c_str(), static_cast<int>(fontSize.size))), textInput.textPosition.y },
                     fontSize.size,
                     4.0f,
                     ::Color{ textColor.r, textColor.g, textColor.b, textColor.a }
@@ -46,11 +46,11 @@ namespace ecs {
                     }
 
                     if ((key >= 65 && key <= 90) || (key >= 97 && key <= 122)) {
-                        textInput.content.push_back(key);
+                        textInput.content.push_back(static_cast<char>(key));
                     } else if (key >= 48 && key <= 57) {
-                        textInput.content.push_back(key);
+                        textInput.content.push_back(static_cast<char>(key));
                     } else if (key == 32 || key == 95 || key == 45 || key == 46) {
-                        textInput.content.push_back(key);
+                        textInput.content.push_back(static_cast<char>(key));
                     }
                 }
             }

@@ -9,12 +9,12 @@
 #define RTYPE_HPP_
 
 #include <iostream>
+#include <mutex>
 #include "Server.hpp"
 #include "Player.hpp"
 #include "Message.hpp"
-#include "GameEngine.hpp"
-#include <mutex>
 #include "EntityServer.hpp"
+#include "GameEngine.hpp"
 
 namespace serverGame
 {

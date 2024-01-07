@@ -297,7 +297,7 @@ namespace ecs {
              */
             template<typename System>
             void registerSystem(Scene &scene) {
-                scene.systems.push_back(std::make_unique<System>());
+                scene.systems.push_back(std::make_shared<System>());
             }
 
             /**

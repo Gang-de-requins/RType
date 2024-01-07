@@ -8,7 +8,7 @@
 namespace ecs {
     class MainSystem : public ISystem {
         protected:
-            std::vector<std::unique_ptr<ISystem>> m_systems;
+            std::vector<std::shared_ptr<ISystem>> m_systems;
 
         public:
             virtual void update(SceneManager &sceneManager) = 0;

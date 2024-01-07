@@ -8,12 +8,22 @@
 #include <array>
 #include <cctype>
 #include <algorithm>
+#if defined(_WIN32)
+#define NOGDI
+#define NOUSER
+#endif
+
+#include <boost/asio.hpp>
+
+#if defined(_WIN32)
+#undef near
+#undef far
+#endif
 #include "rapidjson/document.h"
-#include "Scene.hpp"
-#include "components/Components.hpp"
 #include "Macros.hpp"
 #include "Network.hpp"
-#include <boost/asio.hpp>
+#include "Scene.hpp"
+#include "components/Components.hpp"
 
 namespace ecs {
     class Buffer {

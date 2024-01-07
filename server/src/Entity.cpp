@@ -6,12 +6,13 @@
 */
 
 #include <iostream>
-#include <boost/asio.hpp>
 #include "EntityServer.hpp"
 
 serverGame::Entity::Entity(std::string name, int id, ecs::World &world, ecs::Entity &entity) : _entity(entity)
 {
     this->_name = name;
+    static_cast<void>(id);
+    static_cast<void>(world);
     // ecs::Scene &inGame = world.getCurrentScene();
     // this->_entity = world.createEntity(inGame);
 
@@ -47,7 +48,7 @@ void serverGame::Entity::move(std::string name, ecs::MessageType direction, ecs:
 
     std::cout << postest.first <<  " " << postest.second << std::endl;
 
-    char directionValue = static_cast<char>(direction);
+    //char directionValue = static_cast<char>(direction);
 
     switch (direction) {
         case ecs::MessageType::GoTop:
