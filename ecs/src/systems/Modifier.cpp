@@ -60,6 +60,12 @@ namespace ecs {
 
         for (auto &event : eventsToRemove) {
             scene.events.at(EventType::Collisionnnnnn).erase(scene.events.at(EventType::Collisionnnnnn).begin() + event);
+
+            for (auto &i : eventsToRemove) {
+                if (i > event) {
+					i--;
+				}
+			}
         }
     }
 }
