@@ -37,7 +37,6 @@
 
 # Build
 build
-vcpkg/
 vcpkg_installed/
 vcpkg.zip
 
