@@ -41,6 +41,7 @@ serverGame::Entity::~Entity()
 
 void serverGame::Entity::move(std::string name, ecs::MessageType direction, ecs::World &world)
 {
+    static_cast<void>(name);
     ecs::Acceleration &accSpaceship = world.get<ecs::Acceleration>(this->_entity);
     std::thread stopThread;
 
