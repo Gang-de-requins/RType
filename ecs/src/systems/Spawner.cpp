@@ -5,15 +5,15 @@ namespace ecs {
     void SpawnerSystem::update(SceneManager &sceneManager) {
         ecs::Scene &scene = sceneManager.getCurrentScene();
 
-        for (auto &event : scene.events.at(EventType::Spawn)) {
-            if (event.event == Event::SpawnPlayerBullet) {
-                for (auto &entity : event.entities) {
-                    this->spawnBullet(sceneManager, *entity, scene, true);
-                }
-            }
-        }
+        // for (auto &event : scene.events.at(DefaultEventType::Spawn)) {
+            // if (event.event == BaseEvent::DefaultEvent::SpawnPlayerBullet) {
+                // for (auto &entity : event.entities) {
+                    // this->spawnBullet(sceneManager, *entity, scene, true);
+                // }
+            // }
+        // }
 
-        scene.events.at(EventType::Spawn).clear();
+        scene.events.at(DefaultEventType::Spawn).clear();
     }
 
     /* ------------------------- PRIVATE FUCNTIONS -------------------------- */
@@ -38,8 +38,8 @@ namespace ecs {
         sceneManager.assign(missile, Sound{"assets/weird.wav"});
         sceneManager.assign(missile, Damage{10});
 
-        scene.events[EventType::Audio].push_back({
-            Event::PlaySound,
+        scene.events[DefaultEventType::Audio].push_back({
+            DefaultEvent::PlaySound,
             {&missile}
         });
     }

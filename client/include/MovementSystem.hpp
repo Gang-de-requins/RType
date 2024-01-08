@@ -6,8 +6,9 @@
 #include "components/Position.hpp"
 #include "components/Velocity.hpp"
 #include "components/Acceleration.hpp"
-#include "../Entity.hpp"
-#include "ISystem.hpp"
+#include "Entity.hpp"
+#include "systems/ISystem.hpp"
+#include "EventsCustom.hpp"
 
 namespace ecs {
     class SceneManager;
@@ -21,7 +22,7 @@ namespace ecs {
      * 
      * Inherits from ISystem and overrides the update method to implement the movement logic for entities.
      */
-    class MovementSystem : public ISystem {
+    class MovementSystemCustom : public ISystem {
         public:
             /**
              * @brief Updates the movement and position of entities

@@ -17,8 +17,6 @@ set(SRC_ECS
     ../ecs/src/SceneManager.cpp
     ../ecs/src/ParserJson.cpp
     ../ecs/src/Buffer.cpp
-    ../ecs/src/systems/Movement.cpp
-    # ../ecs/src/systems/Controllable.cpp
     ../ecs/src/systems/Input.cpp
     ../ecs/src/systems/Music.cpp
     ../ecs/src/systems/Sound.cpp
@@ -45,6 +43,7 @@ set(SRC_CLIENT
     src/Network.cpp
     src/Player.cpp
     src/ControllableSystem.cpp
+    src/MovementSystem.cpp
 )
 
 set(SRC

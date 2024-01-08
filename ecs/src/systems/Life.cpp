@@ -7,8 +7,8 @@ namespace ecs {
         int index = 0;
         std::vector<int> eventsToRemove = {};
 
-        for (auto &event : scene.events.at(EventType::Collisionnnnnn)) {
-            if (event.event == Event::DealDamage) {
+        for (auto &event : scene.events.at(DefaultEventType::Collisionnnnnn)) {
+            if (event.event == DefaultEvent::DealDamage) {
                 Damage &damage = sceneManager.get<Damage>(*event.entities.at(0));
                 Health &health = sceneManager.get<Health>(*event.entities.at(1));
 
@@ -26,13 +26,13 @@ namespace ecs {
                     //         {event.entities.at(1)}
                     //     });
                     // }
-                    scene.events[EventType::Destroy].push_back({
-                        Event::PlayerDeath,
+                    scene.events[DefaultEventType::Destroy].push_back({
+                        DefaultEvent::EntityDestroyed,
                         {event.entities.at(1)}
                     });
                 }
-                scene.events[EventType::Destroy].push_back({
-                    Event::EnemyDeath,
+                scene.events[DefaultEventType::Destroy].push_back({
+                    DefaultEvent::EntityDestroyed,
                     {event.entities.at(0)}
                 });
                 eventsToRemove.push_back(index);
@@ -41,7 +41,7 @@ namespace ecs {
         }
 
         for (auto &event : eventsToRemove) {
-            scene.events.at(EventType::Collisionnnnnn).erase(scene.events.at(EventType::Collisionnnnnn).begin() + event);
+            scene.events.at(DefaultEventType::Collisionnnnnn).erase(scene.events.at(DefaultEventType::Collisionnnnnn).begin() + event);
         }
     }
 }

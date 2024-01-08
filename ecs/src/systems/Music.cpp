@@ -15,8 +15,8 @@ namespace ecs {
 
                 if (music.toPlayAtStart) {
                     music.toPlayAtStart = false;
-                    scene.events[EventType::Audio].push_back({
-                        Event::PlayMusic,
+                    scene.events[DefaultEventType::Audio].push_back({
+                        DefaultEvent::PlayMusic,
                         {entity}
                     });
                     checkAllMusic = false;
@@ -24,9 +24,9 @@ namespace ecs {
             }
         }
 
-        for (auto &event : scene.events.at(EventType::Audio)) {
+        for (auto &event : scene.events.at(DefaultEventType::Audio)) {
             switch (event.event) {
-                case Event::PlayMusic:
+                case DefaultEvent::PlayMusic:
                     for (auto &entity : event.entities) {
                         Music &music = sceneManager.get<Music>(*entity);
                         ::Music &musicData = sceneManager.getMusic(music.path);
@@ -39,7 +39,7 @@ namespace ecs {
                     }
                     eventsToRemove.push_back(index);
                     break;
-                case Event::StopMusic:
+                case DefaultEvent::StopMusic:
                     for (auto &entity : event.entities) {
                         Music &music = sceneManager.get<Music>(*entity);
                         ::Music &musicData = sceneManager.getMusic(music.path);
@@ -48,7 +48,7 @@ namespace ecs {
                     }
                     eventsToRemove.push_back(index);
                     break;
-                case Event::PauseMusic:
+                case DefaultEvent::PauseMusic:
                     for (auto &entity : event.entities) {
                         Music &music = sceneManager.get<Music>(*entity);
                         ::Music &musicData = sceneManager.getMusic(music.path);
@@ -57,7 +57,7 @@ namespace ecs {
                     }
                     eventsToRemove.push_back(index);
                     break;
-                case Event::ResumeMusic:
+                case DefaultEvent::ResumeMusic:
                     for (auto &entity : event.entities) {
                         Music &music = sceneManager.get<Music>(*entity);
                         ::Music &musicData = sceneManager.getMusic(music.path);
@@ -66,7 +66,7 @@ namespace ecs {
                     }
                     eventsToRemove.push_back(index);
                     break;
-                case Event::UpdateMusic:
+                case DefaultEvent::UpdateMusic:
                     for (auto &entity : event.entities) {
                         Music &music = sceneManager.get<Music>(*entity);
                         ::Music &musicData = sceneManager.getMusic(music.path);
@@ -77,7 +77,7 @@ namespace ecs {
                     }
                     eventsToRemove.push_back(index);
                     break;
-                case Event::SetVolumeMusic:
+                case DefaultEvent::SetVolumeMusic:
                     for (auto &entity : event.entities) {
                         Music &music = sceneManager.get<Music>(*entity);
                         ::Music &musicData = sceneManager.getMusic(music.path);
@@ -93,12 +93,12 @@ namespace ecs {
         }
 
         for (auto &event : eventsToRemove) {
-            scene.events.at(EventType::Audio).erase(scene.events.at(EventType::Audio).begin() + event);
+            scene.events.at(DefaultEventType::Audio).erase(scene.events.at(DefaultEventType::Audio).begin() + event);
         }
 
         for (auto &entity : entitiesUpdateEvent) {
-            scene.events[EventType::Audio].push_back({
-                Event::UpdateMusic,
+            scene.events[DefaultEventType::Audio].push_back({
+                DefaultEvent::UpdateMusic,
                 {entity}
             });
         }

@@ -7,9 +7,9 @@ namespace ecs {
         int index = 0;
         std::vector<int> eventsToRemove = {};
 
-        for (auto &event : scene.events.at(EventType::Audio)) {
+        for (auto &event : scene.events.at(DefaultEventType::Audio)) {
             switch (event.event) {
-                case Event::PlaySound:
+                case DefaultEvent::PlaySound:
                     for (auto &entity : event.entities) {
                         Sound &sound = sceneManager.get<Sound>(*entity);
                         ::Sound &soundData = sceneManager.getSound(sound.path);
@@ -25,7 +25,7 @@ namespace ecs {
         }
 
         for (auto &event : eventsToRemove) {
-            scene.events.at(EventType::Audio).erase(scene.events.at(EventType::Audio).begin() + event);
+            scene.events.at(DefaultEventType::Audio).erase(scene.events.at(DefaultEventType::Audio).begin() + event);
         }
     }
 }

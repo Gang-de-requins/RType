@@ -3,13 +3,13 @@
 namespace ecs {
     Scene &SceneManager::createScene() {
         this->m_scenes.emplace_back(Scene{this->m_nextSceneId++, 0, {}, {}, {
-            {EventType::Collisionnnnnn, {}},
-            {EventType::Destroy, {}},
-            {EventType::Input, {}},
-            {EventType::KeyboardInput, {}},
-            {EventType::Spawn, {}},
-            {EventType::Timer, {}},
-            {EventType::Audio, {}}
+            {DefaultEventType::Collisionnnnnn, {}},
+            {DefaultEventType::Destroy, {}},
+            {DefaultEventType::Input, {}},
+            {DefaultEventType::KeyboardInput, {}},
+            {DefaultEventType::Spawn, {}},
+            {DefaultEventType::Timer, {}},
+            {DefaultEventType::Audio, {}}
         }, "", false});
         return this->m_scenes.back();
     }
@@ -57,7 +57,7 @@ namespace ecs {
         });
     }
 
-    void SceneManager::emit(Scene &scene, EventType eventType, Event event, std::vector<Entity *> entities) {
+    void SceneManager::emit(Scene &scene, int eventType, int event, std::vector<Entity *> entities) {
         scene.events[eventType].push_back({event, entities});
     }
 

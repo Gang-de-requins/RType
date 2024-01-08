@@ -18,8 +18,8 @@ namespace ecs {
             }
 
             if (!actionFound) {
-                scene.events[EventType::Input].push_back({
-                    Event::StopMoving,
+                scene.events[DefaultEventType::Input].push_back({
+                    CustomEvent::StopMoving,
                     {entity}
                 });
             }

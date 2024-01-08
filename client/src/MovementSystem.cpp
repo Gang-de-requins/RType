@@ -1,15 +1,15 @@
-#include "systems/Movement.hpp"
+#include "MovementSystem.hpp"
 #include "SceneManager.hpp"
 
 namespace ecs {
-    void MovementSystem::update(SceneManager &sceneManager) {
-        ecs::Scene &scene = sceneManager.getCurrentScene();
+    void MovementSystemCustom::update(SceneManager &sceneManager) {
+        Scene &scene = sceneManager.getCurrentScene();
         int index = 0;
         std::vector<int> eventsToRemove = {};
 
-        for (auto &event : scene.events.at(EventType::Input)) {
+        for (auto &event : scene.events.at(DefaultEventType::Input)) {
             switch (event.event) {
-                case Event::MoveUp:
+                case CustomEvent::MoveUp:
                     for (auto &entity : event.entities) {
                         Acceleration &acceleration = sceneManager.get<Acceleration>(*entity);
                         acceleration.ddx = 0;
@@ -20,7 +20,7 @@ namespace ecs {
                         eventsToRemove.push_back(index);
                     }
                     break;
-                case Event::MoveDown:
+                case CustomEvent::MoveDown:
                     for (auto &entity : event.entities) {
                         Acceleration &acceleration = sceneManager.get<Acceleration>(*entity);
                         acceleration.ddx = 0;
@@ -31,7 +31,7 @@ namespace ecs {
                         eventsToRemove.push_back(index);
                     }
                     break;
-                case Event::MoveLeft:
+                case CustomEvent::MoveLeft:
                     for (auto &entity : event.entities) {
                         Acceleration &acceleration = sceneManager.get<Acceleration>(*entity);
                         acceleration.ddx = -0.5f;
@@ -42,7 +42,7 @@ namespace ecs {
                         eventsToRemove.push_back(index);
                     }
                     break;
-                case Event::MoveRight:
+                case CustomEvent::MoveRight:
                     for (auto &entity : event.entities) {
                         Acceleration &acceleration = sceneManager.get<Acceleration>(*entity);
                         acceleration.ddx = 0.5f;
@@ -53,12 +53,12 @@ namespace ecs {
                         eventsToRemove.push_back(index);
                     }
                     break;
-                case Event::StopMoving:
+                case CustomEvent::StopMoving:
                     for (auto &entity : event.entities) {
                         Acceleration &acceleration = sceneManager.get<Acceleration>(*entity);
 
-                        acceleration.ddx *= -1;
-                        acceleration.ddy *= -1;
+                        acceleration.ddx *= 0.9f;
+                        acceleration.ddy *= 0.9f;
                         acceleration.maxSpeed -= 0.1f;
                         acceleration.maxSpeed = std::max(acceleration.maxSpeed, 0.0f);
 
@@ -77,11 +77,13 @@ namespace ecs {
         }
 
         for (auto &event : eventsToRemove) {
-            scene.events.at(EventType::Input).erase(scene.events.at(EventType::Input).begin() + event);
+            scene.events.at(DefaultEventType::Input).erase(scene.events.at(DefaultEventType::Input).begin() + event);
         }
     }
 
-    void MovementSystem::move(SceneManager &sceneManager, Entity *entity) {
+    /* ------------------------- PRIVATE FUCNTIONS -------------------------- */
+
+    void MovementSystemCustom::move(SceneManager &sceneManager, Entity *entity) {
         Position &position = sceneManager.get<Position>(*entity);
         Velocity &velocity = sceneManager.get<Velocity>(*entity);
         Acceleration &acceleration = sceneManager.get<Acceleration>(*entity);

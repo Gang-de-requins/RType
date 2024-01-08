@@ -6,7 +6,7 @@
 #include "Entity.hpp"
 
 namespace ecs {
-    enum EventType {
+    enum DefaultEventType {
         Collisionnnnnn,
         Destroy,
         Input,
@@ -17,7 +17,7 @@ namespace ecs {
         Audio
     };
 
-    enum Event {
+    enum DefaultEvent {
         // Keyboard
         KEY_NULL            = 0,        // Key: NULL, used for no key pressed
         // Alphanumeric keys
@@ -133,23 +133,7 @@ namespace ecs {
         KEY_MENU            = 82,       // Key: Android menu button
         KEY_VOLUME_UP       = 24,       // Key: Android volume up button
         KEY_VOLUME_DOWN     = 25,       // Key: Android volume down button
-
         Overlap = 400,
-        MoveUp,
-        MoveDown,
-        MoveLeft,
-        MoveRight,
-        StopMoving,
-        Shoot,
-        SpawnEnemy,
-        SpawnPlayer,
-        SpawnEnemyBullet,
-        SpawnPlayerBullet,
-        PlayerDeath,
-        EnemyDeath,
-        BulletDeath,
-        EnemyBulletDeath,
-        ModifierDisparition,
         PlaySound,
         PlayMusic,
         StopMusic,
@@ -159,10 +143,11 @@ namespace ecs {
         SetVolumeMusic,
         DealDamage,
         ApplyModifier,
+        EntityDestroyed,
     };
 
     struct EventData {
-        Event event;
+        int event;
         std::vector<Entity *> entities;
     };
 }

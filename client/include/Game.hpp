@@ -5,7 +5,9 @@
 #include "Network.hpp"
 #include "GameEngine.hpp"
 #include "ControllableSystem.hpp"
+#include "MovementSystem.hpp"
 #include "Player.hpp"
+#include "EventsCustom.hpp"
 
 #define SCENE_MENU 0
 #define SCENE_GAME 1

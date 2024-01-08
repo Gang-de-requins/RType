@@ -7,8 +7,8 @@ namespace ecs {
         int index = 0;
         std::vector<int> eventsToRemove = {};
 
-        for (auto &event : scene.events.at(EventType::Collisionnnnnn)) {
-            if (event.event == Event::ApplyModifier) {
+        for (auto &event : scene.events.at(DefaultEventType::Collisionnnnnn)) {
+            if (event.event == DefaultEvent::ApplyModifier) {
                 std::vector<std::type_index> componentsTypes = {
                     std::type_index(typeid(Acceleration)),
                     std::type_index(typeid(Damage)),
@@ -48,8 +48,8 @@ namespace ecs {
                     }
                 }
                 if (modifierApplied) {
-                    scene.events[EventType::Destroy].push_back({
-                        Event::ModifierDisparition,
+                    scene.events[DefaultEventType::Destroy].push_back({
+                        DefaultEvent::EntityDestroyed,
                         {event.entities.at(0)}
                     });
                 }
@@ -59,7 +59,7 @@ namespace ecs {
         }
 
         for (auto &event : eventsToRemove) {
-            scene.events.at(EventType::Collisionnnnnn).erase(scene.events.at(EventType::Collisionnnnnn).begin() + event);
+            scene.events.at(DefaultEventType::Collisionnnnnn).erase(scene.events.at(DefaultEventType::Collisionnnnnn).begin() + event);
         }
     }
 }

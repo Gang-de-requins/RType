@@ -6,6 +6,7 @@
 #include "raylib.h"
 #include "components/Controllable.hpp"
 #include "systems/ISystem.hpp"
+#include "EventsCustom.hpp"
 
 namespace ecs {
     class ControllableSystemCustom : public ISystem {

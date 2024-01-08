@@ -225,7 +225,7 @@ namespace ecs {
              * @param event The event.
              * @param entities The entities concerned by the event.
              */
-            void emit(Scene &scene, EventType eventType, Event event, std::vector<Entity *> entities = {});
+            void emit(Scene &scene, int eventType, int event, std::vector<Entity *> entities = {});
 
             /**
              * @fn SceneManager::update

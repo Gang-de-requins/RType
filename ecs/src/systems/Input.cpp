@@ -6,11 +6,11 @@ namespace ecs {
         int key = GetKeyPressed();
 
         if (key != KEY_NULL) {
-            sceneManager.emit(sceneManager.getCurrentScene(), EventType::KeyboardInput, static_cast<Event>(key));
+            sceneManager.emit(sceneManager.getCurrentScene(), DefaultEventType::KeyboardInput, static_cast<DefaultEvent>(key));
         } else {
             Scene &scene = sceneManager.getCurrentScene();
 
-            scene.events.at(EventType::KeyboardInput).clear();
+            scene.events.at(DefaultEventType::KeyboardInput).clear();
         }
     }
 }

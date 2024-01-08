@@ -34,7 +34,7 @@ namespace ecs {
                         std::bind(&CollisionSystem::isModifierCollision, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5)
                     };
 
-                    for (auto &event : scene.events[EventType::Collisionnnnnn]) {
+                    for (auto &event : scene.events[DefaultEventType::Collisionnnnnn]) {
                         if ((event.entities[0]->id == entity1->id && event.entities[1]->id == entity2->id) || (event.entities[0]->id == entity2->id && event.entities[1]->id == entity1->id)) {
                             alreadyColliding = true;
                             break;
@@ -102,16 +102,16 @@ namespace ecs {
             if (entity1Damage && entity2Health) {
                 std::cout << "entity1Damage && entity2Health" << std::endl;
                 modification = true;
-                scene.events[EventType::Collisionnnnnn].push_back({
-                    Event::DealDamage,
+                scene.events[DefaultEventType::Collisionnnnnn].push_back({
+                    DefaultEvent::DealDamage,
                     {entity1, entity2}
                 });
             }
             if (entity2Damage && entity1Health) {
                 std::cout << "entity2Damage && entity1Health" << std::endl;
                 modification = true;
-                scene.events[EventType::Collisionnnnnn].push_back({
-                    Event::DealDamage,
+                scene.events[DefaultEventType::Collisionnnnnn].push_back({
+                    DefaultEvent::DealDamage,
                     {entity2, entity1}
                 });
             }
@@ -129,15 +129,15 @@ namespace ecs {
 
             if (entity1Modifier) {
                 modification = true;
-                scene.events[EventType::Collisionnnnnn].push_back({
-                    Event::ApplyModifier,
+                scene.events[DefaultEventType::Collisionnnnnn].push_back({
+                    DefaultEvent::ApplyModifier,
                     {entity1, entity2}
                 });
             }
             if (entity2Modifier) {
                 modification = true;
-                scene.events[EventType::Collisionnnnnn].push_back({
-                    Event::ApplyModifier,
+                scene.events[DefaultEventType::Collisionnnnnn].push_back({
+                    DefaultEvent::ApplyModifier,
                     {entity2, entity1}
                 });
             }

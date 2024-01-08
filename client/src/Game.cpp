@@ -131,7 +131,7 @@ namespace rtype {
             ecs::InputSystem,
             ecs::ControllableSystemCustom,
             ecs::AnimationSystem,
-            ecs::MovementSystem,
+            ecs::MovementSystemCustom,
             ecs::SpriteSystem,
             ecs::NameSystem,
             ecs::TextSystem,
@@ -171,39 +171,39 @@ namespace rtype {
         this->m_world.assign(myPlayer, ecs::Rotation{0});
         // this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, 500, std::chrono::steady_clock::now()});
         this->m_world.assign(myPlayer, ecs::PControllable{ecs::EntityType::Player, {
-            {ecs::Event::KEY_W, [this](ecs::Entity *entity) {
+            {ecs::DefaultEvent::KEY_W, [this](ecs::Entity *entity) {
                 ecs::Scene &scene = this->m_world.getCurrentScene();
-                scene.events[ecs::EventType::Input].push_back(ecs::EventData{
-                    ecs::Event::MoveUp,
+                scene.events[ecs::DefaultEventType::Input].push_back(ecs::EventData{
+                    ecs::CustomEvent::MoveUp,
                     {entity}
                 });
             }},
-            {ecs::Event::KEY_S, [this](ecs::Entity *entity) {
+            {ecs::DefaultEvent::KEY_S, [this](ecs::Entity *entity) {
                 ecs::Scene &scene = this->m_world.getCurrentScene();
-                scene.events[ecs::EventType::Input].push_back(ecs::EventData{
-                    ecs::Event::MoveDown,
+                scene.events[ecs::DefaultEventType::Input].push_back(ecs::EventData{
+                    ecs::CustomEvent::MoveDown,
                     {entity}
                 });
             }},
-            {ecs::Event::KEY_A, [this](ecs::Entity *entity) {
+            {ecs::DefaultEvent::KEY_A, [this](ecs::Entity *entity) {
                 ecs::Scene &scene = this->m_world.getCurrentScene();
-                scene.events[ecs::EventType::Input].push_back(ecs::EventData{
-                    ecs::Event::MoveLeft,
+                scene.events[ecs::DefaultEventType::Input].push_back(ecs::EventData{
+                    ecs::CustomEvent::MoveLeft,
                     {entity}
                 });
             }},
-            {ecs::Event::KEY_D, [this](ecs::Entity *entity) {
+            {ecs::DefaultEvent::KEY_D, [this](ecs::Entity *entity) {
                 ecs::Scene &scene = this->m_world.getCurrentScene();
-                scene.events[ecs::EventType::Input].push_back(ecs::EventData{
-                    ecs::Event::MoveRight,
+                scene.events[ecs::DefaultEventType::Input].push_back(ecs::EventData{
+                    ecs::CustomEvent::MoveRight,
                     {entity}
                 });
             }},
-            {ecs::Event::KEY_SPACE, [this](ecs::Entity *entity) {
+            {ecs::DefaultEvent::KEY_SPACE, [this](ecs::Entity *entity) {
                 std::cout << "Space pressed" << std::endl;
                 ecs::Scene &scene = this->m_world.getCurrentScene();
-                scene.events[ecs::EventType::Spawn].push_back(ecs::EventData{
-                    ecs::Event::SpawnPlayerBullet,
+                scene.events[ecs::DefaultEventType::Spawn].push_back(ecs::EventData{
+                    ecs::CustomEvent::SpawnPlayerBullet,
                     {entity}
                 });
             }},
