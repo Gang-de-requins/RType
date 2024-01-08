@@ -7,6 +7,7 @@ set(ECS_LIBRARY ecs)
 
 set(SRC_PONG
     src/main.cpp
+    src/Pong.cpp
 )
 
 set(SRC
