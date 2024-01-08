@@ -5,7 +5,7 @@ namespace rtype {
     {
         initScenes();
         this->m_network.connect(ip, port, *this);
-        this->m_playerName = "Justinj";
+        this->m_playerName = "Name";
     }
 
     Game::~Game()
@@ -203,17 +203,11 @@ namespace rtype {
         this->m_world.assign(ButtonBackward, ecs::Rotation{0});
         this->m_world.assign(ButtonBackward, ecs::Clickable{false, [this](ecs::Clickable&) {this->m_world.switchToScene(0);}});
 
-        ecs::Entity &Profil = this->m_world.createEntity(inMenuSettings);
-        this->m_world.assign(Profil, ecs::Position{1142.5, 90});
-        this->m_world.assign(Profil, ecs::Sprite{"assets/Settings/profil.png", ecs::Rectangle{0, 0, 211, 211}, ecs::Vector2{0, 0}});
-        this->m_world.assign(Profil, ecs::Scale{0.6, 0.6});
-        this->m_world.assign(Profil, ecs::Rotation{0});
-
-        ecs::Entity &Nickname = this->m_world.createEntity(inMenuSettings);
-        this->m_world.assign(Nickname, ecs::Position{1100, 230});
-        this->m_world.assign(Nickname, ecs::Sprite{"assets/Settings/nickname.png", ecs::Rectangle{0, 0, 421, 171}, ecs::Vector2{0, 0}});
-        this->m_world.assign(Nickname, ecs::Scale{0.5, 0.5});
-        this->m_world.assign(Nickname, ecs::Rotation{0});
+        ecs::Entity &ChangePort = this->m_world.createEntity(inMenuSettings);
+        this->m_world.assign(ChangePort, ecs::Position{1100, 230});
+        this->m_world.assign(ChangePort, ecs::Sprite{"assets/Settings/nickname.png", ecs::Rectangle{0, 0, 421, 171}, ecs::Vector2{0, 0}});
+        this->m_world.assign(ChangePort, ecs::Scale{0.5, 0.5});
+        this->m_world.assign(ChangePort, ecs::Rotation{0});
 
         ecs::Entity &SettingIP = this->m_world.createEntity(inMenuSettings);
         this->m_world.assign(SettingIP, ecs::Position{900, 350});
@@ -226,6 +220,23 @@ namespace rtype {
         this->m_world.assign(ChangeIP, ecs::Sprite{"assets/Settings/nickname.png", ecs::Rectangle{0, 0, 421, 171}, ecs::Vector2{0, 0}});
         this->m_world.assign(ChangeIP, ecs::Scale{0.5, 0.5});
         this->m_world.assign(ChangeIP, ecs::Rotation{0});
+
+        ecs::Entity &IPTextInput = this->m_world.createEntity(inMenuSettings);
+        this->m_world.assign(IPTextInput, ecs::Position{900, 510});
+        this->m_world.assign(IPTextInput, ecs::Rectangle{0, 0, 421, 171});
+        this->m_world.assign(IPTextInput, ecs::TextInput{10, ecs::Position{900, 510}});
+        this->m_world.assign(IPTextInput, ecs::Scale{1, 1});
+        this->m_world.assign(IPTextInput, ecs::Rotation{0});
+        this->m_world.assign(IPTextInput, ecs::Clickable{false, [this](ecs::Clickable&) {
+            ecs::Entity &IPTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 13);
+            ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(IPTextInput);
+
+            this->m_playerName = textInput.content;
+            textInput.isFocused = true;
+        }});
+        this->m_world.assign(IPTextInput, ecs::Color{200, 200, 200, 255});
+        this->m_world.assign(IPTextInput, ecs::FontSize{35});
+        this->m_world.assign(IPTextInput, ecs::TextColor{255, 255, 255, 255});
 
         /* ------------------------- Scene ChooseName --------------------------------*/
 
