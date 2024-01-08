@@ -10,9 +10,14 @@
 #include "Sound.hpp"
 #include "Parallax.hpp"
 #include "Clickable.hpp"
-#include "rendering/Name.hpp"
+#include "Destruction.hpp"
+#include "Spawner.hpp"
 #include "rendering/Animation.hpp"
+#include "rendering/Name.hpp"
+#include "rendering/Rectangle.hpp"
 #include "rendering/Sprite.hpp"
 #include "rendering/Text.hpp"
+#include "rendering/TextInput.hpp"
+#include "rendering/Render.hpp"
 
 #endif /* SYSTEMS_HPP */

@@ -5,6 +5,7 @@
 #include <memory>
 #include <string_view>
 #include "Entity.hpp"
+#include "Events.hpp"
 
 namespace ecs {
     class ISystem;
@@ -33,10 +34,20 @@ namespace ecs {
      */
     struct Scene {
         std::size_t id;
+        std::size_t nextEntityId;
         std::vector<Entity> entities;
-        std::vector<std::unique_ptr<ISystem>> systems;
+        std::vector<std::shared_ptr<ISystem>> systems;
+        std::unordered_map<EventType, std::vector<EventData>> events;
         std::string_view path;
         bool loadFromPath;
+
+        bool operator==(const Scene &other) const {
+            return this->id == other.id;
+        }
+
+        bool operator!=(const Scene &other) const {
+            return this->id != other.id;
+        }
     };
 }
 

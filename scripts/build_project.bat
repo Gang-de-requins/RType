@@ -1,16 +1,16 @@
 @echo off
 
 set PROJECT_CLIENT_DIR=client
-set PROJECT_CLIENT_NAME=r-type_client
-
 set PROJECT_SERVER_DIR=server
-set PROJECT_SERVER_NAME=r-type_server
+set RTYPE_CLIENT=r-type_client
+set RTYPE_SERVER=r-type_server
 
-if not exist "build" mkdir build
-
-cmake --preset=windows
+cmake -S . -B build -D CMAKE_BUILD_TYPE=Release
 
 cmake --build build
 
-copy build\%PROJECT_CLIENT_DIR%\%PROJECT_CLIENT_NAME% .
-copy build\%PROJECT_SERVER_DIR%\%PROJECT_SERVER_NAME% .
+copy /y build\%PROJECT_CLIENT_DIR%\Debug\%RTYPE_CLIENT%.exe .
+copy /y build\%PROJECT_CLIENT_DIR%\Debug\raylib.dll .
+
+copy /y build\%PROJECT_SERVER_DIR%\Debug\%RTYPE_SERVER%.exe .
+copy /y build\%PROJECT_SERVER_DIR%\Debug\raylib.dll .

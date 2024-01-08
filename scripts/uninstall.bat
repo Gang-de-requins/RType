@@ -1,14 +1,15 @@
 @echo off
 
-set PROJECT_CLIENT_NAME=r-type_client
-set PROJECT_SERVER_NAME=r-type_server
-set VCPKG_DIR=vcpkg
-set VCPKG_INSTALLED_DIR=vcpkg_installed 
+set BUILD_DIR=build
+set RTYPE_CLIENT=r-type_client
+set RTYPE_SERVER=r-type_server
 
+echo Cleaning up...
+echo Deleting build directory...
 rd /s /q build
-del %PROJECT_CLIENT_NAME%
-del %PROJECT_SERVER_NAME%
-del %VCPKG_DIR%
-del %VCPKG_INSTALLED_DIR%
+echo Deleting binaries...
+del /q %RTYPE_CLIENT%.*
+del /q %RTYPE_SERVER%.*
+del /q raylib.dll
 
 echo Cleanup complete.

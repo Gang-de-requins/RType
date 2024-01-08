@@ -1,24 +1,14 @@
 #!/bin/bash
 
-PROJECT_CLIENT_NAME=r-type_client
-PROJECT_SERVER_NAME=r-type_server
-VCPKG_DIR=vcpkg
-VCPKG_INSTALLED_DIR=vcpkg_installed
+BUILD_DIR=build
+RTYPE_CLIENT=r-type_client
+RTYPE_SERVER=r-type_server
 
+echo "Cleaning up..."
+echo "Deleting build directory..."
+rm -rf $BUILD_DIR
+echo "Deleting executables..."
+rm RTYPE_CLIENT
+rm RTYPE_SERVER
 
-# remove vcpkg if it is installed
-if [ -d $VCPKG_DIR ]; then
-    echo "uninstalling vcpkg..."
-    rm -rf $VCPKG_DIR
-    rm -rf $VCPKG_INSTALLED_DIR
-
-    # remove vcpkg from PATH
-    # sed -i '/export VCPKG_ROOT=$PWD\/vcpkg/d' ~/.bashrc
-    # sed -i '/export PATH=$VCPKG_ROOT:$PATH/d' ~/.bashrc
-
-    echo "vcpkg uninstalled"
-fi
-
-rm -rf build
-rm $PROJECT_CLIENT_NAME
-rm $PROJECT_SERVER_NAME
+echo "Cleanup complete."

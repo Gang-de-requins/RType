@@ -3,7 +3,8 @@
 
 namespace ecs {
     void CollisionSystem::update(SceneManager &sceneManager) {
-        std::vector<Entity *> entities = sceneManager.view<Collision, Position, Sprite>(sceneManager.getCurrentScene());
+        ecs::Scene &scene = sceneManager.getCurrentScene();
+        std::vector<Entity *> entities = sceneManager.view<Collision, Position, Sprite>(scene);
 
         for (auto &entity1 : entities) {
             Collision &collision1 = sceneManager.get<Collision>(*entity1);
@@ -27,8 +28,25 @@ namespace ecs {
                 Collision &collision2 = sceneManager.get<Collision>(*entity2);
 
                 if (this->isColliding(collisionInfo)) {
-                    collision1.isColliding = true;
-                    collision1.collidingWith.push_back(entity2->id);
+                    bool alreadyColliding = false;
+                    std::vector<std::function<bool(SceneManager &, Scene &, Entity *&, Entity *&, bool)>> collisionFunctions = {
+                        std::bind(&CollisionSystem::isDamageCollision, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5),
+                        std::bind(&CollisionSystem::isModifierCollision, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5)
+                    };
+
+                    for (auto &event : scene.events[EventType::Collisionnnnnn]) {
+                        if ((event.entities[0]->id == entity1->id && event.entities[1]->id == entity2->id) || (event.entities[0]->id == entity2->id && event.entities[1]->id == entity1->id)) {
+                            alreadyColliding = true;
+                            break;
+                        }
+                    }
+
+                    for (auto &collisionFunction : collisionFunctions) {
+                        if (collisionFunction(sceneManager, scene, entity1, entity2, alreadyColliding)) {
+                            break;
+                        }
+                    }                    
+
 
                     if (!collision1.isOverlap && !collision2.isOverlap && sceneManager.has<Velocity>(*entity1)) {
                         Velocity &velocity1 = sceneManager.get<Velocity>(*entity1);
@@ -68,5 +86,59 @@ namespace ecs {
         };
 
         return CheckCollisionRecs(rectangle1, rectangle2);
+    }
+
+    bool CollisionSystem::isDamageCollision(SceneManager &sceneManager, Scene &scene, Entity *&entity1, Entity *&entity2, bool alreadyColliding) {
+        bool modification = false;
+
+        if (!alreadyColliding) {
+            bool entity1Damage = sceneManager.has<Damage>(*entity1);
+            bool entity2Damage = sceneManager.has<Damage>(*entity2);
+            bool entity1Health = sceneManager.has<Health>(*entity1);
+            bool entity2Health = sceneManager.has<Health>(*entity2);
+
+            if (entity1Damage && entity2Health) {
+                modification = true;
+                scene.events[EventType::Collisionnnnnn].push_back({
+                    Event::DealDamage,
+                    {entity1, entity2}
+                });
+            }
+            if (entity2Damage && entity1Health) {
+                modification = true;
+                scene.events[EventType::Collisionnnnnn].push_back({
+                    Event::DealDamage,
+                    {entity2, entity1}
+                });
+            }
+        }
+
+        return modification;
+    }
+
+    bool CollisionSystem::isModifierCollision(SceneManager &sceneManager, Scene &scene, Entity *&entity1, Entity *&entity2, bool alreadyColliding) {
+        bool modification = false;
+
+        if (!alreadyColliding) {
+            bool entity1Modifier = sceneManager.has<Modifier>(*entity1);
+            bool entity2Modifier = sceneManager.has<Modifier>(*entity2);
+
+            if (entity1Modifier) {
+                modification = true;
+                scene.events[EventType::Collisionnnnnn].push_back({
+                    Event::ApplyModifier,
+                    {entity1, entity2}
+                });
+            }
+            if (entity2Modifier) {
+                modification = true;
+                scene.events[EventType::Collisionnnnnn].push_back({
+                    Event::ApplyModifier,
+                    {entity2, entity1}
+                });
+            }
+        }
+
+        return modification;
     }
 }

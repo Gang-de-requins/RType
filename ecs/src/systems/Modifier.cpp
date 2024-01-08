@@ -3,60 +3,69 @@
 
 namespace ecs {
     void ModifierSystem::update(SceneManager &sceneManager) {
-        auto entities = sceneManager.view<Collision, Sprite, Controllable>(sceneManager.getCurrentScene());
-        auto modifiers = sceneManager.view<Modifier, Collision, Sprite>(sceneManager.getCurrentScene());
-        std::vector<Entity *> entitiesToDelete;
-        std::vector<std::type_index> componentsTypes = {
-            std::type_index(typeid(Acceleration)),
-            std::type_index(typeid(Damage)),
-            std::type_index(typeid(Health)),
-            std::type_index(typeid(Rotation)),
-            std::type_index(typeid(Scale)),
-            std::type_index(typeid(Velocity))
-        };
+        ecs::Scene &scene = sceneManager.getCurrentScene();
+        int index = 0;
+        std::vector<int> eventsToRemove = {};
 
-        for (auto &entity : entities) {
-            auto &collision = sceneManager.get<Collision>(*entity);
-
-            for (auto &modifier : modifiers) {
-                auto &modifierComponent = sceneManager.get<Modifier>(*modifier);
+        for (auto &event : scene.events.at(EventType::Collisionnnnnn)) {
+            if (event.event == Event::ApplyModifier) {
+                std::vector<std::type_index> componentsTypes = {
+                    std::type_index(typeid(Acceleration)),
+                    std::type_index(typeid(Damage)),
+                    std::type_index(typeid(Health)),
+                    std::type_index(typeid(Rotation)),
+                    std::type_index(typeid(Scale)),
+                    std::type_index(typeid(Velocity))
+                };
+                Modifier &modifier = sceneManager.get<Modifier>(*event.entities.at(0));
+                Entity &entity = *event.entities.at(1);
                 bool modifierApplied = false;
 
-                if (std::find(collision.collidingWith.begin(), collision.collidingWith.end(), modifier->id) != collision.collidingWith.end()) {
-                    if (modifierComponent.modifiers.find(std::type_index(typeid(Acceleration))) != modifierComponent.modifiers.end()) {
+                for (auto &component : entity.components) {
+                    if (this->hasModifier(modifier, componentsTypes[0]) && component.first == componentsTypes[0]) {
                         modifierApplied = true;
-                        applyModifier<Acceleration>(entity, componentsTypes[0], modifierComponent);
+                        this->applyModifier<Acceleration>(entity, componentsTypes[0], modifier);
                     }
-                    if (modifierComponent.modifiers.find(std::type_index(typeid(Damage))) != modifierComponent.modifiers.end()) {
+                    if (this->hasModifier(modifier, componentsTypes[1]) && component.first == componentsTypes[1]) {
                         modifierApplied = true;
-                        applyModifier<Damage>(entity, componentsTypes[1], modifierComponent);
+                        this->applyModifier<Damage>(entity, componentsTypes[1], modifier);
                     }
-                    if (modifierComponent.modifiers.find(std::type_index(typeid(Health))) != modifierComponent.modifiers.end()) {
+                    if (this->hasModifier(modifier, componentsTypes[2]) && component.first == componentsTypes[2]) {
                         modifierApplied = true;
-                        applyModifier<Health>(entity, componentsTypes[2], modifierComponent);
+                        this->applyModifier<Health>(entity, componentsTypes[2], modifier);
                     }
-                    if (modifierComponent.modifiers.find(std::type_index(typeid(Rotation))) != modifierComponent.modifiers.end()) {
+                    if (this->hasModifier(modifier, componentsTypes[3]) && component.first == componentsTypes[3]) {
                         modifierApplied = true;
-                        applyModifier<Rotation>(entity, componentsTypes[3], modifierComponent);
+                        this->applyModifier<Rotation>(entity, componentsTypes[3], modifier);
                     }
-                    if (modifierComponent.modifiers.find(std::type_index(typeid(Scale))) != modifierComponent.modifiers.end()) {
+                    if (this->hasModifier(modifier, componentsTypes[4]) && component.first == componentsTypes[4]) {
                         modifierApplied = true;
-                        applyModifier<Scale>(entity, componentsTypes[4], modifierComponent);
+                        this->applyModifier<Scale>(entity, componentsTypes[4], modifier);
                     }
-                    if (modifierComponent.modifiers.find(std::type_index(typeid(Velocity))) != modifierComponent.modifiers.end()) {
+                    if (this->hasModifier(modifier, componentsTypes[5]) && component.first == componentsTypes[5]) {
                         modifierApplied = true;
-                        applyModifier<Velocity>(entity, componentsTypes[5], modifierComponent);
-                    }
-
-                    if (modifierApplied) {
-                        entitiesToDelete.emplace_back(modifier);
+                        this->applyModifier<Velocity>(entity, componentsTypes[5], modifier);
                     }
                 }
+                if (modifierApplied) {
+                    scene.events[EventType::Destroy].push_back({
+                        Event::ModifierDisparition,
+                        {event.entities.at(0)}
+                    });
+                }
+                eventsToRemove.push_back(index);
             }
+            index++;
         }
 
-        for (auto &entity : entitiesToDelete) {
-            sceneManager.destroyEntity(sceneManager.getCurrentScene(), *entity);
+        for (auto &event : eventsToRemove) {
+            scene.events.at(EventType::Collisionnnnnn).erase(scene.events.at(EventType::Collisionnnnnn).begin() + event);
+
+            for (auto &i : eventsToRemove) {
+                if (i > event) {
+					i--;
+				}
+			}
         }
     }
 }

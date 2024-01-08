@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 static int checkPort(char const * const *av)
 {

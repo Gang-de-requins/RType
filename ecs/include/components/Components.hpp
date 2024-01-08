@@ -20,6 +20,8 @@
 #include "Sound.hpp"
 #include "Sprite.hpp"
 #include "Text.hpp"
+#include "TextColor.hpp"
+#include "TextInput.hpp"
 #include "Vector2.hpp"
 #include "Velocity.hpp"
 

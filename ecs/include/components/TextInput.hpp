@@ -2,6 +2,7 @@
 #define TEXTINPUT_COMPONENT_HPP_
 
 #include <string>
+#include "Position.hpp"
 
 namespace ecs {
 
@@ -16,7 +17,11 @@ namespace ecs {
      * The string that stores the current text input content. It represents the text entered by the user.
      */
     struct TextInput {
-        std::string content;
+        std::size_t maxLength;
+        Position textPosition;
+        std::string content = "Player1";
+        bool isFocused = false;
+        int counter = 0;
     };
 
 }

@@ -39,7 +39,6 @@ namespace ecs {
         std::vector<Scene> m_scenes; // Scenes
         std::size_t m_nextSceneId; // Next scene id
         std::size_t m_currentSceneId; // Current scene id
-        std::size_t m_nextEntityId; // Next entity id
         std::unordered_map<std::string, Texture2D> m_textures; // Textures
         std::unordered_map<std::string, ::Music> m_musics; // Musics
         std::unordered_map<std::string, ::Sound> m_sounds; // Sounds
@@ -50,7 +49,7 @@ namespace ecs {
              * @brief Construct a new Scene Manager object
              * 
              */
-            SceneManager() : m_scenes(), m_nextSceneId(0), m_currentSceneId(0), m_nextEntityId(0) {
+            SceneManager() : m_scenes(), m_nextSceneId(0), m_currentSceneId(0) {
                 this->m_scenes.reserve(DEFAULT_NB_SCENES);
             }
 
@@ -117,6 +116,16 @@ namespace ecs {
              * @param entity The entity to destroy.
              */
             void destroyEntity(Scene &scene, Entity &entity);
+
+            /**
+             * @fn SceneManager::getEntityById
+             * @brief Get an entity by its id
+             * 
+             * @param scene The scene in which the entity will be retrieved.
+             * @param id The id of the entity.
+             * @return The entity.
+             */
+            Entity &getEntityById(Scene &scene, std::size_t id);
 
             /**
              * @fn SceneManager::assign
@@ -288,7 +297,7 @@ namespace ecs {
              */
             template<typename System>
             void registerSystem(Scene &scene) {
-                scene.systems.push_back(std::make_unique<System>());
+                scene.systems.push_back(std::make_shared<System>());
             }
 
             /**
