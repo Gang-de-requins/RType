@@ -1,0 +1,107 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        # os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [windows-latest]
+        build_type: [Release]
+        # c_compiler: [gcc, clang, cl]
+        c_compiler: [cl]
+        include:
+          - os: windows-latest
+            c_compiler: cl
+            cpp_compiler: cl
+        #  - os: ubuntu-latest
+        #    c_compiler: gcc
+        #    cpp_compiler: g++
+        #  - os: ubuntu-latest
+        #    c_compiler: clang
+        #    cpp_compiler: clang++
+        #  - os: macos-latest
+        #    c_compiler: clang
+        #    cpp_compiler: clang++
+        #exclude:
+        #  - os: windows-latest
+        #    c_compiler: gcc
+        #  - os: windows-latest
+        #    c_compiler: clang
+        #  - os: ubuntu-latest
+        #    c_compiler: cl
+        #  - os: macos-latest
+        #    c_compiler: cl
+        #  - os: macos-latest
+        #    c_compiler: gcc
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set reusable strings
+      id: strings
+      shell: bash
+      run: |
+        echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: build
+        path: ${{ github.workspace }}/downloaded-artifact
+
+    - name: Create Package
+      working-directory: ${{ github.workspace }}/downloaded-artifact
+      run: cmake --build . --config ${{ matrix.build_type }} --target package
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Package on Linux
+      if: matrix.os == 'ubuntu-latest'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ steps.strings.outputs.build-output-dir }}/r-type-linux.zip
+        asset_name: r-type-linux.zip
+        asset_content_type: application/zip
+
+    - name: Upload Package on Windows
+      if: matrix.os == 'windows-latest'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ steps.strings.outputs.build-output-dir }}/r-type-windows.zip
+        asset_name: r-type-windows.zip
+        asset_content_type: application/zip
+
+    - name: Upload Package on MacOS
+      if: matrix.os == 'macos-latest'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ steps.strings.outputs.build-output-dir }}/r-type-macos.zip
+        asset_name: r-type-macos.zip
+        asset_content_type: application/zip
