@@ -6,6 +6,7 @@ namespace ecs {
             {EventType::Collisionnnnnn, {}},
             {EventType::Destroy, {}},
             {EventType::Input, {}},
+            {EventType::KeyboardInput, {}},
             {EventType::Spawn, {}},
             {EventType::Timer, {}},
             {EventType::Audio, {}}

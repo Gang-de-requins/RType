@@ -8,7 +8,7 @@
 #include "systems/ISystem.hpp"
 
 namespace ecs {
-    class ControllableSystem : public ISystem {
+    class ControllableSystemCustom : public ISystem {
         public:
             void update(SceneManager &sceneManager) override;
     };

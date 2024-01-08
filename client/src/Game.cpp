@@ -129,7 +129,7 @@ namespace rtype {
             ecs::MusicSystem,
             ecs::SoundSystem,
             ecs::InputSystem,
-            ecs::ControllableSystem,
+            ecs::ControllableSystemCustom,
             ecs::AnimationSystem,
             ecs::MovementSystem,
             ecs::SpriteSystem,
@@ -171,15 +171,42 @@ namespace rtype {
         this->m_world.assign(myPlayer, ecs::Rotation{0});
         // this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, 500, std::chrono::steady_clock::now()});
         this->m_world.assign(myPlayer, ecs::PControllable{ecs::EntityType::Player, {
-            {ecs::Event::KEY_W, [this]() {
-                // static_cast<void>(entity);
-                std::cout << "Entity " << entity.id << " is moving up" << std::endl;
+            {ecs::Event::KEY_W, [this](ecs::Entity *entity) {
                 ecs::Scene &scene = this->m_world.getCurrentScene();
                 scene.events[ecs::EventType::Input].push_back(ecs::EventData{
                     ecs::Event::MoveUp,
-                    {&entity}
+                    {entity}
                 });
-            }}
+            }},
+            {ecs::Event::KEY_S, [this](ecs::Entity *entity) {
+                ecs::Scene &scene = this->m_world.getCurrentScene();
+                scene.events[ecs::EventType::Input].push_back(ecs::EventData{
+                    ecs::Event::MoveDown,
+                    {entity}
+                });
+            }},
+            {ecs::Event::KEY_A, [this](ecs::Entity *entity) {
+                ecs::Scene &scene = this->m_world.getCurrentScene();
+                scene.events[ecs::EventType::Input].push_back(ecs::EventData{
+                    ecs::Event::MoveLeft,
+                    {entity}
+                });
+            }},
+            {ecs::Event::KEY_D, [this](ecs::Entity *entity) {
+                ecs::Scene &scene = this->m_world.getCurrentScene();
+                scene.events[ecs::EventType::Input].push_back(ecs::EventData{
+                    ecs::Event::MoveRight,
+                    {entity}
+                });
+            }},
+            {ecs::Event::KEY_SPACE, [this](ecs::Entity *entity) {
+                std::cout << "Space pressed" << std::endl;
+                ecs::Scene &scene = this->m_world.getCurrentScene();
+                scene.events[ecs::EventType::Spawn].push_back(ecs::EventData{
+                    ecs::Event::SpawnPlayerBullet,
+                    {entity}
+                });
+            }},
         }});
         this->m_world.assign(myPlayer, ecs::Collision{false, {}, false});
         this->m_world.assign(myPlayer, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 8, 0, 150, std::chrono::steady_clock::now()});

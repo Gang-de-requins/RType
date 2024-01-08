@@ -52,12 +52,12 @@ namespace ecs {
     };
 
     struct PControllable : public Controllable {
-        std::unordered_map<Event, std::function<void()>> actions;
+        std::unordered_map<Event, std::function<void(Entity *)>> actions;
     };
 
     struct EControllable : public Controllable {
         std::unordered_map<Event, bool> actionsTriggered;
-        std::unordered_map<Event, std::function<void()>> actions;
+        std::unordered_map<Event, std::function<void(Entity *)>> actions;
     };
 }
 

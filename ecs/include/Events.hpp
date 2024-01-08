@@ -162,7 +162,7 @@ namespace ecs {
     };
 
     struct EventData {
-        int event;
+        Event event;
         std::vector<Entity *> entities;
     };
 }
