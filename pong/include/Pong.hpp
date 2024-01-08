@@ -16,12 +16,13 @@ namespace game
 
     class Pong
     {
-        public:
-            Pong();
-            ~Pong();
-            run();
-        
-            
+    public:
+        Pong();
+        ~Pong();
+        void run();
+
+    private:
+        int _points;
     };
 
 }
