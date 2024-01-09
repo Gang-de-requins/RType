@@ -116,12 +116,12 @@ namespace rtype {
         this->m_world.assign(Title, ecs::Scale{1, 1});
         this->m_world.assign(Title, ecs::Rotation{0});
 
-        ecs::Entity &ButtonPlay = this->m_world.createEntity(inMenu);
-        this->m_world.assign(ButtonPlay, ecs::Position{810, 300});
-        this->m_world.assign(ButtonPlay, ecs::Sprite{"assets/Menu/buttonPlay.png", ecs::Rectangle{0, 0, 300, 153}, ecs::Vector2{0, 0}});
-        this->m_world.assign(ButtonPlay, ecs::Scale{1, 1});
-        this->m_world.assign(ButtonPlay, ecs::Rotation{0});
-        this->m_world.assign(ButtonPlay, ecs::Clickable{false, [this](ecs::Clickable&) {
+        ecs::Entity &ButtonConnect = this->m_world.createEntity(inMenu);
+        this->m_world.assign(ButtonConnect, ecs::Position{810, 300});
+        this->m_world.assign(ButtonConnect, ecs::Sprite{"assets/Menu/buttonPlay.png", ecs::Rectangle{0, 0, 300, 153}, ecs::Vector2{0, 0}});
+        this->m_world.assign(ButtonConnect, ecs::Scale{1, 1});
+        this->m_world.assign(ButtonConnect, ecs::Rotation{0});
+        this->m_world.assign(ButtonConnect, ecs::Clickable{false, [this](ecs::Clickable&) {
             std::cout << "ButtonPlay clicked" << std::endl;
             this->m_world.switchToScene(2);
         }});
