@@ -31,6 +31,7 @@ namespace serverGame
         ~ServerRooms();
         void start();
         void createRoom(std::string const roomName);
+        void getRooms(boost::asio::ip::udp::endpoint endpoint);
 
     private:
         Server server;
