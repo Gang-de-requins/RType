@@ -8,10 +8,13 @@
 #include <iostream>
 #include <boost/asio.hpp>
 #include "../include/ServerRooms.hpp"
+#include "Rtype.hpp"
 
 serverGame::ServerRooms::ServerRooms()
 {
-    this->server.setupServer(12345);
+    this->port = 4242;
+    this->server.setupServer(port);
+    this->port += 10
 }
 
 serverGame::ServerRooms::~ServerRooms()
@@ -45,10 +48,19 @@ void serverGame::ServerRooms::start()
 
 void serverGame::ServerRooms::createRoom(std::string roomName)
 {
-
+    std::shared_ptr<serverGame::Rtype> rtype = std::make_shared<serverGame::Rtype>(this->port);
+    rtype->name = roomName;
+    this->port += 2;
 }
 
 void serverGame::ServerRooms::getRooms(boost::asio::ip::udp::endpoint endpoint)
 {
 
+}
+
+void rtypeThread(std::shared_ptr<serverGame::Rtype> rtype)
+{
+    std::thread receive(receiveMessageThread, rtype);
+    std::thread send(sendGameStateThread, rtype);
+    rtype->run();
 }
