@@ -277,6 +277,18 @@ namespace rtype {
         this->m_world.assign(PlayerTextInput, ecs::FontSize{50});
         this->m_world.assign(PlayerTextInput, ecs::TextColor{255, 255, 255, 255});
 
+        std::cout << "player name: " << this->m_playerName << std::endl;
+
+        ecs::Entity &ButtonPlay = this->m_world.createEntity(chooseName);
+        this->m_world.assign(ButtonPlay, ecs::Position{810, 300});
+        this->m_world.assign(ButtonPlay, ecs::Sprite{"assets/Menu/buttonPlay.png", ecs::Rectangle{0, 0, 300, 153}, ecs::Vector2{0, 0}});
+        this->m_world.assign(ButtonPlay, ecs::Scale{1, 1});
+        this->m_world.assign(ButtonPlay, ecs::Rotation{0});
+        this->m_world.assign(ButtonPlay, ecs::Clickable{false, [this](ecs::Clickable&) {
+            std::cout << "Switch scene to play game" << std::endl;
+            this->m_world.switchToScene(3);
+        }});
+
         /* ------------------------- Scene InGame --------------------------------*/
         ecs::Scene &inGame = this->m_world.createScene();
 
