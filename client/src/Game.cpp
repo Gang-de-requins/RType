@@ -38,6 +38,7 @@ namespace rtype {
             //     this->m_network.send(::Network::MessageType::StopLeft, this->m_playerName);
             // if (IsKeyReleased(KEY_RIGHT))
             //     this->m_network.send(::Network::MessageType::StopRight, this->m_playerName);
+            std::cout << "player name: " << this->m_playerName << std::endl;
             if (IsKeyPressed(KEY_SPACE)) {
                 ecs::SceneManager &sceneManager = this->m_world.getSceneManager();
                 auto entities = sceneManager.view<ecs::Controllable>(sceneManager.getCurrentScene());
@@ -203,11 +204,34 @@ namespace rtype {
         this->m_world.assign(ButtonBackward, ecs::Rotation{0});
         this->m_world.assign(ButtonBackward, ecs::Clickable{false, [this](ecs::Clickable&) {this->m_world.switchToScene(0);}});
 
+        ecs::Entity &SettingPort = this->m_world.createEntity(inMenuSettings);
+        this->m_world.assign(SettingPort, ecs::Position{1147, 90});
+        this->m_world.assign(SettingPort, ecs::Sprite{"assets/Settings/settingIP.png", ecs::Rectangle{0, 0, 210, 210}, ecs::Vector2{0, 0}});
+        this->m_world.assign(SettingPort, ecs::Scale{0.6, 0.6});
+        this->m_world.assign(SettingPort, ecs::Rotation{0});
+
         ecs::Entity &ChangePort = this->m_world.createEntity(inMenuSettings);
-        this->m_world.assign(ChangePort, ecs::Position{1100, 230});
+        this->m_world.assign(ChangePort, ecs::Position{1100.5, 230});
         this->m_world.assign(ChangePort, ecs::Sprite{"assets/Settings/nickname.png", ecs::Rectangle{0, 0, 421, 171}, ecs::Vector2{0, 0}});
         this->m_world.assign(ChangePort, ecs::Scale{0.5, 0.5});
         this->m_world.assign(ChangePort, ecs::Rotation{0});
+
+        ecs::Entity &PortTextInput = this->m_world.createEntity(inMenuSettings);
+        this->m_world.assign(PortTextInput, ecs::Position{1147, 260});
+        this->m_world.assign(PortTextInput, ecs::Rectangle{0, 0, 421, 171});
+        this->m_world.assign(PortTextInput, ecs::TextInput{10, ecs::Position{1147, 260}});
+        this->m_world.assign(PortTextInput, ecs::Scale{1, 1});
+        this->m_world.assign(PortTextInput, ecs::Rotation{0});
+        this->m_world.assign(PortTextInput, ecs::Clickable{false, [this](ecs::Clickable&) {
+            ecs::Entity &PortTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 11);
+            ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(PortTextInput);
+
+            this->m_playerName = textInput.content;
+            textInput.isFocused = true;
+        }});
+        this->m_world.assign(PortTextInput, ecs::Color{200, 200, 200, 255});
+        this->m_world.assign(PortTextInput, ecs::FontSize{35});
+        this->m_world.assign(PortTextInput, ecs::TextColor{255, 255, 255, 255});
 
         ecs::Entity &SettingIP = this->m_world.createEntity(inMenuSettings);
         this->m_world.assign(SettingIP, ecs::Position{900, 350});
@@ -228,7 +252,7 @@ namespace rtype {
         this->m_world.assign(IPTextInput, ecs::Scale{1, 1});
         this->m_world.assign(IPTextInput, ecs::Rotation{0});
         this->m_world.assign(IPTextInput, ecs::Clickable{false, [this](ecs::Clickable&) {
-            ecs::Entity &IPTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 13);
+            ecs::Entity &IPTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 14);
             ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(IPTextInput);
 
             this->m_playerName = textInput.content;
@@ -277,7 +301,6 @@ namespace rtype {
         this->m_world.assign(PlayerTextInput, ecs::FontSize{50});
         this->m_world.assign(PlayerTextInput, ecs::TextColor{255, 255, 255, 255});
 
-        std::cout << "player name: " << this->m_playerName << std::endl;
 
         ecs::Entity &ButtonPlay = this->m_world.createEntity(chooseName);
         this->m_world.assign(ButtonPlay, ecs::Position{810, 300});
