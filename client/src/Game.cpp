@@ -38,7 +38,6 @@ namespace rtype {
             //     this->m_network.send(::Network::MessageType::StopLeft, this->m_playerName);
             // if (IsKeyReleased(KEY_RIGHT))
             //     this->m_network.send(::Network::MessageType::StopRight, this->m_playerName);
-            std::cout << "player name: " << this->m_playerName << std::endl;
             if (IsKeyPressed(KEY_SPACE)) {
                 ecs::SceneManager &sceneManager = this->m_world.getSceneManager();
                 auto entities = sceneManager.view<ecs::Controllable>(sceneManager.getCurrentScene());
@@ -226,8 +225,19 @@ namespace rtype {
             ecs::Entity &PortTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 11);
             ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(PortTextInput);
 
-            this->m_playerName = textInput.content;
+            try {
+            this->m_network.m_port = static_cast<unsigned short>(std::stoi(textInput.content));
             textInput.isFocused = true;
+            std::cout << "m_port: " << this->m_network.m_port << std::endl;
+            } catch (const std::invalid_argument& e) {
+                std::cerr << "Erreur : Argument invalide lors de la conversion en entier." << std::endl;
+            } catch (const std::out_of_range& e) {
+                std::cerr << "Erreur : La valeur dépasse la plage valide pour unsigned short." << std::endl;
+            } catch (const std::exception& e) {
+                std::cerr << "Erreur : Une exception std::exception s'est produite lors de la conversion." << std::endl;
+            } catch (...) {
+                std::cerr << "Erreur : Une exception non dérivée de std::exception s'est produite lors de la conversion." << std::endl;
+            }
         }});
         this->m_world.assign(PortTextInput, ecs::Color{200, 200, 200, 255});
         this->m_world.assign(PortTextInput, ecs::FontSize{35});
@@ -255,8 +265,9 @@ namespace rtype {
             ecs::Entity &IPTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 14);
             ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(IPTextInput);
 
-            this->m_playerName = textInput.content;
+            this->m_network.m_ip = textInput.content;
             textInput.isFocused = true;
+            std::cout << "m_ip: " << this->m_network.m_ip << std::endl;
         }});
         this->m_world.assign(IPTextInput, ecs::Color{200, 200, 200, 255});
         this->m_world.assign(IPTextInput, ecs::FontSize{35});
@@ -291,7 +302,7 @@ namespace rtype {
         this->m_world.assign(PlayerTextInput, ecs::Scale{1, 1});
         this->m_world.assign(PlayerTextInput, ecs::Rotation{0});
         this->m_world.assign(PlayerTextInput, ecs::Clickable{false, [this](ecs::Clickable&) {
-            ecs::Entity &PlayerTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 14);
+            ecs::Entity &PlayerTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 16);
             ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(PlayerTextInput);
 
             this->m_playerName = textInput.content;
