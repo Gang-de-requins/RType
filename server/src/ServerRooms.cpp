@@ -36,9 +36,9 @@ void serverGame::ServerRooms::start()
                 this->createRoom(messageString);
                 break;
 
-            // case ecs::MessageType::GetRooms:
-            //     this->getRooms(endpoint);
-            //     break;
+            case ecs::MessageType::GetRooms:
+                this->getRooms(endpoint);
+                break;
         }
     }
 }
@@ -48,3 +48,7 @@ void serverGame::ServerRooms::createRoom(std::string roomName)
 
 }
 
+void serverGame::ServerRooms::getRooms(boost::asio::ip::udp::endpoint endpoint)
+{
+
+}
