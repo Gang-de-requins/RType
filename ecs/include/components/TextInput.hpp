@@ -19,7 +19,7 @@ namespace ecs {
     struct TextInput {
         int maxLength;
         Position textPosition;
-        std::string content = "Player1";
+        std::string content = "...";
         bool isFocused = false;
         int counter = 0;
     };
