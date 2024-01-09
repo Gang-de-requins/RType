@@ -1,38 +1,50 @@
-// /*
-// ** EPITECH PROJECT, 2023
-// ** r type
-// ** File description:
-// ** Server
-// */
+/*
+** EPITECH PROJECT, 2023
+** r type
+** File description:
+** Server
+*/
 
-// #include <iostream>
-// #include <boost/asio.hpp>
-// #include "../include/ServerRooms.hpp"
+#include <iostream>
+#include <boost/asio.hpp>
+#include "../include/ServerRooms.hpp"
 
-// serverGame::ServerRooms::ServerRooms()
-// {
-//     this->server.setupServer(12345);
-// }
+serverGame::ServerRooms::ServerRooms()
+{
+    this->server.setupServer(12345);
+}
 
-// serverGame::ServerRooms::~ServerRooms()
-// {
+serverGame::ServerRooms::~ServerRooms()
+{
 
-// }
+}
 
-// void serverGame::ServerRooms::start()
-// {
-//     while(true)
-//     {
-//         this->server.receiveMessage();
-//     }
-// }
+void serverGame::ServerRooms::start()
+{
+    while(true)
+    {
+        ecs::Buffer buffer;
+        this->server.receiveMessage(buffer);
 
-// // void serverGame::ServerRooms::createRoom()
-// // {
+        ecs::MessageType messageType = buffer.readMessageType();
+        std::string messageString = buffer.readString();
+        boost::asio::ip::udp::endpoint endpoint = buffer.getEndpoint();
 
-// // }
+        switch (messageType)
+        {
+            case ecs::MessageType::CreateRoom:
+                this->createRoom(messageString);
+                break;
 
-// // void serverGame::ServerRooms::listRooms()
-// // {
+            // case ecs::MessageType::GetRooms:
+            //     this->getRooms(endpoint);
+            //     break;
+        }
+    }
+}
 
-// // }
+void serverGame::ServerRooms::createRoom(std::string roomName)
+{
+
+}
+
