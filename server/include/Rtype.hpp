@@ -45,6 +45,7 @@ namespace serverGame
         Server server;
         std::vector<ecs::Buffer> bufferList;
         std::mutex mutex;
+        std::string name;
 
 
     private:
