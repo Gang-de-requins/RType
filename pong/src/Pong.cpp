@@ -121,6 +121,25 @@ namespace game
         this->world.assign(MenuMusic, ecs::Music({"../assets/pong_menu.wav", 0.1f, true}));
 
 
+        /* ------------------------- Game --------------------------------*/
+
+        /* Game Scene */
+        ecs::Scene &inGame = this->world.createScene();
+
+        /* Game Systems */
+        this->world.registerSystems<
+            ecs::MusicSystem,
+            ecs::ControllableSystem,
+            ecs::RenderSystem,
+            ecs::ClickableSystem,
+            ecs::TextSystem,
+            ecs::AnimationSystem,
+            ecs::MovementSystem,
+            ecs::SoundSystem
+        >(inMenu);
+
+
+        // ecs::Entity &Game = this->world.createEntity(inGame);
 
     }
 }
