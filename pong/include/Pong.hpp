@@ -10,7 +10,6 @@
 
 #include <iostream>
 #include "GameEngine.hpp"
-#include "Player.hpp"
 #include "raylib.h"
 
 namespace game
