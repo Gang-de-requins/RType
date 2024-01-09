@@ -36,6 +36,7 @@ namespace serverGame
     private:
         Server server;
         std::vector<std::thread> threadPool;
+        int port;
     };
 }
 
