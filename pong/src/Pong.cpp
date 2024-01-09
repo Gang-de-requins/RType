@@ -112,7 +112,7 @@ namespace game
         this->world.assign(ButtonPlay, ecs::Clickable{false, [this](ecs::Clickable&) {
             std::cout << "ButtonPlay clicked" << std::endl;
             std::cout << "Player1: " << this->name1 << std::endl << "Player2: " << this->name2 << std::endl;
-            // this->world.switchToScene(1);
+            this->world.switchToScene(1);
         }});
 
         
@@ -138,8 +138,12 @@ namespace game
             ecs::SoundSystem
         >(inMenu);
 
-
-        // ecs::Entity &Game = this->world.createEntity(inGame);
+        /* Map background */
+        ecs::Entity &Background = this->world.createEntity(inGame);
+        this->world.assign(Pong, ecs::Position{0, 0});
+        this->world.assign(Pong, ecs::Sprite{"../assets/pong_map.png", ecs::Rectangle{0, 0, 1920, 1080}, ecs::Vector2{0, 0}});
+        this->world.assign(Pong, ecs::Scale{1, 1});
+        this->world.assign(Pong, ecs::Rotation{0});
 
     }
 }
