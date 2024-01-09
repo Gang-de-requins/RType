@@ -12,8 +12,5 @@ int main(int ac, char **av)
 {
     game::Pong pong;
     std::cout << "Starting game..." << std::endl;
-
-    // while (true) {
-    //     pong.run();
-    // }
+    pong.run();
 }
