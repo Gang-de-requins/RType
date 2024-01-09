@@ -129,7 +129,7 @@ namespace rtype {
         ecs::Scene &inGame = this->m_world.createScene();
 
         this->m_world.registerSystems<
-            ecs::MusicSystem,
+            // ecs::MusicSystem,
             ecs::SoundSystem,
             ecs::ControllableSystem,
             ecs::AnimationSystem,
@@ -181,8 +181,8 @@ namespace rtype {
         // ecs::Entity &SoundPlayer = this->m_world.createEntity(inGame);
         // this->m_world.assign(SoundPlayer, ecs::Sound{"assets/weird.wav"});
 
-        ecs::Entity &music = this->m_world.createEntity(inGame);
-        this->m_world.assign(music, ecs::Music{"assets/mini1111.xm", 1.0f, true});
+        // ecs::Entity &music = this->m_world.createEntity(inGame);
+        // this->m_world.assign(music, ecs::Music{"assets/mini1111.xm", 1.0f, true});
 
         ecs::Entity &boost = this->m_world.createEntity(inGame);
         this->m_world.assign(boost, ecs::Position{500, 200});
