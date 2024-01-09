@@ -10,19 +10,24 @@
 
 #include <iostream>
 #include "GameEngine.hpp"
+#include "Player.hpp"
+#include "raylib.h"
 
 namespace game
 {
 
     class Pong
     {
+    ecs::World world;
+    std::string name1;
+    std::string name2;
     public:
         Pong();
         ~Pong();
         void run();
 
     private:
-        int _points;
+        void GameScenes();
     };
 
 }
