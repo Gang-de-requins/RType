@@ -145,5 +145,18 @@ namespace game
         this->world.assign(Pong, ecs::Scale{1, 1});
         this->world.assign(Pong, ecs::Rotation{0});
 
+
+        ecs::Entity &p1 = this->world.createEntity(inGame);
+        this->world.assign(p1, ecs::Position{500, 500});
+        this->world.assign(p1, ecs::Sprite{"../assets/player1.png", ecs::Rectangle{0, 0, 74, 539}, ecs::Vector2{0, 0}});
+        this->world.assign(p1, ecs::Scale{1, 1});
+        this->world.assign(p1, ecs::Rotation{0});
+
+
+        ecs::Entity &p2 = this->world.createEntity(inGame);
+        this->world.assign(p2, ecs::Position{0, 0});
+        this->world.assign(p2, ecs::Sprite{"../assets/player2.png", ecs::Rectangle{0, 0, 67, 594}, ecs::Vector2{0, 0}});
+        this->world.assign(p2, ecs::Scale{1, 1});
+        this->world.assign(p2, ecs::Rotation{0});
     }
 }
