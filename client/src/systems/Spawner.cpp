@@ -39,6 +39,6 @@ namespace ecs {
         scene.events[EventType::Audio].push_back({
             Event::PlaySound,
             {&missile}
-            });
+        });
     }
 }

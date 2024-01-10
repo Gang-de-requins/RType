@@ -14,8 +14,7 @@ namespace ecs {
                         Sound &sound = sceneManager.get<Sound>(*entity);
                         ::Sound &soundData = sceneManager.getSound(sound.path);
 
-                        if (!IsSoundPlaying(soundData))
-                            ::PlaySound(soundData);
+                        ::PlaySound(soundData);
                     }
                     eventsToRemove.push_back(index);
                     break;
