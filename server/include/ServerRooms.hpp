@@ -9,6 +9,7 @@
 #define SERVERROOMS_HPP_
 
 #include <iostream>
+#include <list>
 #if defined(_WIN32)
     #define NOGDI
     #define NOUSER
@@ -34,8 +35,15 @@ namespace serverGame
         void getRooms(boost::asio::ip::udp::endpoint endpoint);
 
     private:
+    struct RoomInfo {
+            std::string name;
+            int port;
+            int availableSlots;
+        };
         Server server;
         std::vector<std::thread> threadPool;
+        std::vector<RoomInfo> rooms;
+        std::mutex roomsMutex;
         int port;
     };
 }
