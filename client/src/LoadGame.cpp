@@ -47,7 +47,65 @@ namespace rtype {
         this->m_world.assign(myPlayer, ecs::Acceleration{0, 0, 4});
         this->m_world.assign(myPlayer, ecs::Scale{2, 2});
         this->m_world.assign(myPlayer, ecs::Rotation{0});
-        this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, 0.05, std::chrono::steady_clock::now()});
+        this->m_world.assign(myPlayer, ecs::Controllable{
+            std::unordered_map<int, std::tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager & sceneManager, ecs::Scene & scene, ecs::Entity * entity)>>> {
+                {KEY_UP, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
+                    ecs::ActionTrigger::Hold, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
+                        static_cast<void>(sceneManager);
+
+                        scene.events[ecs::EventType::Input].push_back({
+                            ecs::GameEvent::MoveUp,
+                            {entity}
+                        });
+                    }
+                )},
+                {KEY_DOWN, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
+                    ecs::ActionTrigger::Hold, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
+                        static_cast<void>(sceneManager);
+
+                        scene.events[ecs::EventType::Input].push_back({
+                            ecs::GameEvent::MoveDown,
+                            {entity}
+                        });
+                    }
+                )},
+                {KEY_LEFT, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
+                    ecs::ActionTrigger::Hold, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
+                        static_cast<void>(sceneManager);
+
+                        scene.events[ecs::EventType::Input].push_back({
+                            ecs::GameEvent::MoveLeft,
+                            {entity}
+                        });
+                    }
+                )},
+                {KEY_RIGHT, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
+                    ecs::ActionTrigger::Hold, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
+                        static_cast<void>(sceneManager);
+
+                        scene.events[ecs::EventType::Input].push_back({
+                            ecs::GameEvent::MoveRight,
+                            {entity}
+                        });
+                    }
+                )},
+                {KEY_SPACE, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
+                    ecs::ActionTrigger::Press, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
+                        if (sceneManager.has<ecs::Shooter>(*entity)) {
+                            ecs::Shooter& shooter = sceneManager.get<ecs::Shooter>(*entity);
+
+                            if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - shooter.lastShotTime) >= shooter.cooldown) {
+                                shooter.lastShotTime = std::chrono::steady_clock::now();
+                                scene.events[ecs::EventType::Spawn].push_back({
+                                    ecs::GameEvent::SpawnPlayerBullet,
+                                    {entity}
+                                });
+                            }
+                        }
+                    }
+                )},
+            }
+        });
         this->m_world.assign(myPlayer, ecs::Collision{false, {}, false});
         this->m_world.assign(myPlayer, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 8, 0, 150, std::chrono::steady_clock::now()});
         this->m_world.assign(myPlayer, ecs::Name{this->m_playerName, ecs::Position{-20, -20}});

@@ -4,15 +4,8 @@ namespace rtype {
     void Game::loadChooseName(ecs::Scene &scene)
     {
         this->m_world.registerSystems<
-            ecs::MusicSystem,
-            ecs::ControllableSystem,
-            ecs::MovementSystem,
-            ecs::CollisionSystem,
-            ecs::LifeSystem,
-            ecs::ParallaxSystem,
             ecs::RenderSystem,
             ecs::ClickableSystem,
-            ecs::TextInputSystem,
             ecs::SubmitSystem
         >(scene);
 

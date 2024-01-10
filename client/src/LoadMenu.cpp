@@ -4,12 +4,6 @@ namespace rtype {
     void Game::loadMenu(ecs::Scene &scene)
     {
         this->m_world.registerSystems<
-            ecs::MusicSystem,
-            ecs::ControllableSystem,
-            ecs::MovementSystem,
-            ecs::CollisionSystem,
-            ecs::LifeSystem,
-            ecs::ParallaxSystem,
             ecs::RenderSystem,
             ecs::ClickableSystem
         >(scene);
@@ -28,19 +22,6 @@ namespace rtype {
         this->m_world.assign(Title, ecs::Scale{1, 1});
         this->m_world.assign(Title, ecs::Rotation{0});
 
-        ecs::Entity &ButtonConnect = this->m_world.createEntity(scene);
-        this->m_world.assign(ButtonConnect, ecs::Position{810, 300});
-        this->m_world.assign(ButtonConnect, ecs::Sprite{"assets/Menu/buttonPlay.png", ecs::Rectangle{0, 0, 300, 153}, ecs::Vector2{0, 0}});
-        this->m_world.assign(ButtonConnect, ecs::Scale{1, 1});
-        this->m_world.assign(ButtonConnect, ecs::Rotation{0});
-        this->m_world.assign(ButtonConnect, ecs::Clickable{false, [this](ecs::Clickable&) {
-            std::cout << "-> ButtonPlay clicked" << std::endl;
-            std::cout << "Switch scene to choose name and to connect server" << std::endl;
-            this->m_network.connect(this->m_network.m_ip, this->m_network.m_port, *this);
-            this->m_world.switchToScene(SCENE_CHOOSENAME);
-            loadChooseName(this->m_world.getSceneById(SCENE_CHOOSENAME));
-        }});
-
         ecs::Entity &ButtonSettings = this->m_world.createEntity(scene);
         this->m_world.assign(ButtonSettings, ecs::Position{810, 460});
         this->m_world.assign(ButtonSettings, ecs::Sprite{"assets/Menu/buttonSettings.png", ecs::Rectangle{0, 0, 300, 153}, ecs::Vector2{0, 0}});
@@ -52,5 +33,16 @@ namespace rtype {
             loadSettings(this->m_world.getSceneById(SCENE_SETTINGS));
             this->m_world.switchToScene(SCENE_SETTINGS);
         }});
+
+        ecs::Entity& ButtonConnect = this->m_world.createEntity(scene);
+        this->m_world.assign(ButtonConnect, ecs::Position{ 810, 300 });
+        this->m_world.assign(ButtonConnect, ecs::Sprite{ "assets/Menu/buttonPlay.png", ecs::Rectangle{0, 0, 300, 153}, ecs::Vector2{0, 0} });
+        this->m_world.assign(ButtonConnect, ecs::Scale{ 1, 1 });
+        this->m_world.assign(ButtonConnect, ecs::Rotation{ 0 });
+        this->m_world.assign(ButtonConnect, ecs::Clickable{ false, [this](ecs::Clickable&) {
+            this->m_network.connect(this->m_network.m_ip, this->m_network.m_port, *this, this->m_playerName);
+            loadChooseName(this->m_world.getSceneById(SCENE_CHOOSENAME));
+            this->m_world.switchToScene(SCENE_CHOOSENAME);
+        } });
     }
 }
