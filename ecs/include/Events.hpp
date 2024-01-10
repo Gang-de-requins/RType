@@ -18,11 +18,7 @@ namespace ecs {
 
     enum Event {
         Overlap,
-        Shoot,
-        PlayerDeath,
-        EnemyDeath,
-        BulletDeath,
-        EnemyBulletDeath,
+        EntityDestroyed,
         ModifierDisparition,
         PlaySound,
         PlayMusic,
