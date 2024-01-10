@@ -6,6 +6,9 @@
 #include "Network.hpp"
 #include "Player.hpp"
 #include "raylib.h"
+#include "systems/Movement.hpp"
+#include "systems/Controllable.hpp"
+#include "systems/Spawner.hpp"
 
 #define SCENE_MENU 0
 #define SCENE_GAME 1

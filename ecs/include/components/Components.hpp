@@ -17,6 +17,7 @@
 #include "Rectangle.hpp"
 #include "Rotation.hpp"
 #include "Scale.hpp"
+#include "Shooter.hpp"
 #include "Sound.hpp"
 #include "Sprite.hpp"
 #include "Text.hpp"

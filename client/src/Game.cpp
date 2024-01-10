@@ -31,16 +31,6 @@ namespace rtype {
             if (IsKeyPressed(KEY_RIGHT))
                 this->m_network.send(ecs::MessageType::GoRight, this->m_playerName);
             if (IsKeyPressed(KEY_SPACE)) {
-                ecs::SceneManager &sceneManager = this->m_world.getSceneManager();
-                auto entities = sceneManager.view<ecs::Controllable>(sceneManager.getCurrentScene());
-            
-                // for (auto &entity : entities) {
-                //     ecs::Controllable &controllable = sceneManager.get<ecs::Controllable>(*entity);
-                //     if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - controllable.shootUpdate).count() >= controllable.timeOut) {
-                //         this->m_network.send(::Network::MessageType::NewMissile, this->m_playerName);
-                //     }
-                // }
-
             }
 
             BeginDrawing();
@@ -130,6 +120,7 @@ namespace rtype {
 
         this->m_world.registerSystems<
             // ecs::MusicSystem,
+            ecs::KeyboardInputSystem,
             ecs::SoundSystem,
             ecs::ControllableSystem,
             ecs::AnimationSystem,
@@ -171,10 +162,70 @@ namespace rtype {
         this->m_world.assign(myPlayer, ecs::Acceleration{0, 0, 8});
         this->m_world.assign(myPlayer, ecs::Scale{2, 2});
         this->m_world.assign(myPlayer, ecs::Rotation{0});
-        this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, 500, std::chrono::steady_clock::now()});
+        //this->m_world.assign(myPlayer, ecs::Controllable{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, 500, std::chrono::steady_clock::now()});
+        this->m_world.assign(myPlayer, ecs::Controllable{
+            std::unordered_map<int, std::tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager & sceneManager, ecs::Scene & scene, ecs::Entity * entity)>>> {
+                {KEY_UP, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
+                    ecs::ActionTrigger::Hold, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
+                        static_cast<void>(sceneManager);
+
+                        scene.events[ecs::EventType::Input].push_back({
+                            ecs::GameEvent::MoveUp,
+                            {entity}
+                        });
+                    }
+                )},
+                {KEY_DOWN, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
+					ecs::ActionTrigger::Hold, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
+						static_cast<void>(sceneManager);
+
+						scene.events[ecs::EventType::Input].push_back({
+							ecs::GameEvent::MoveDown,
+							{entity}
+						});
+					}
+				)},
+                {KEY_LEFT, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
+                    ecs::ActionTrigger::Hold, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
+                        static_cast<void>(sceneManager);
+
+                        scene.events[ecs::EventType::Input].push_back({
+                            ecs::GameEvent::MoveLeft,
+                            {entity}
+                        });
+                    }
+                )},
+                {KEY_RIGHT, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
+					ecs::ActionTrigger::Hold, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
+						static_cast<void>(sceneManager);
+
+						scene.events[ecs::EventType::Input].push_back({
+							ecs::GameEvent::MoveRight,
+							{entity}
+						});
+					}
+				)},
+                {KEY_SPACE, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
+					ecs::ActionTrigger::Press, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
+						if (sceneManager.has<ecs::Shooter>(*entity)) {
+							ecs::Shooter& shooter = sceneManager.get<ecs::Shooter>(*entity);
+
+							if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - shooter.lastShotTime) >= shooter.cooldown) {
+                                shooter.lastShotTime = std::chrono::steady_clock::now();
+								scene.events[ecs::EventType::Spawn].push_back({
+									ecs::GameEvent::SpawnPlayerBullet,
+									{entity}
+								});
+							}
+						}
+					}
+				)},
+            }
+        });
         this->m_world.assign(myPlayer, ecs::Collision{false, {}, false});
         this->m_world.assign(myPlayer, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 8, 0, 150, std::chrono::steady_clock::now()});
         this->m_world.assign(myPlayer, ecs::Name{this->m_playerName, ecs::Position{-20, -20}});
+        this->m_world.assign(myPlayer, ecs::Shooter{std::chrono::milliseconds(500), std::chrono::steady_clock::now()});
 
         this->m_players.push_back(Player(myPlayer, this->m_playerName));
 

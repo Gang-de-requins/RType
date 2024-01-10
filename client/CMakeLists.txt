@@ -13,16 +13,15 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(ECS_LIBRARY ecs)
 
-set(SRC_CLIENT
+set(SRC
     src/Main.cpp
     src/ErrorHandling.cpp
     src/Game.cpp
     src/Network.cpp
     src/Player.cpp
-)
-
-set(SRC
-    ${SRC_CLIENT}
+    src/systems/Movement.cpp
+    src/systems/Controllable.cpp
+    src/systems/Spawner.cpp
 )
 
 if (WIN32)

@@ -156,7 +156,12 @@ namespace ecs {
     }
 
     void ParserJson::loadControllable(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &controllable) {
-        std::array<std::string_view, 6> controllableNames = {"keyUp", "keyDown", "keyLeft", "keyRight", "keySpace", "timeOut"};
+        static_cast<void>(sceneManager);
+        static_cast<void>(scene);
+        static_cast<void>(entity);
+        static_cast<void>(controllable);
+
+        /*std::array<std::string_view, 6> controllableNames = {"keyUp", "keyDown", "keyLeft", "keyRight", "keySpace", "timeOut"};
         std::array<int, 5> controllableValues = {0, 0, 0, 0, 0};
         float timeOut = 0;
 
@@ -175,9 +180,9 @@ namespace ecs {
             } else {
                 timeOut = controllable[controllableNames[i].data()].GetFloat();
             }
-        }
+        }*/
 
-        sceneManager.assign<Controllable>(
+        /*sceneManager.assign<Controllable>(
             entity,
             Controllable{
                 controllableValues[0],
@@ -188,7 +193,7 @@ namespace ecs {
                 timeOut,
                 std::chrono::steady_clock::now()
             }
-        );
+        );*/
     }
 
     void ParserJson::loadDamage(SceneManager &sceneManager, Scene &scene, Entity &entity, rapidjson::Value &damage) {

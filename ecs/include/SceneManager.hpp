@@ -216,6 +216,17 @@ namespace ecs {
                 (this->registerSystem<Systems>(scene), ...);
             }
 
+             /**
+			  * @fn SceneManager::emit
+			  * @brief Emit an event
+			  * 
+			  * @param scene The scene in which the event will be emitted.
+			  * @param eventType The type of the event.
+			  * @param event The event.
+              * @param entities The entities to which the event will be emitted.
+			  */
+            void emit(Scene& scene, int eventType, int event, std::vector<Entity *> entities = {});
+
             /**
              * @fn SceneManager::update
              * @brief Update the scene

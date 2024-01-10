@@ -14,8 +14,6 @@ set(SRC
     src/SceneManager.cpp
     src/ParserJson.cpp
     src/Buffer.cpp
-    src/systems/Movement.cpp
-    src/systems/Controllable.cpp
     src/systems/Modifier.cpp
     src/systems/Music.cpp
     src/systems/Sound.cpp
@@ -23,8 +21,8 @@ set(SRC
     src/systems/Life.cpp
     src/systems/Parallax.cpp
     src/systems/Clickable.cpp
-    src/systems/Spawner.cpp
     src/systems/Destruction.cpp
+    src/systems/KeyboardInput.cpp
     src/systems/rendering/Name.cpp
     src/systems/rendering/Sprite.cpp
     src/systems/rendering/Text.cpp
