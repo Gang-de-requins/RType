@@ -29,6 +29,7 @@ namespace rtype {
 
         private:
             void initScenes();
+            void loadMenu(ecs::Scene &scene);
     };
 }
 

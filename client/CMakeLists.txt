@@ -38,6 +38,7 @@ set(SRC_ECS
 set(SRC_CLIENT
     src/Main.cpp
     src/Game.cpp
+    src/LoadMenu.cpp
     src/Network.cpp
     src/Player.cpp
 )

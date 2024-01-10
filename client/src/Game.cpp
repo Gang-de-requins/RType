@@ -94,64 +94,36 @@ namespace rtype {
 
         ecs::Scene &inMenu = this->m_world.createScene();
 
-         this->m_world.registerSystems<
-            ecs::MusicSystem,
-            ecs::ControllableSystem,
-            ecs::MovementSystem,
-            ecs::CollisionSystem,
-            ecs::LifeSystem,
-            ecs::ParallaxSystem,
-            ecs::RenderSystem,
-            ecs::ClickableSystem
-        >(inMenu);
+        loadMenu(inMenu);
+        // ecs::Entity &Bakckground = this->m_world.createEntity(inMenu);
+        // this->m_world.assign(Bakckground, ecs::Position{0, 0});
+        // this->m_world.assign(Bakckground, ecs::Sprite{"assets/Menu/Space-Back-Menu.png", ecs::Rectangle{0, 0, 1920, 1080}, ecs::Vector2{0, 0}});
+        // this->m_world.assign(Bakckground, ecs::Scale{1, 1});
+        // this->m_world.assign(Bakckground, ecs::Rotation{0});
 
-        ecs::Entity &Bakckground = this->m_world.createEntity(inMenu);
-        this->m_world.assign(Bakckground, ecs::Position{0, 0});
-        this->m_world.assign(Bakckground, ecs::Sprite{"assets/Menu/Space-Back-Menu.png", ecs::Rectangle{0, 0, 1920, 1080}, ecs::Vector2{0, 0}});
-        this->m_world.assign(Bakckground, ecs::Scale{1, 1});
-        this->m_world.assign(Bakckground, ecs::Rotation{0});
+        // ecs::Entity &Title = this->m_world.createEntity(inMenu);
+        // this->m_world.assign(Title, ecs::Position{350, 5});
+        // this->m_world.assign(Title, ecs::Sprite{"assets/Menu/r-type.png", ecs::Rectangle{0, 0, 1258, 481}, ecs::Vector2{0, 0}});
+        // this->m_world.assign(Title, ecs::Scale{1, 1});
+        // this->m_world.assign(Title, ecs::Rotation{0});
 
-        ecs::Entity &Title = this->m_world.createEntity(inMenu);
-        this->m_world.assign(Title, ecs::Position{350, 5});
-        this->m_world.assign(Title, ecs::Sprite{"assets/Menu/r-type.png", ecs::Rectangle{0, 0, 1258, 481}, ecs::Vector2{0, 0}});
-        this->m_world.assign(Title, ecs::Scale{1, 1});
-        this->m_world.assign(Title, ecs::Rotation{0});
-
-        ecs::Entity &ButtonConnect = this->m_world.createEntity(inMenu);
-        this->m_world.assign(ButtonConnect, ecs::Position{810, 300});
-        this->m_world.assign(ButtonConnect, ecs::Sprite{"assets/Menu/buttonPlay.png", ecs::Rectangle{0, 0, 300, 153}, ecs::Vector2{0, 0}});
-        this->m_world.assign(ButtonConnect, ecs::Scale{1, 1});
-        this->m_world.assign(ButtonConnect, ecs::Rotation{0});
-        this->m_world.assign(ButtonConnect, ecs::Clickable{false, [this](ecs::Clickable&) {
-            std::cout << "ButtonPlay clicked" << std::endl;
-            this->m_network.connect(this->m_network.m_ip, this->m_network.m_port, *this);
-            this->m_world.switchToScene(2);
-        }});
-
-        // ecs::Entity &PlayerTextInput = this->m_world.createEntity(inMenu);
-        // this->m_world.assign(PlayerTextInput, ecs::Position{500, 300});
-        // this->m_world.assign(PlayerTextInput, ecs::Rectangle{0, 0, 300, 100});
-        // this->m_world.assign(PlayerTextInput, ecs::TextInput{10, ecs::Position{500, 325}});
-        // this->m_world.assign(PlayerTextInput, ecs::Scale{1, 1});
-        // this->m_world.assign(PlayerTextInput, ecs::Rotation{0});
-        // this->m_world.assign(PlayerTextInput, ecs::Clickable{false, [this](ecs::Clickable&) {
-        //     std::cout << "PlayerTextInput clicked" << std::endl;
-        //     ecs::Entity &PlayerTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 0);
-        //     ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(PlayerTextInput);
-
-        //     this->m_playerName = textInput.content;
-        //     textInput.isFocused = true;
+        // ecs::Entity &ButtonConnect = this->m_world.createEntity(inMenu);
+        // this->m_world.assign(ButtonConnect, ecs::Position{810, 300});
+        // this->m_world.assign(ButtonConnect, ecs::Sprite{"assets/Menu/buttonPlay.png", ecs::Rectangle{0, 0, 300, 153}, ecs::Vector2{0, 0}});
+        // this->m_world.assign(ButtonConnect, ecs::Scale{1, 1});
+        // this->m_world.assign(ButtonConnect, ecs::Rotation{0});
+        // this->m_world.assign(ButtonConnect, ecs::Clickable{false, [this](ecs::Clickable&) {
+        //     std::cout << "ButtonPlay clicked" << std::endl;
+        //     this->m_network.connect(this->m_network.m_ip, this->m_network.m_port, *this);
+        //     this->m_world.switchToScene(2);
         // }});
-        // this->m_world.assign(PlayerTextInput, ecs::Color{200, 200, 200, 255});
-        // this->m_world.assign(PlayerTextInput, ecs::FontSize{50});
-        // this->m_world.assign(PlayerTextInput, ecs::TextColor{0, 0, 0, 255});
 
-        ecs::Entity &ButtonSettings = this->m_world.createEntity(inMenu);
-        this->m_world.assign(ButtonSettings, ecs::Position{810, 460});
-        this->m_world.assign(ButtonSettings, ecs::Sprite{"assets/Menu/buttonSettings.png", ecs::Rectangle{0, 0, 300, 153}, ecs::Vector2{0, 0}});
-        this->m_world.assign(ButtonSettings, ecs::Scale{1, 1});
-        this->m_world.assign(ButtonSettings, ecs::Rotation{0});
-        this->m_world.assign(ButtonSettings, ecs::Clickable{false, [this](ecs::Clickable&) {this->m_world.switchToScene(1);}});
+        // ecs::Entity &ButtonSettings = this->m_world.createEntity(inMenu);
+        // this->m_world.assign(ButtonSettings, ecs::Position{810, 460});
+        // this->m_world.assign(ButtonSettings, ecs::Sprite{"assets/Menu/buttonSettings.png", ecs::Rectangle{0, 0, 300, 153}, ecs::Vector2{0, 0}});
+        // this->m_world.assign(ButtonSettings, ecs::Scale{1, 1});
+        // this->m_world.assign(ButtonSettings, ecs::Rotation{0});
+        // this->m_world.assign(ButtonSettings, ecs::Clickable{false, [this](ecs::Clickable&) {this->m_world.switchToScene(1);}});
 
         /* ------------------------- Scene InSettings--------------------------------*/
 
@@ -204,7 +176,10 @@ namespace rtype {
         this->m_world.assign(ButtonBackward, ecs::Sprite{"assets/Settings/buttonBackward.png", ecs::Rectangle{0, 0, 210, 210}, ecs::Vector2{0, 0}});
         this->m_world.assign(ButtonBackward, ecs::Scale{0.4, 0.4});
         this->m_world.assign(ButtonBackward, ecs::Rotation{0});
-        this->m_world.assign(ButtonBackward, ecs::Clickable{false, [this](ecs::Clickable&) {this->m_world.switchToScene(0);}});
+        this->m_world.assign(ButtonBackward, ecs::Clickable{false, [this](ecs::Clickable&) {
+            loadMenu(this->m_world.getSceneById(0));
+            this->m_world.switchToScene(0);
+        }});
 
         ecs::Entity &SettingPort = this->m_world.createEntity(inMenuSettings);
         this->m_world.assign(SettingPort, ecs::Position{1147, 90});

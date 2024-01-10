@@ -48,6 +48,12 @@ namespace ecs {
         });
     }
 
+    Scene &SceneManager::getSceneById(std::size_t id) {
+        return *std::find_if(m_scenes.begin(), m_scenes.end(), [&id](const Scene &e) {
+            return e.id == id;
+        });
+    }
+
     void SceneManager::update() {
         ecs::Scene &scene = this->getCurrentScene();
 
