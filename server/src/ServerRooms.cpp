@@ -42,6 +42,8 @@ void serverGame::ServerRooms::start()
             case ecs::MessageType::GetRooms:
                 this->getRooms(endpoint);
                 break;
+            default:
+                break;
         }
     }
 }
@@ -83,6 +85,8 @@ void serverGame::ServerRooms::createRoom(std::string roomName) {
         this->port += 2;
         this->threadPool.push_back(std::thread(rtypeThread, rtype));
 		this->roomsMutex.unlock();
+
+        std::cout << "New Room Created :" << roomName << std::endl;
 }
 
 
