@@ -20,6 +20,7 @@ set(SRC_SERVER
     src/Entity.cpp
     src/Server.cpp
     src/Message.cpp
+    src/ServerRooms.cpp
 )
 
 set(SRC
