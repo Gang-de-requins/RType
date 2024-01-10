@@ -31,11 +31,12 @@ int checkArguments(int ac, char const * const *av)
 
 int main(int ac, char const * const *av)
 {
-    serverGame::ServerRooms Rooms;
-    Rooms.start();
     
     if (checkArguments(ac, av) == EXIT_FAILURE)
         return 84;
 
+    serverGame::ServerRooms Rooms;
+    Rooms.start();
+    
     return 0;
 }
