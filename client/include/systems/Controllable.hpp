@@ -14,10 +14,6 @@ namespace ecs {
 	class ControllableSystem : public ISystem {
 		public:
 			void update(SceneManager& sceneManager) override;
-
-		private:
-			void addMoveEvent(SceneManager& sceneManager, Scene& scene, int event);
-			void addShootEvent(SceneManager& sceneManager, Scene& scene, int event);
 	};
 }
 
