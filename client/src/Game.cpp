@@ -1,10 +1,11 @@
 #include "Game.hpp"
 
 namespace rtype {
-    Game::Game(const std::string &ip, const unsigned short port)
+    Game::Game()
     {
         initScenes();
-        this->m_network.connect(ip, port, *this);
+        this->m_network.m_ip = "127.0.0.1";
+        this->m_network.m_port = 4444;
         this->m_playerName = "Name";
     }
 
@@ -41,7 +42,7 @@ namespace rtype {
             if (IsKeyPressed(KEY_SPACE)) {
                 ecs::SceneManager &sceneManager = this->m_world.getSceneManager();
                 auto entities = sceneManager.view<ecs::Controllable>(sceneManager.getCurrentScene());
-            
+
                 for (auto &entity : entities) {
                     ecs::Controllable &controllable = sceneManager.get<ecs::Controllable>(*entity);
                     if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - controllable.shootUpdate).count() >= controllable.timeOut) {
@@ -123,6 +124,7 @@ namespace rtype {
         this->m_world.assign(ButtonConnect, ecs::Rotation{0});
         this->m_world.assign(ButtonConnect, ecs::Clickable{false, [this](ecs::Clickable&) {
             std::cout << "ButtonPlay clicked" << std::endl;
+            this->m_network.connect(this->m_network.m_ip, this->m_network.m_port, *this);
             this->m_world.switchToScene(2);
         }});
 
@@ -167,7 +169,8 @@ namespace rtype {
             ecs::CollisionSystem,
             ecs::LifeSystem,
             ecs::ParallaxSystem,
-            ecs::ClickableSystem
+            ecs::ClickableSystem,
+            ecs::SubmitSystem
         >(inMenuSettings);
 
         ecs::Entity &Bakckground_Settings = this->m_world.createEntity(inMenuSettings);
@@ -224,24 +227,22 @@ namespace rtype {
         this->m_world.assign(PortTextInput, ecs::Clickable{false, [this](ecs::Clickable&) {
             ecs::Entity &PortTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 11);
             ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(PortTextInput);
-
-            try {
-            this->m_network.m_port = static_cast<unsigned short>(std::stoi(textInput.content));
             textInput.isFocused = true;
-            std::cout << "m_port: " << this->m_network.m_port << std::endl;
-            } catch (const std::invalid_argument& e) {
-                std::cerr << "Erreur : Argument invalide lors de la conversion en entier." << std::endl;
-            } catch (const std::out_of_range& e) {
-                std::cerr << "Erreur : La valeur dépasse la plage valide pour unsigned short." << std::endl;
-            } catch (const std::exception& e) {
-                std::cerr << "Erreur : Une exception std::exception s'est produite lors de la conversion." << std::endl;
-            } catch (...) {
-                std::cerr << "Erreur : Une exception non dérivée de std::exception s'est produite lors de la conversion." << std::endl;
-            }
         }});
         this->m_world.assign(PortTextInput, ecs::Color{200, 200, 200, 255});
         this->m_world.assign(PortTextInput, ecs::FontSize{35});
         this->m_world.assign(PortTextInput, ecs::TextColor{255, 255, 255, 255});
+        this->m_world.assign(PortTextInput, ecs::Submit{KEY_ENTER, [this](ecs::SceneManager &sceneManager, ecs::Entity *entity) {
+            if (sceneManager.has<ecs::TextInput>(*entity)) {
+                ecs::TextInput &textInput = sceneManager.get<ecs::TextInput>(*entity);
+
+                try {
+                    this->m_network.m_port = static_cast<unsigned short>(std::stoi(textInput.content));
+                    std::cout << "m_port: " << this->m_network.m_port << std::endl;
+                } catch (const std::exception& e) {
+                    std::cerr << "Erreur : Une exception std::exception s'est produite lors de la conversion." << std::endl;
+                }
+        }}});
 
         ecs::Entity &SettingIP = this->m_world.createEntity(inMenuSettings);
         this->m_world.assign(SettingIP, ecs::Position{900, 350});
@@ -264,14 +265,17 @@ namespace rtype {
         this->m_world.assign(IPTextInput, ecs::Clickable{false, [this](ecs::Clickable&) {
             ecs::Entity &IPTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 14);
             ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(IPTextInput);
-
-            this->m_network.m_ip = textInput.content;
             textInput.isFocused = true;
-            std::cout << "m_ip: " << this->m_network.m_ip << std::endl;
         }});
         this->m_world.assign(IPTextInput, ecs::Color{200, 200, 200, 255});
         this->m_world.assign(IPTextInput, ecs::FontSize{35});
         this->m_world.assign(IPTextInput, ecs::TextColor{255, 255, 255, 255});
+        this->m_world.assign(IPTextInput, ecs::Submit{KEY_ENTER, [this](ecs::SceneManager &sceneManager, ecs::Entity *entity) {
+            if (sceneManager.has<ecs::TextInput>(*entity)) {
+                ecs::TextInput &textInput = sceneManager.get<ecs::TextInput>(*entity);
+                this->m_network.m_ip = textInput.content;
+            }
+        }});
 
         /* ------------------------- Scene ChooseName --------------------------------*/
 

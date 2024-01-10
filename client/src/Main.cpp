@@ -1,13 +1,8 @@
 #include "Game.hpp"
 
-int checkArguments(int ac, char const * const *av);
-
-int main(int ac, char const * const *av)
+int main()
 {
-    if (checkArguments(ac, av) == EXIT_FAILURE)
-        return 84;
-
-    rtype::Game game(av[1], std::stoi(av[2]));
+    rtype::Game game;
 
     game.run();
     return EXIT_SUCCESS;

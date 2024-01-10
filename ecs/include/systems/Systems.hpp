@@ -10,6 +10,7 @@
 #include "Sound.hpp"
 #include "Parallax.hpp"
 #include "Clickable.hpp"
+#include "Submit.hpp"
 #include "rendering/Animation.hpp"
 #include "rendering/Name.hpp"
 #include "rendering/Rectangle.hpp"

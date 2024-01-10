@@ -19,6 +19,7 @@
 #include "Scale.hpp"
 #include "Sound.hpp"
 #include "Sprite.hpp"
+#include "Submit.hpp"
 #include "Text.hpp"
 #include "TextColor.hpp"
 #include "TextInput.hpp"
