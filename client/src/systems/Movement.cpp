@@ -69,6 +69,18 @@ namespace ecs {
 
         for (auto& entity : sceneManager.view<Acceleration, Velocity, Position>(scene)) {
             this->move(sceneManager, entity);
+
+            if (sceneManager.has<Damage>(*entity)) {
+                Position& position = sceneManager.get<Position>(*entity);
+
+                if (position.x < 0 || position.x > 1920 || position.y < 0 || position.y > 1080) {
+                    scene.events[EventType::Destroy].push_back({
+                        Event::EntityDestroyed,
+                        { entity }
+                    });
+				}
+            }
+
         }
 
         for (auto& event : eventsToRemove) {
