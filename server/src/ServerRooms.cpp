@@ -14,7 +14,7 @@ serverGame::ServerRooms::ServerRooms()
 {
     this->port = 4242;
     this->server.setupServer(port);
-    this->port += 10
+    this->port += 10;
 }
 
 serverGame::ServerRooms::~ServerRooms()
@@ -46,20 +46,6 @@ void serverGame::ServerRooms::start()
     }
 }
 
-void serverGame::ServerRooms::createRoom(std::string roomName)
-{
-    std::shared_ptr<serverGame::Rtype> rtype = std::make_shared<serverGame::Rtype>(this->port);
-    rtype->name = roomName;
-    this->threadPool.push_back(std::thread(rtypeThread, rtype));
-    // créer une liste pour stocker les infos pour pouvoir les envoyers aux clients
-    this->port += 2;
-}
-
-void serverGame::ServerRooms::getRooms(boost::asio::ip::udp::endpoint endpoint)
-{
-
-}
-
 void receiveMessageThread(std::shared_ptr<serverGame::Rtype> rtype)
 {
 	while(true)
@@ -84,4 +70,35 @@ void rtypeThread(std::shared_ptr<serverGame::Rtype> rtype)
     std::thread receive(receiveMessageThread, rtype);
     std::thread send(sendGameStateThread, rtype);
     rtype->run();
+}
+
+void serverGame::ServerRooms::createRoom(std::string roomName) {
+        std::shared_ptr<serverGame::Rtype> rtype = std::make_shared<serverGame::Rtype>(this->port);
+        rtype->name = roomName;
+
+		this->roomsMutex.lock();
+
+        rooms.push_back({roomName, this->port, 3});
+        
+        this->port += 2;
+        this->threadPool.push_back(std::thread(rtypeThread, rtype));
+		this->roomsMutex.unlock();
+}
+
+
+void serverGame::ServerRooms::getRooms(boost::asio::ip::udp::endpoint endpoint)
+{
+		this->roomsMutex.lock();
+        ecs::Buffer buffer;
+        buffer.writeMessageType(ecs::MessageType::GetRooms);
+
+        for (const auto& room : rooms) {
+            buffer.writeString(room.name);
+            buffer.writeInt(room.port);
+            buffer.writeInt(room.availableSlots);
+            server.sendMessage(buffer, endpoint);
+        }
+		this->roomsMutex.unlock();
+
+
 }
