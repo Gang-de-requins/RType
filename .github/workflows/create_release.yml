@@ -52,14 +52,42 @@ jobs:
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
-    - name: Download build artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: build
-        path: ${{ github.workspace }}/downloaded-artifact
+    - name: Init vcpkg submodule
+      if: matrix.os == 'windows-latest'
+      run: |
+        git submodule update --init --recursive
+        cd vcpkg
+        ./bootstrap-vcpkg.bat
+        cd ..
+
+    - name: Install vcpkg on Linux and MacOS
+      if: matrix.os != 'windows-latest'
+      run: |
+        git submodule update --init --recursive
+        cd vcpkg
+        ./bootstrap-vcpkg.sh
+        cd ..
+
+    - name: Install GLFW dependencies
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libxinerama-dev libxcursor-dev xorg-dev libglu1-mesa-dev pkg-config
+
+    - name: Configure CMake
+      run: >
+        cmake -B ${{ steps.strings.outputs.build-output-dir }}
+        -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
+        -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
+        -S ${{ github.workspace }}
+
+    - name: Build
+      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
 
     - name: Create Package
-      working-directory: ${{ github.workspace }}/downloaded-artifact
+      working-directory: ${{ steps.strings.outputs.build-output-dir }}
       run: cmake --build . --config ${{ matrix.build_type }} --target package
 
     - name: Create Release

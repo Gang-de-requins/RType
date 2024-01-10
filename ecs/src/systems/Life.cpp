@@ -15,20 +15,13 @@ namespace ecs {
                 health.health -= damage.damage;
 
                 if (health.health <= 0) {
-                    if (sceneManager.has<Controllable>(*event.entities.at(1))) {
-                        scene.events[EventType::Destroy].push_back({
-                            Event::PlayerDeath,
-                            {event.entities.at(1)}
-                        });
-                    } else {
-                        scene.events[EventType::Destroy].push_back({
-                            Event::EnemyDeath,
-                            {event.entities.at(1)}
-                        });
-                    }
+                    scene.events[EventType::Destroy].push_back({
+                        Event::EntityDestroyed,
+                        {event.entities.at(1)}
+                    });
                 }
                 scene.events[EventType::Destroy].push_back({
-                    Event::EnemyDeath,
+                    Event::EntityDestroyed,
                     {event.entities.at(0)}
                 });
                 eventsToRemove.push_back(index);

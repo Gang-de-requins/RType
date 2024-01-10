@@ -12,25 +12,13 @@ namespace ecs {
         Input,
         Spawn,
         Timer,
-        Audio
+        Audio,
+        KeyboardInput
     };
 
     enum Event {
         Overlap,
-        MoveUp,
-        MoveDown,
-        MoveLeft,
-        MoveRight,
-        StopMoving,
-        Shoot,
-        SpawnEnemy,
-        SpawnPlayer,
-        SpawnEnemyBullet,
-        SpawnPlayerBullet,
-        PlayerDeath,
-        EnemyDeath,
-        BulletDeath,
-        EnemyBulletDeath,
+        EntityDestroyed,
         ModifierDisparition,
         PlaySound,
         PlayMusic,
@@ -44,7 +32,7 @@ namespace ecs {
     };
 
     struct EventData {
-        Event event;
+        int event;
         std::vector<Entity *> entities;
     };
 }

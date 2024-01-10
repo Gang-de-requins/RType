@@ -6,10 +6,14 @@
 #include "Network.hpp"
 #include "Player.hpp"
 #include "raylib.h"
+#include "systems/Movement.hpp"
+#include "systems/Controllable.hpp"
+#include "systems/Spawner.hpp"
 
 #define SCENE_MENU 0
-#define SCENE_GAME 1
-#define SCENE_GAME_OVER 2
+#define SCENE_SETTINGS 1
+#define SCENE_CHOOSENAME 2
+#define SCENE_GAME 3
 
 namespace rtype {
     class Game {
@@ -19,7 +23,7 @@ namespace rtype {
         std::string m_playerName;
 
         public:
-            Game(const std::string &ip, const unsigned short port, const std::string &playerName);
+            Game();
             ~Game();
             void run();
             ecs::World &getWorld();
@@ -29,6 +33,10 @@ namespace rtype {
 
         private:
             void initScenes();
+            void loadMenu(ecs::Scene &scene);
+            void loadSettings(ecs::Scene &scene);
+            void loadChooseName(ecs::Scene &scene);
+            void loadGame(ecs::Scene &scene);
     };
 }
 
