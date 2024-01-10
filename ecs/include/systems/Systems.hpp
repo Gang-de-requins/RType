@@ -2,7 +2,6 @@
 #define SYSTEMS_HPP
 
 #include "Collision.hpp"
-#include "Controllable.hpp"
 #include "Life.hpp"
 #include "Modifier.hpp"
 #include "Music.hpp"
@@ -10,7 +9,6 @@
 #include "Parallax.hpp"
 #include "Clickable.hpp"
 #include "Destruction.hpp"
-#include "Spawner.hpp"
 #include "KeyboardInput.hpp"
 #include "rendering/Animation.hpp"
 #include "rendering/Name.hpp"

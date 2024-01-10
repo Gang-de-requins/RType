@@ -18,16 +18,7 @@ namespace ecs {
 
     enum Event {
         Overlap,
-        MoveUp,
-        MoveDown,
-        MoveLeft,
-        MoveRight,
-        StopMoving,
         Shoot,
-        SpawnEnemy,
-        SpawnPlayer,
-        SpawnEnemyBullet,
-        SpawnPlayerBullet,
         PlayerDeath,
         EnemyDeath,
         BulletDeath,

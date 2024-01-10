@@ -20,6 +20,8 @@ set(SRC
     src/Network.cpp
     src/Player.cpp
     src/systems/Movement.cpp
+    src/systems/Controllable.cpp
+    src/systems/Spawner.cpp
 )
 
 if (WIN32)

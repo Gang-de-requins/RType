@@ -5,17 +5,18 @@
 #include <algorithm>
 #include "raylib.h"
 #include "components/Components.hpp"
-#include "ISystem.hpp"
+#include "systems/ISystem.hpp"
 #include "Entity.hpp"
 #include "Scene.hpp"
+#include "GameEvents.hpp"
 
 namespace ecs {
     class SpawnerSystem : public ISystem {
-        public:
-            void update(SceneManager &sceneManager) override;
+    public:
+        void update(SceneManager& sceneManager) override;
 
-        private:
-            void spawnBullet(SceneManager &sceneManager, Entity &entity, Scene &scene, bool isPlayer);
+    private:
+        void spawnBullet(SceneManager& sceneManager, Entity& entity, Scene& scene, bool isPlayer);
     };
 }
 

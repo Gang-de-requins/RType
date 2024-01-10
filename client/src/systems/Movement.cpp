@@ -9,7 +9,7 @@ namespace ecs {
 
         for (auto& event : scene.events.at(EventType::Input)) {
             switch (event.event) {
-            case Event::MoveUp:
+            case GameEvent::MoveUp:
                 for (auto& entity : event.entities) {
                     Acceleration& acceleration = sceneManager.get<Acceleration>(*entity);
                     acceleration.ddx = 0;
@@ -19,7 +19,7 @@ namespace ecs {
                     eventsToRemove.push_back(index);
                 }
                 break;
-            case Event::MoveDown:
+            case GameEvent::MoveDown:
                 for (auto& entity : event.entities) {
                     Acceleration& acceleration = sceneManager.get<Acceleration>(*entity);
                     acceleration.ddx = 0;
@@ -29,7 +29,7 @@ namespace ecs {
                     eventsToRemove.push_back(index);
                 }
                 break;
-            case Event::MoveLeft:
+            case GameEvent::MoveLeft:
                 for (auto& entity : event.entities) {
                     Acceleration& acceleration = sceneManager.get<Acceleration>(*entity);
                     acceleration.ddx = -0.5f;
@@ -39,7 +39,7 @@ namespace ecs {
                     eventsToRemove.push_back(index);
                 }
                 break;
-            case Event::MoveRight:
+            case GameEvent::MoveRight:
                 for (auto& entity : event.entities) {
                     Acceleration& acceleration = sceneManager.get<Acceleration>(*entity);
                     acceleration.ddx = 0.5f;
@@ -49,7 +49,7 @@ namespace ecs {
                     eventsToRemove.push_back(index);
                 }
                 break;
-            case Event::StopMoving:
+            case GameEvent::StopMoving:
                 for (auto& entity : event.entities) {
                     Acceleration& acceleration = sceneManager.get<Acceleration>(*entity);
 

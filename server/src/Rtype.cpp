@@ -15,7 +15,7 @@ serverGame::Rtype::Rtype(int port)
     this->id = 0;
     ecs::Scene &inGame = this->world.createScene();
     this->world.registerSystems<
-        ecs::ControllableSystem,
+        //ecs::ControllableSystem,
         //ecs::MovementSystem,
         ecs::CollisionSystem,
         ecs::LifeSystem
