@@ -23,17 +23,6 @@ namespace rtype {
 
         while (!WindowShouldClose())
         {
-            if (IsKeyPressed(KEY_UP))
-                this->m_network.send(ecs::MessageType::GoTop, this->m_playerName);
-            if (IsKeyPressed(KEY_DOWN))
-                this->m_network.send(ecs::MessageType::GoBottom, this->m_playerName);
-            if (IsKeyPressed(KEY_LEFT))
-                this->m_network.send(ecs::MessageType::GoLeft, this->m_playerName);
-            if (IsKeyPressed(KEY_RIGHT))
-                this->m_network.send(ecs::MessageType::GoRight, this->m_playerName);
-            if (IsKeyPressed(KEY_SPACE)) {
-            }
-
             BeginDrawing();
             ClearBackground(BLACK);
 

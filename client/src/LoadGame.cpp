@@ -116,7 +116,7 @@ namespace rtype {
         this->m_world.assign(SoundPlayer, ecs::Sound{"assets/weird.wav"});
 
         ecs::Entity &music = this->m_world.createEntity(scene);
-        this->m_world.assign(music, ecs::Music{"assets/mini1111.xm"});
+        this->m_world.assign(music, ecs::Music{"assets/mini1111.xm", 1.0f, true});
 
         ecs::Entity &boost = this->m_world.createEntity(scene);
         this->m_world.assign(boost, ecs::Position{500, 200});
