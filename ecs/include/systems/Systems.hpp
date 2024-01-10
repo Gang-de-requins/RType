@@ -12,6 +12,7 @@
 #include "Clickable.hpp"
 #include "Destruction.hpp"
 #include "Spawner.hpp"
+#include "KeyboardInput.hpp"
 #include "rendering/Animation.hpp"
 #include "rendering/Name.hpp"
 #include "rendering/Rectangle.hpp"

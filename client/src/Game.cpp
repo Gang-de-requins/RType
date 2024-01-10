@@ -130,6 +130,7 @@ namespace rtype {
 
         this->m_world.registerSystems<
             // ecs::MusicSystem,
+            ecs::KeyboardInputSystem,
             ecs::SoundSystem,
             ecs::ControllableSystem,
             ecs::AnimationSystem,

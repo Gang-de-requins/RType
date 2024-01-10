@@ -8,7 +8,8 @@ namespace ecs {
             {EventType::Input, {}},
             {EventType::Spawn, {}},
             {EventType::Timer, {}},
-            {EventType::Audio, {}}
+            {EventType::Audio, {}},
+            {EventType::KeyboardInput, {}}
         }, "", false});
         return this->m_scenes.back();
     }
@@ -54,6 +55,10 @@ namespace ecs {
         return *std::find_if(scene.entities.begin(), scene.entities.end(), [&id](const Entity &e) {
             return e.id == id;
         });
+    }
+
+    void SceneManager::emit(Scene &scene, int eventType, int event, std::vector<Entity *> entities) {
+		scene.events[eventType].push_back({event, entities});
     }
 
     void SceneManager::update() {
