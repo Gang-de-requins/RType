@@ -1,7 +1,8 @@
 #include "Game.hpp"
 
 namespace rtype {
-    void Game::loadMenu(ecs::Scene &scene) {
+    void Game::loadMenu(ecs::Scene &scene)
+    {
         this->m_world.registerSystems<
             ecs::MusicSystem,
             ecs::ControllableSystem,
@@ -33,9 +34,11 @@ namespace rtype {
         this->m_world.assign(ButtonConnect, ecs::Scale{1, 1});
         this->m_world.assign(ButtonConnect, ecs::Rotation{0});
         this->m_world.assign(ButtonConnect, ecs::Clickable{false, [this](ecs::Clickable&) {
-            std::cout << "ButtonPlay clicked" << std::endl;
+            std::cout << "-> ButtonPlay clicked" << std::endl;
+            std::cout << "Switch scene to choose name and to connect server" << std::endl;
             this->m_network.connect(this->m_network.m_ip, this->m_network.m_port, *this);
-            this->m_world.switchToScene(2);
+            this->m_world.switchToScene(SCENE_CHOOSENAME);
+            loadChooseName(this->m_world.getSceneById(SCENE_CHOOSENAME));
         }});
 
         ecs::Entity &ButtonSettings = this->m_world.createEntity(scene);
@@ -43,6 +46,11 @@ namespace rtype {
         this->m_world.assign(ButtonSettings, ecs::Sprite{"assets/Menu/buttonSettings.png", ecs::Rectangle{0, 0, 300, 153}, ecs::Vector2{0, 0}});
         this->m_world.assign(ButtonSettings, ecs::Scale{1, 1});
         this->m_world.assign(ButtonSettings, ecs::Rotation{0});
-        this->m_world.assign(ButtonSettings, ecs::Clickable{false, [this](ecs::Clickable&) {this->m_world.switchToScene(1);}});
+        this->m_world.assign(ButtonSettings, ecs::Clickable{false, [this](ecs::Clickable&) {
+            std::cout << "-> ButtonPlay clicked" << std::endl;
+            std::cout << "Switch scene settings" << std::endl;
+            loadSettings(this->m_world.getSceneById(SCENE_SETTINGS));
+            this->m_world.switchToScene(SCENE_SETTINGS);
+        }});
     }
 }
