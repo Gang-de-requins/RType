@@ -10,6 +10,7 @@
 #include "Clickable.hpp"
 #include "Destruction.hpp"
 #include "KeyboardInput.hpp"
+#include "Submit.hpp"
 #include "rendering/Animation.hpp"
 #include "rendering/Name.hpp"
 #include "rendering/Rectangle.hpp"

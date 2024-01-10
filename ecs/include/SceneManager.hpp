@@ -127,6 +127,7 @@ namespace ecs {
              */
             Entity &getEntityById(Scene &scene, std::size_t id);
 
+            Scene &getSceneById(std::size_t id);
             /**
              * @fn SceneManager::assign
              * @brief Assign a component to an entity

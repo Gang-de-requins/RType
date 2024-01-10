@@ -1,95 +1,8 @@
 #include "Game.hpp"
 
 namespace rtype {
-    Game::Game()
+    void Game::loadGame(ecs::Scene &scene)
     {
-        initScenes();
-        this->m_network.m_ip = "127.0.0.1";
-        this->m_network.m_port = 4444;
-        this->m_playerName = "Name";
-    }
-
-    Game::~Game()
-    {
-    }
-
-    void Game::run()
-    {
-        SetTraceLogLevel(LOG_NONE);
-        SetTraceLogLevel(LOG_NONE);
-        InitAudioDevice();
-        InitWindow(1920, 1080, "rtype");
-        SetTargetFPS(60);
-        this->m_world.loadTextures({ "assets/characters.gif" });
-
-        while (!WindowShouldClose())
-        {
-            if (IsKeyPressed(KEY_UP))
-                this->m_network.send(ecs::MessageType::GoTop, this->m_playerName);
-            if (IsKeyPressed(KEY_DOWN))
-                this->m_network.send(ecs::MessageType::GoBottom, this->m_playerName);
-            if (IsKeyPressed(KEY_LEFT))
-                this->m_network.send(ecs::MessageType::GoLeft, this->m_playerName);
-            if (IsKeyPressed(KEY_RIGHT))
-                this->m_network.send(ecs::MessageType::GoRight, this->m_playerName);
-            if (IsKeyPressed(KEY_SPACE)) {
-            }
-
-            BeginDrawing();
-            ClearBackground(BLACK);
-
-            this->m_world.update();
-
-            EndDrawing();
-        }
-
-        CloseWindow();
-        CloseAudioDevice();
-        this->m_network.setRunning(false);
-    }
-
-    ecs::World &Game::getWorld()
-    {
-        return this->m_world;
-    }
-
-    float Game::getOffsetColorSpaceship() const
-    {
-        return static_cast<float>(this->m_players.size() * 16);
-    }
-
-    void Game::addPlayer(Player &player)
-    {
-        this->m_players.push_back(player);
-    }
-
-    std::vector<Player> &Game::getPlayers()
-    {
-        return this->m_players;
-    }
-
-    /* ---------------------------- PRIVATE FUNCTIONS --------------------------- */
-
-    void Game::initScenes()
-    {
-
-        /* ------------------------- Scene InMenu --------------------------------*/
-
-        ecs::Scene &inMenu = this->m_world.createScene();
-
-        loadMenu(inMenu);
-
-        /* ------------------------- Scene InSettings--------------------------------*/
-
-        ecs::Scene &inMenuSettings = this->m_world.createScene();
-
-        /* ------------------------- Scene ChooseName --------------------------------*/
-
-        ecs::Scene &chooseName = this->m_world.createScene();
-
-        /* ------------------------- Scene InGame --------------------------------*/
-        ecs::Scene &inGame = this->m_world.createScene();
-
         this->m_world.registerSystems<
             ecs::MusicSystem,
             ecs::ControllableSystem,
@@ -102,9 +15,11 @@ namespace rtype {
             ecs::LifeSystem,
             ecs::ParallaxSystem,
             ecs::ModifierSystem
-        >(inGame);
+        >(scene);
 
-        ecs::Entity &ParallaxBack1 = this->m_world.createEntity(inGame);
+        std::cout << "In Game" << std::endl;
+
+        ecs::Entity &ParallaxBack1 = this->m_world.createEntity(scene);
         this->m_world.assign(ParallaxBack1, ecs::Position{0, 0});
         this->m_world.assign(ParallaxBack1, ecs::Velocity{-3, 0});
         this->m_world.assign(ParallaxBack1, ecs::Sprite{"assets/space-back.png", ecs::Rectangle{0, 0, 7596, 1080}, ecs::Vector2{0, 0}});
@@ -113,7 +28,7 @@ namespace rtype {
         this->m_world.assign(ParallaxBack1, ecs::Scale{1, 1});
         this->m_world.assign(ParallaxBack1, ecs::Rotation{0});
 
-        ecs::Entity &ParallaxBack2 = this->m_world.createEntity(inGame);
+        ecs::Entity &ParallaxBack2 = this->m_world.createEntity(scene);
         this->m_world.assign(ParallaxBack2, ecs::Position{1920, 0});
         this->m_world.assign(ParallaxBack2, ecs::Velocity{-1.5, 0});
         this->m_world.assign(ParallaxBack2, ecs::Sprite{"assets/far-planets.png", ecs::Rectangle{0, 0, 272, 160}, ecs::Vector2{0, 0}});
@@ -122,7 +37,9 @@ namespace rtype {
         this->m_world.assign(ParallaxBack2, ecs::Scale{1920 / 272, 1080 / 160});
         this->m_world.assign(ParallaxBack2, ecs::Rotation{0});
 
-        ecs::Entity &myPlayer = this->m_world.createEntity(inGame);
+        std::cout << "PlayerTextInput " << this->m_playerName << std::endl;
+
+        ecs::Entity &myPlayer = this->m_world.createEntity(scene);
         this->m_world.assign(myPlayer, ecs::Position{200, 200});
         this->m_world.assign(myPlayer, ecs::Health{100});
         this->m_world.assign(myPlayer, ecs::Velocity{0, 0});
@@ -137,13 +54,13 @@ namespace rtype {
 
         this->m_players.push_back(Player(myPlayer, this->m_playerName));
 
-        ecs::Entity &SoundPlayer = this->m_world.createEntity(inGame);
+        ecs::Entity &SoundPlayer = this->m_world.createEntity(scene);
         this->m_world.assign(SoundPlayer, ecs::Sound{"assets/weird.wav"});
 
-        ecs::Entity &music = this->m_world.createEntity(inGame);
+        ecs::Entity &music = this->m_world.createEntity(scene);
         this->m_world.assign(music, ecs::Music{"assets/mini1111.xm"});
 
-        ecs::Entity &boost = this->m_world.createEntity(inGame);
+        ecs::Entity &boost = this->m_world.createEntity(scene);
         this->m_world.assign(boost, ecs::Position{500, 200});
         this->m_world.assign(boost, ecs::Collision{false, {}, true});
         this->m_world.assign(boost, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}});

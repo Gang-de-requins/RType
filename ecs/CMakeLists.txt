@@ -23,6 +23,7 @@ set(SRC
     src/systems/Clickable.cpp
     src/systems/Destruction.cpp
     src/systems/KeyboardInput.cpp
+    src/systems/Submit.cpp
     src/systems/rendering/Name.cpp
     src/systems/rendering/Sprite.cpp
     src/systems/rendering/Text.cpp

@@ -16,7 +16,7 @@ namespace rtype {
         }
     }
 
-    void Network::connect(const std::string &ip, const unsigned short port, Game &game, const std::string &playerName)
+    void Network::connect(const std::string &ip, const unsigned short port, Game &game)
     {
         this->m_endpoint = boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string(ip), port);
         this->m_socket.connect(this->m_endpoint);
