@@ -44,3 +44,7 @@ message("ECS Library built successfully!")
 if (WIN32)
     target_compile_definitions(${PROJECT_NAME} PRIVATE _WIN32_WINNT=0x0601)
 endif()
+
+if (CMAKE_BUILD_TYPE MATCHES Debug)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE DEBUG)
+endif()

@@ -75,6 +75,16 @@ namespace ecs {
                 break;
             system->update(*this);
         }
+
+        #ifdef DEBUG
+            if (IsKeyPressed(KEY_F1)) {
+                this->m_debug = !this->m_debug;
+            }
+
+            if (this->m_debug) {
+                DrawText(std::to_string(GetFPS()).c_str(), 20, 30, 40, ::RED);
+            }
+        #endif
     }
 
     void SceneManager::loadTextures(std::vector<std::string> &paths) {

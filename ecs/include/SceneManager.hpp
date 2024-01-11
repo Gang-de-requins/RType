@@ -42,6 +42,7 @@ namespace ecs {
         std::unordered_map<std::string, Texture2D> m_textures; // Textures
         std::unordered_map<std::string, ::Music> m_musics; // Musics
         std::unordered_map<std::string, ::Sound> m_sounds; // Sounds
+        bool m_debug = false; // Debug mode
 
         public:
             /**
