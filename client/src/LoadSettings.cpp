@@ -55,24 +55,31 @@ namespace rtype {
         this->m_world.assign(SettingPort, ecs::Scale{0.6f, 0.6f});
         this->m_world.assign(SettingPort, ecs::Rotation{0});
 
+        ecs::Entity &TextChoosePort = this->m_world.createEntity(scene);
+        this->m_world.assign(TextChoosePort, ecs::Position{985, 230});
+        this->m_world.assign(TextChoosePort, ecs::TextInput{10, ecs::Position{985, 230}, "> Choose your PORT !! <"});
+        this->m_world.assign(TextChoosePort, ecs::Scale{1, 1});
+        this->m_world.assign(TextChoosePort, ecs::Rotation{0});
+        this->m_world.assign(TextChoosePort, ecs::FontSize{40});
+        this->m_world.assign(TextChoosePort, ecs::TextColor{255, 255, 255, 255});
+
         ecs::Entity &ChangePort = this->m_world.createEntity(scene);
-        this->m_world.assign(ChangePort, ecs::Position{1100.5f, 230});
+        this->m_world.assign(ChangePort, ecs::Position{1100.5f, 290});
         this->m_world.assign(ChangePort, ecs::Sprite{"assets/Settings/nickname.png", ecs::Rectangle{0, 0, 421, 171}, ecs::Vector2{0, 0}});
         this->m_world.assign(ChangePort, ecs::Scale{0.5f, 0.5f});
         this->m_world.assign(ChangePort, ecs::Rotation{0});
 
         ecs::Entity &PortTextInput = this->m_world.createEntity(scene);
-        this->m_world.assign(PortTextInput, ecs::Position{1147, 260});
-        this->m_world.assign(PortTextInput, ecs::Rectangle{0, 0, 421, 171});
-        this->m_world.assign(PortTextInput, ecs::TextInput{10, ecs::Position{1147, 260}});
+        this->m_world.assign(PortTextInput, ecs::Position{1147, 310});
+        this->m_world.assign(PortTextInput, ecs::Rectangle{0, 0, 300, 150});
+        this->m_world.assign(PortTextInput, ecs::TextInput{10, ecs::Position{1147, 315}});
         this->m_world.assign(PortTextInput, ecs::Scale{1, 1});
         this->m_world.assign(PortTextInput, ecs::Rotation{0});
         this->m_world.assign(PortTextInput, ecs::Clickable{false, [this](ecs::Clickable&) {
-            ecs::Entity &PortTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 7);
+            ecs::Entity &PortTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 8);
             ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(PortTextInput);
             textInput.isFocused = true;
         }});
-        this->m_world.assign(PortTextInput, ecs::Color{200, 200, 200, 255});
         this->m_world.assign(PortTextInput, ecs::FontSize{35});
         this->m_world.assign(PortTextInput, ecs::TextColor{255, 255, 255, 255});
         this->m_world.assign(PortTextInput, ecs::Submit{KEY_ENTER, [this](ecs::SceneManager &sceneManager, ecs::Entity *entity) {
@@ -88,29 +95,36 @@ namespace rtype {
         }}});
 
         ecs::Entity &SettingIP = this->m_world.createEntity(scene);
-        this->m_world.assign(SettingIP, ecs::Position{900, 350});
+        this->m_world.assign(SettingIP, ecs::Position{900, 380});
         this->m_world.assign(SettingIP, ecs::Sprite{"assets/Settings/settingIP.png", ecs::Rectangle{0, 0, 210, 210}, ecs::Vector2{0, 0}});
         this->m_world.assign(SettingIP, ecs::Scale{0.6f, 0.6f});
         this->m_world.assign(SettingIP, ecs::Rotation{0});
 
+        ecs::Entity &TextChooseIP = this->m_world.createEntity(scene);
+        this->m_world.assign(TextChooseIP, ecs::Position{765, 520});
+        this->m_world.assign(TextChooseIP, ecs::TextInput{10, ecs::Position{765, 520}, "> Choose your IP !! <"});
+        this->m_world.assign(TextChooseIP, ecs::Scale{1, 1});
+        this->m_world.assign(TextChooseIP, ecs::Rotation{0});
+        this->m_world.assign(TextChooseIP, ecs::FontSize{40});
+        this->m_world.assign(TextChooseIP, ecs::TextColor{255, 255, 255, 255});
+
         ecs::Entity &ChangeIP = this->m_world.createEntity(scene);
-        this->m_world.assign(ChangeIP, ecs::Position{857.5f, 490});
+        this->m_world.assign(ChangeIP, ecs::Position{857.5f, 580});
         this->m_world.assign(ChangeIP, ecs::Sprite{"assets/Settings/nickname.png", ecs::Rectangle{0, 0, 421, 171}, ecs::Vector2{0, 0}});
         this->m_world.assign(ChangeIP, ecs::Scale{0.5f, 0.5f});
         this->m_world.assign(ChangeIP, ecs::Rotation{0});
 
         ecs::Entity &IPTextInput = this->m_world.createEntity(scene);
-        this->m_world.assign(IPTextInput, ecs::Position{900, 510});
-        this->m_world.assign(IPTextInput, ecs::Rectangle{0, 0, 421, 171});
-        this->m_world.assign(IPTextInput, ecs::TextInput{10, ecs::Position{900, 510}});
+        this->m_world.assign(IPTextInput, ecs::Position{900, 580});
+        this->m_world.assign(IPTextInput, ecs::Rectangle{0, 0, 300, 171});
+        this->m_world.assign(IPTextInput, ecs::TextInput{10, ecs::Position{900, 605}});
         this->m_world.assign(IPTextInput, ecs::Scale{1, 1});
         this->m_world.assign(IPTextInput, ecs::Rotation{0});
         this->m_world.assign(IPTextInput, ecs::Clickable{false, [this](ecs::Clickable&) {
-            ecs::Entity &IPTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 10);
+            ecs::Entity &IPTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 12);
             ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(IPTextInput);
             textInput.isFocused = true;
         }});
-        this->m_world.assign(IPTextInput, ecs::Color{200, 200, 200, 255});
         this->m_world.assign(IPTextInput, ecs::FontSize{35});
         this->m_world.assign(IPTextInput, ecs::TextColor{255, 255, 255, 255});
         this->m_world.assign(IPTextInput, ecs::Submit{KEY_ENTER, [this](ecs::SceneManager &sceneManager, ecs::Entity *entity) {

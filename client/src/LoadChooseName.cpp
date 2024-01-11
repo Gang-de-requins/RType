@@ -19,19 +19,19 @@ namespace rtype {
 
         ecs::Entity &TextChooseName = this->m_world.createEntity(scene);
         this->m_world.assign(TextChooseName, ecs::Position{300, 200});
-        this->m_world.assign(TextChooseName, ecs::TextInput{10, ecs::Position{300, 225}, "Choose your name !!"});
+        this->m_world.assign(TextChooseName, ecs::TextInput{10, ecs::Position{300, 225}, "> Choose your name !! <"});
         this->m_world.assign(TextChooseName, ecs::Scale{1, 1});
         this->m_world.assign(TextChooseName, ecs::Rotation{0});
         this->m_world.assign(TextChooseName, ecs::FontSize{50});
         this->m_world.assign(TextChooseName, ecs::TextColor{255, 255, 255, 255});
 
-        ecs::Entity &test = this->m_world.createEntity(scene);
-        this->m_world.assign(test, ecs::Position{355, 300});
-        this->m_world.assign(test, ecs::TextInput{10, ecs::Position{355, 325}, "=>"});
-        this->m_world.assign(test, ecs::Scale{1, 1});
-        this->m_world.assign(test, ecs::Rotation{0});
-        this->m_world.assign(test, ecs::FontSize{50});
-        this->m_world.assign(test, ecs::TextColor{255, 255, 255, 255});
+        ecs::Entity &ToShow = this->m_world.createEntity(scene);
+        this->m_world.assign(ToShow, ecs::Position{355, 300});
+        this->m_world.assign(ToShow, ecs::TextInput{10, ecs::Position{355, 325}, "=>"});
+        this->m_world.assign(ToShow, ecs::Scale{1, 1});
+        this->m_world.assign(ToShow, ecs::Rotation{0});
+        this->m_world.assign(ToShow, ecs::FontSize{50});
+        this->m_world.assign(ToShow, ecs::TextColor{255, 255, 255, 255});
 
         ecs::Entity &PlayerTextInput = this->m_world.createEntity(scene);
         this->m_world.assign(PlayerTextInput, ecs::Position{400, 300});
