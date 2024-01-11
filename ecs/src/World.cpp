@@ -33,6 +33,10 @@ namespace ecs {
         return this->m_sceneManager.getEntityById(scene, id);
     }
 
+    Scene &World::getSceneById(std::size_t id) {
+        return this->m_sceneManager.getSceneById(id);
+    }
+
     void World::update() {
         this->m_sceneManager.update();
     }
