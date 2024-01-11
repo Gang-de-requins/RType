@@ -22,7 +22,7 @@ namespace rtype {
         this->m_world.assign(ButtonMusic, ecs::Sprite{"assets/Settings/buttonMusic.png", ecs::Rectangle{0, 0, 210, 210}, ecs::Vector2{0, 0}});
         this->m_world.assign(ButtonMusic, ecs::Scale{0.6f, 0.6f});
         this->m_world.assign(ButtonMusic, ecs::Rotation{0});
-        this->m_world.assign(ButtonMusic, ecs::Clickable{false, [this](ecs::Clickable&) {this->m_world.switchToScene(1);}});
+        this->m_world.assign(ButtonMusic, ecs::Clickable{false, [this](ecs::Clickable&, ecs::Entity *) {this->m_world.switchToScene(1);}});
 
         ecs::Entity &ButtonPause = this->m_world.createEntity(scene);
         this->m_world.assign(ButtonPause, ecs::Position{630, 230});
@@ -35,14 +35,14 @@ namespace rtype {
         this->m_world.assign(ButtonPlayMusic, ecs::Sprite{"assets/Settings/buttonPlay.png", ecs::Rectangle{0, 0, 210, 210}, ecs::Vector2{0, 0}});
         this->m_world.assign(ButtonPlayMusic, ecs::Scale{0.3f, 0.3f});
         this->m_world.assign(ButtonPlayMusic, ecs::Rotation{0});
-        this->m_world.assign(ButtonPlayMusic, ecs::Clickable{false, [this](ecs::Clickable&) {this->m_world.switchToScene(1);}});
+        this->m_world.assign(ButtonPlayMusic, ecs::Clickable{false, [this](ecs::Clickable&, ecs::Entity *) {this->m_world.switchToScene(1);}});
 
         ecs::Entity &ButtonBackward = this->m_world.createEntity(scene);
         this->m_world.assign(ButtonBackward, ecs::Position{5, 995});
         this->m_world.assign(ButtonBackward, ecs::Sprite{"assets/Settings/buttonBackward.png", ecs::Rectangle{0, 0, 210, 210}, ecs::Vector2{0, 0}});
         this->m_world.assign(ButtonBackward, ecs::Scale{0.4f, 0.4f});
         this->m_world.assign(ButtonBackward, ecs::Rotation{0});
-        this->m_world.assign(ButtonBackward, ecs::Clickable{false, [this](ecs::Clickable&) {
+        this->m_world.assign(ButtonBackward, ecs::Clickable{false, [this](ecs::Clickable&, ecs::Entity *) {
             std::cout << "-> ButtonPlay clicked" << std::endl;
             std::cout << "Switch scene Menu" << std::endl;
             loadMenu(this->m_world.getSceneById(SCENE_MENU));
@@ -67,9 +67,9 @@ namespace rtype {
         this->m_world.assign(PortTextInput, ecs::TextInput{10, ecs::Position{1147, 260}});
         this->m_world.assign(PortTextInput, ecs::Scale{1, 1});
         this->m_world.assign(PortTextInput, ecs::Rotation{0});
-        this->m_world.assign(PortTextInput, ecs::Clickable{false, [this](ecs::Clickable&) {
-            ecs::Entity &PortTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 7);
-            ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(PortTextInput);
+        this->m_world.assign(PortTextInput, ecs::Clickable{false, [this](ecs::Clickable&, ecs::Entity *entity) {
+            // ecs::Entity &PortTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), entity->id);
+            ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(*entity);
             textInput.isFocused = true;
         }});
         this->m_world.assign(PortTextInput, ecs::Color{200, 200, 200, 255});
@@ -105,9 +105,9 @@ namespace rtype {
         this->m_world.assign(IPTextInput, ecs::TextInput{10, ecs::Position{900, 510}});
         this->m_world.assign(IPTextInput, ecs::Scale{1, 1});
         this->m_world.assign(IPTextInput, ecs::Rotation{0});
-        this->m_world.assign(IPTextInput, ecs::Clickable{false, [this](ecs::Clickable&) {
-            ecs::Entity &IPTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 10);
-            ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(IPTextInput);
+        this->m_world.assign(IPTextInput, ecs::Clickable{false, [this](ecs::Clickable&, ecs::Entity *entity) {
+            // ecs::Entity &IPTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 10);
+            ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(*entity);
             textInput.isFocused = true;
         }});
         this->m_world.assign(IPTextInput, ecs::Color{200, 200, 200, 255});

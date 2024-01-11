@@ -6,6 +6,7 @@
 #include "raylib.h"
 #include "Scene.hpp"
 #include "ParserJson.hpp"
+#include "systems/Systems.hpp"
 #include "systems/ISystem.hpp"
 #include "Macros.hpp"
 
@@ -43,6 +44,8 @@ namespace ecs {
         std::unordered_map<std::string, ::Music> m_musics; // Musics
         std::unordered_map<std::string, ::Sound> m_sounds; // Sounds
         bool m_debug = false; // Debug mode
+        Entity *m_clickedEntity = nullptr; // Clicked entity (debug mode)
+        Clickable m_clickedEntityClickable; // Clickable component of the clicked entity (debug mode)
 
         public:
             /**
@@ -320,6 +323,38 @@ namespace ecs {
              * @param scene The scene in which the entities will be loaded.
              */
             void loadEntitiesFromJson(Scene &scene);
+
+            #ifdef DEBUG
+                /**
+                 * @fn SceneManager::drawFps
+                 * @brief Draw FPS (debug mode)
+                 * 
+                 */
+                void drawFps();
+
+                /**
+                 * @fn SceneManager::addClickableComponent
+                 * @brief Add a clickable component to an entity to get its information (debug mode)
+                 * 
+                 * @param entity The entity to which the clickable component will be added.
+                 */
+                void addClickableComponent(Entity *entity);
+
+                /**
+                 * @fn SceneManager::drawDebugTab
+                 * @brief Draw the debug tab
+                 * 
+                 */
+                void drawDebugTab();
+
+                /**
+                 * @fn SceneManager::drawEntityInfo
+                 * @brief Draw the information of an entity (debug mode)
+                 * 
+                 * @param entity The entity to draw.
+                 */
+                void drawEntityInfo();
+            #endif
     };
 }
 

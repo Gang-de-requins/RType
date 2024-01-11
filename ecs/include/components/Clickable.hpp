@@ -4,6 +4,7 @@
 #include <functional>
 
 namespace ecs {
+    struct Entity;
 
     /**
      * @struct Clickable
@@ -20,7 +21,7 @@ namespace ecs {
      */
     struct Clickable {
         bool clickable;
-        std::function<void(Clickable&)> onClick;
+        std::function<void(Clickable&, Entity *)> onClick;
     };
 }
 

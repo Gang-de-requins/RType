@@ -34,7 +34,7 @@ namespace ecs {
             Clickable &clickable = sceneManager.get<Clickable>(*entity);
 
             if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && mouseInSprite(mousePosition, *entity, sceneManager)) {
-                clickable.onClick(clickable);
+                clickable.onClick(clickable, entity);
             }
         }
     }

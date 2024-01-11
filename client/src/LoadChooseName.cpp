@@ -23,8 +23,8 @@ namespace rtype {
         this->m_world.assign(PlayerTextInput, ecs::TextInput{10, ecs::Position{500, 325}});
         this->m_world.assign(PlayerTextInput, ecs::Scale{1, 1});
         this->m_world.assign(PlayerTextInput, ecs::Rotation{0});
-        this->m_world.assign(PlayerTextInput, ecs::Clickable{false, [this](ecs::Clickable&) {
-            ecs::Entity &PlayerTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 1);
+        this->m_world.assign(PlayerTextInput, ecs::Clickable{false, [this](ecs::Clickable&, ecs::Entity *entity) {
+            ecs::Entity &PlayerTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), entity->id);
             ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(PlayerTextInput);
 
             textInput.isFocused = true;
@@ -45,7 +45,7 @@ namespace rtype {
         this->m_world.assign(ButtonPlay, ecs::Sprite{"assets/Menu/buttonPlay.png", ecs::Rectangle{0, 0, 300, 153}, ecs::Vector2{0, 0}});
         this->m_world.assign(ButtonPlay, ecs::Scale{1, 1});
         this->m_world.assign(ButtonPlay, ecs::Rotation{0});
-        this->m_world.assign(ButtonPlay, ecs::Clickable{false, [this](ecs::Clickable&) {
+        this->m_world.assign(ButtonPlay, ecs::Clickable{false, [this](ecs::Clickable&, ecs::Entity *) {
             std::cout << "-> ButtonPlay clicked" << std::endl;
             std::cout << "Switch scene to play game" << std::endl;
             loadGame(this->m_world.getSceneById(SCENE_GAME));

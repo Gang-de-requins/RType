@@ -27,7 +27,7 @@ namespace rtype {
         this->m_world.assign(ButtonSettings, ecs::Sprite{"assets/Menu/buttonSettings.png", ecs::Rectangle{0, 0, 300, 153}, ecs::Vector2{0, 0}});
         this->m_world.assign(ButtonSettings, ecs::Scale{1, 1});
         this->m_world.assign(ButtonSettings, ecs::Rotation{0});
-        this->m_world.assign(ButtonSettings, ecs::Clickable{false, [this](ecs::Clickable&) {
+        this->m_world.assign(ButtonSettings, ecs::Clickable{false, [this](ecs::Clickable&, ecs::Entity *) {
             std::cout << "-> ButtonPlay clicked" << std::endl;
             std::cout << "Switch scene settings" << std::endl;
             loadSettings(this->m_world.getSceneById(SCENE_SETTINGS));
@@ -39,7 +39,7 @@ namespace rtype {
         this->m_world.assign(ButtonConnect, ecs::Sprite{ "assets/Menu/buttonPlay.png", ecs::Rectangle{0, 0, 300, 153}, ecs::Vector2{0, 0} });
         this->m_world.assign(ButtonConnect, ecs::Scale{ 1, 1 });
         this->m_world.assign(ButtonConnect, ecs::Rotation{ 0 });
-        this->m_world.assign(ButtonConnect, ecs::Clickable{ false, [this](ecs::Clickable&) {
+        this->m_world.assign(ButtonConnect, ecs::Clickable{ false, [this](ecs::Clickable&, ecs::Entity *) {
             this->m_network.connect(this->m_network.m_ip, this->m_network.m_port, *this, this->m_playerName);
             loadChooseName(this->m_world.getSceneById(SCENE_CHOOSENAME));
             this->m_world.switchToScene(SCENE_CHOOSENAME);
