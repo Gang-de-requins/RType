@@ -9,6 +9,10 @@ add_subdirectory(../ecs build/ecs)
 set(SRC_PONG
     src/main.cpp
     src/Pong.cpp
+    src/LoadMenu.cpp
+    src/LoadGame.cpp
+    src/LoadEnd.cpp
+    src/LoadSettings.cpp
 )
 
 set(SRC
