@@ -12,6 +12,11 @@
 #include "GameEngine.hpp"
 #include "raylib.h"
 
+#define MENU 0
+#define GAME 1
+#define END 2
+#define SETTINGS 3
+
 namespace game
 {
 
@@ -27,6 +32,10 @@ namespace game
 
     private:
         void GameScenes();
+        void LoadMenu(ecs::Scene &scene);
+        void LoadGame(ecs::Scene &scene);
+        void LoadEnd(ecs::Scene &scene);
+        void LoadSettings(ecs::Scene &scene);
     };
 
 }
