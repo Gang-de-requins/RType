@@ -9,6 +9,12 @@
         },
         {
             "name": "rapidjson"
+        },
+        {
+            "name": "sfml"
+        },
+        {
+            "name": "asio"
         }
     ]
 }
