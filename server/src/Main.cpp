@@ -7,7 +7,6 @@
 
 #include "../include/ServerRooms.hpp"
 #include "Rtype.hpp"
-#include "Message.hpp"
 
 int checkArguments(int ac, char const * const *av)
 {
