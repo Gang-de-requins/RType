@@ -83,7 +83,7 @@ namespace server {
             }
         }
     }
-    
+
     void Server::processMessages()
     {
         EntityTemplate entityTemplate = EntityTemplate();
@@ -99,3 +99,37 @@ namespace server {
 
             std::cout << "Message received: " << messageString << std::endl;
 
+            switch (messageType) {
+                case ecs::MessageType::PLAYER_CONNECTED:
+                {
+                    Player newPlayer = Player(messageString, buffer.getEndpoint());
+
+                    _players.push_back(newPlayer);
+
+                    for (auto &player : _players) {
+                        if (player.getEndpoint() != buffer.getEndpoint()) {
+                            // Send to all other players that a new player has connected
+                            ecs::Buffer newBuffer;
+                            newBuffer.writeMessageType(ecs::MessageType::PLAYER_CONNECTED);
+                            std::string response = messageString + ":" + "0" + ":100:100";
+                            newBuffer.writeString(response);
+                            send(newBuffer, player.getEndpoint());
+
+                            // Send to the new player that all other players are connected
+                            ecs::Buffer newBuffer2;
+                            newBuffer2.writeMessageType(ecs::MessageType::PLAYER_CONNECTED);
+                            std::string response2 = player.getName() + ":" + "0" + ":100:100";
+                            newBuffer2.writeString(response2);
+                            send(newBuffer2, buffer.getEndpoint());
+                        }
+                    }
+
+                    ecs::Buffer localBuffer;
+                    localBuffer.writeMessageType(ecs::MessageType::PLAYER_CONNECTED);
+                    std::string response = messageString + ":" + "1" + ":100:100";
+                    localBuffer.writeString(response);
+                    send(localBuffer, buffer.getEndpoint());
+
+                    entityTemplate.player(this->_world, messageString, 100, 100);
+                    break;
+                }
