@@ -25,6 +25,7 @@ namespace rtype {
         bool m_isMovingBottom;
         bool m_isMovingLeft;
         bool m_isMovingRight;
+        std::size_t id;
 
         public:
             Player(ecs::Entity &Entityspaceship, const std::string &name);
