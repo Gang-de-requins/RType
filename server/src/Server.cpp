@@ -173,3 +173,13 @@ namespace server {
                     }
                     break;
                 }
+                case ecs::MessageType::PLAYER_SHOOT:
+                {
+                    std::size_t id = 0;
+
+                    try {
+                        id = std::stoi(messageString);
+                    } catch (std::exception &e) {
+                        std::cerr << "Exception in processMessages: " << e.what() << std::endl;
+                        break;
+                    }
