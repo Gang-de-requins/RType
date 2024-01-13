@@ -2,6 +2,7 @@
 #define GAME_ENGINE_HPP
 
 // Boost-asio avant raylib pour compiler sur Windows
+#include "Buffer.hpp"
 
 /* Components */
 #include "components/Components.hpp"
@@ -11,6 +12,5 @@
 
 #include "Entity.hpp"
 #include "World.hpp"
-#include "Message.hpp"
 
 #endif /* GAME_ENGINE_HPP */
