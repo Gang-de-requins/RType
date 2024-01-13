@@ -11,9 +11,11 @@ namespace server {
             ~Player() {}
 
             std::string getName() const { return _name; }
+            asio::ip::udp::endpoint getEndpoint() const { return _endpoint; }
 
         private:
             std::string _name;
+            asio::ip::udp::endpoint _endpoint;
     };
 }
 
