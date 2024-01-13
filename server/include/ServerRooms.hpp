@@ -42,7 +42,7 @@ namespace serverGame
         };
         Server server;
         std::vector<std::thread> threadPool;
-        std::vector<RoomInfo> rooms;
+        std::vector<ecs::RoomInfo> rooms;
         std::mutex roomsMutex;
         int port;
     };
