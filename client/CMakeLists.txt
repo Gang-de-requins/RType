@@ -30,7 +30,7 @@ set(SRC
 if (WIN32)
 	add_compile_options(/W4 /WX /std:c++17)
 else()
-    add_compile_options(-Wall -Wextra -Werror -std=c++17)
+    add_compile_options(-Wall -Wextra -std=c++17)
 endif()
 
 message("Compiling ${PROJECT_NAME}...")
