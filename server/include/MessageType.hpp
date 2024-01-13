@@ -8,7 +8,8 @@ namespace server {
         PLAYER_MOVE = 0x03,
         PLAYER_SHOOT = 0x04,
         ENEMY_SPAWN = 0x05,
-        ENTITY_DESTROYED = 0x06,
+        ENEMY_SHOOT = 0x06,
+        ENTITY_DESTROYED = 0x07,
     };
 }
 
