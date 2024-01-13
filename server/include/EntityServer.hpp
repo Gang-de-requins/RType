@@ -28,12 +28,12 @@
 
 namespace serverGame
 {
-    class Entity
+    class EntityServer
     {
 
     public:
-        Entity(std::string name, int id, ecs::World &world, ecs::Entity &entity);
-        ~Entity();
+        EntityServer(std::string name, int id, ecs::World &world, ecs::Entity &entity);
+        ~EntityServer();
         void setName(std::string name)
         {
             this->_name = name;
@@ -64,11 +64,16 @@ namespace serverGame
             return this->_type;
         }
 
-        void move(std::string name, ecs::MessageType direction, ecs::World &world);
+        ecs::Entity& getEntity() const {
+            return _entity;
+        }
+
+        void move(ecs::MessageType direction, ecs::World &world);
         void stopMoving(ecs::Acceleration &accSpaceship);
         void continuousMovement(ecs::Acceleration &accSpaceship, ecs::MessageType direction);
         std::pair<float, float> getPosition(ecs::World &world);
         std::pair<float, float> getAcceleration(ecs::World &world);
+        float getHealth(ecs::World &world);
         bool isMovingTop;
         bool isMovingLeft;
         bool isMovingRight;
