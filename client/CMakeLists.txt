@@ -19,6 +19,7 @@ set(SRC
     src/LoadMenu.cpp
     src/LoadSettings.cpp
     src/LoadChooseName.cpp
+    src/LoadChooseRoom.cpp
     src/LoadGame.cpp
     src/Network.cpp
     src/Player.cpp

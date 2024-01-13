@@ -12,8 +12,9 @@
 
 #define SCENE_MENU 0
 #define SCENE_SETTINGS 1
-#define SCENE_CHOOSENAME 2
-#define SCENE_GAME 3
+#define SCENE_CHOOSEROOM 2
+#define SCENE_CHOOSENAME 3
+#define SCENE_GAME 4
 
 namespace rtype {
     class Game {
@@ -35,6 +36,7 @@ namespace rtype {
             void initScenes();
             void loadMenu(ecs::Scene &scene);
             void loadSettings(ecs::Scene &scene);
+            void loadChooseRoom(ecs::Scene &scene);
             void loadChooseName(ecs::Scene &scene);
             void loadGame(ecs::Scene &scene);
     };
