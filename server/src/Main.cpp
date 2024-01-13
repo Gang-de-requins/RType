@@ -28,14 +28,22 @@ int checkArguments(int ac, char const * const *av)
     return EXIT_SUCCESS;
 }
 
+
 int main(int ac, char const * const *av)
 {
-    
-    if (checkArguments(ac, av) == EXIT_FAILURE)
-        return 84;
+    if (checkArgs(ac, av) == EXIT_FAILURE)
+        return EXIT_FAILURE;
 
-    serverGame::ServerRooms Rooms;
-    Rooms.start();
-    
-    return 0;
+    srand(static_cast<unsigned int>(time(NULL)));
+    try {
+        std::shared_ptr<server::Server> server = std::make_shared<server::Server>(std::stoi(av[1]));
+        std::thread receive(receiveMessageThread, server);
+
+        server->run();
+    }
+    catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
+    }
+
+    return EXIT_SUCCESS;
 }
