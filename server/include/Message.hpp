@@ -18,6 +18,10 @@ namespace server {
             {
                 this->_msg = msg;
             }
+            MessageType getMessageType() const
+            {
+                return this->_messageType;
+            }
 
         private:
             MessageType _messageType;
