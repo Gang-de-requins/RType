@@ -13,6 +13,7 @@ serverGame::Rtype::Rtype(int port)
 {
     this->server.setupServer(port);
     this->id = 0;
+    this->test = 0;
     ecs::Scene &inGame = this->world.createScene();
     this->world.registerSystems<
         ecs::ControllableSystem,
@@ -30,6 +31,7 @@ serverGame::Rtype::~Rtype()
 void serverGame::Rtype::run(void)
 {
     this->addDefault("test");
+
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     while(true)
     {
@@ -66,21 +68,35 @@ void serverGame::Rtype::processMessages(void)
 
         ecs::MessageType messageType = message.getMessageType();
 
-        if (message.getMessageType() == ecs::MessageType::PlayerJoined) {
+        switch (messageType) {
+            case ecs::MessageType::PlayerJoined: {
                 ecs::PlayerJoined receivedStruct;
                 receivedStruct.deserialize(message.getMessageData());
                 std::cout << "Received PlayerJoinRequest: playername = " << receivedStruct.playername << std::endl;
                 addPlayer(receivedStruct.playername, message.getEndpoint());
-        }else if (message.getMessageType() == ecs::MessageType::Move) {
+                break;
+            }
+            case ecs::MessageType::NewMissile: {
+                for (auto& entity : this->getEntities()) {
+                    if (entity->getEndpoint() == message.getEndpoint()) {
+                        std::string tt = std::to_string(this->test);
+                        this->test++;
+                    }
+                }
+                break;
+            }
+            case ecs::MessageType::Move: {
                 ecs::Move receivedStruct;
                 receivedStruct.deserialize(message.getMessageData());
                 for (auto& entity : this->getEntities()) {
-                    if (entity.getEndpoint() == message.getEndpoint())
-                        entity.move(receivedStruct.direction, this->world);
+                    if (entity->getEndpoint() == message.getEndpoint())
+                        entity->move(receivedStruct.direction, this->world);
                 }
-
-        } else {
-            std::cout << "Unknown message type received: " << static_cast<int>(message.getMessageType()) << std::endl;
+                break;
+            }
+            default:
+                std::cout << "Unknown message type received: " << static_cast<int>(message.getMessageType()) << std::endl;
+                break;
         }
     }
 }
@@ -97,11 +113,10 @@ void serverGame::Rtype::addDefault(std::string name)
     world.assign(entity, ecs::Acceleration{0, 0, 4});
     world.assign(entity, ecs::Scale{1, 1});
     world.assign(entity, ecs::Rotation{0});
-    world.assign(entity, ecs::Collision{false, {}});
     world.assign(entity, ecs::Name{name, ecs::Position{-20, -20}});
 
-    serverGame::EntityServer newEntity(name, this->id, this->world, entity);
-    newEntity.setType("TEST");
+   auto newEntity = std::make_shared<serverGame::EntityServer>(name, this->id, this->world, entity);
+    newEntity->setType("TEST");
     this->mutex.lock();
     this->entities.push_back(newEntity);
     this->mutex.unlock();
@@ -120,29 +135,49 @@ void serverGame::Rtype::addPlayer(std::string name, boost::asio::ip::udp::endpoi
     world.assign(entity, ecs::Acceleration{0, 0, 4});
     world.assign(entity, ecs::Scale{1, 1});
     world.assign(entity, ecs::Rotation{0});
-    world.assign(entity, ecs::Collision{false, {}});
     world.assign(entity, ecs::Name{name, ecs::Position{-20, -20}});
 
-    serverGame::EntityServer newEntity(name, this->id, this->world, entity);
-    newEntity.setEndpoint(endpoint);
-    newEntity.setType("PLAYER");
+    auto newEntity = std::make_shared<serverGame::EntityServer>(name, this->id, this->world, entity);
+    newEntity->setEndpoint(endpoint);
+    newEntity->setType("PLAYER");
     this->mutex.lock();
     this->entities.push_back(newEntity);
     this->mutex.unlock();
 
     ecs::NewPlayer newPlayer = {name, entity.id, {200, 200}, 100};
-    this->server.send(newPlayer, ecs::MessageType::PlayerJoinedAccept, newEntity.getEndpoint());
+    this->server.send(newPlayer, ecs::MessageType::PlayerJoinedAccept, newEntity->getEndpoint());
 
 
     for (auto& entity : this->entities) {
-        if (entity.getType() != "TEST") {
-            if (entity.getName() != newEntity.getName()) {
-                ecs::NewPlayer existingPlayer = {entity.getName(), 0, {0, 0}, 100};
-                this->server.send(existingPlayer, ecs::MessageType::NewPlayer, newEntity.getEndpoint());
-                this->server.send(newPlayer, ecs::MessageType::NewPlayer, entity.getEndpoint());
+        if (entity->getType() != "TEST") {
+            if (entity->getName() != newEntity->getName()) {
+                ecs::NewPlayer existingPlayer = {entity->getName(), 0, {0, 0}, 100};
+                this->server.send(existingPlayer, ecs::MessageType::NewPlayer, newEntity->getEndpoint());
+                this->server.send(newPlayer, ecs::MessageType::NewPlayer, entity->getEndpoint());
             }
         }
     }
+}
+
+
+void serverGame::Rtype::addMissile(std::string name)
+{
+    ecs::Scene &inGame = world.getCurrentScene();
+    ecs::Entity &entity = world.createEntity(inGame);
+
+    world.assign(entity, ecs::Position{200, 200});
+    world.assign(entity, ecs::Velocity{3, 0});
+    world.assign(entity, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}});
+    world.assign(entity, ecs::Acceleration{0, 0, 4});
+    world.assign(entity, ecs::Scale{1, 1});
+    world.assign(entity, ecs::Rotation{0});
+    world.assign(entity, ecs::Name{name, ecs::Position{-20, -20}});
+
+   auto newEntity = std::make_shared<serverGame::EntityServer>(name, this->id, this->world, entity);
+    newEntity->setType("TEST");
+    this->mutex.lock();
+    this->entities.push_back(newEntity);
+    this->mutex.unlock();
 }
 
 // void serverGame::Rtype::GoDirection(serverGame::Message msg, Network::MessageType dir)
@@ -190,20 +225,20 @@ void serverGame::Rtype::sendGameState()
     this->mutex.lock();
     ecs::EntityList entityList;
     for (auto &entity : this->getEntities()) {
-        if (entity.getType() != "TEST") {
-            std::pair<float, float> pos = entity.getPosition(this->world);
+        if (entity->getType() != "TEST") {
+            std::pair<float, float> pos = entity->getPosition(this->world);
             ecs::EntityInfo entityInfo;
-            entityInfo.playername = entity.getName();
-            entityInfo.id = entity.getEntity().id;
-            entityInfo.hp = entity.getHealth(this->world);
+            entityInfo.playername = entity->getName();
+            entityInfo.id = entity->getEntity().id;
+            entityInfo.hp = entity->getHealth(this->world);
             entityInfo.pos = pos;
             entityList.entityList.push_back(entityInfo);
         }
     }
     
     for (auto &entity : this->getEntities()) {
-        if (entity.getType() == "PLAYER")
-            this->server.send(entityList, ecs::MessageType::EntityList, entity.getEndpoint());
+        if (entity->getType() == "PLAYER")
+            this->server.send(entityList, ecs::MessageType::EntityList, entity->getEndpoint());
     }
     this->mutex.unlock();
 }
