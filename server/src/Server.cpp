@@ -133,3 +133,36 @@ namespace server {
                     entityTemplate.player(this->_world, messageString, 100, 100);
                     break;
                 }
+                case ecs::MessageType::PLAYER_MOVE:
+                {
+                    // Message format: "tag:direction"
+                    std::string delimiter = ":";
+                    std::string rawId = messageString.substr(0, messageString.find(delimiter));
+                    messageString.erase(0, messageString.find(delimiter) + delimiter.length());
+                    std::string direction = messageString.substr(0, messageString.find(delimiter));
+                    std::size_t id = 0;
+
+                    try {
+                        id = std::stoi(rawId);
+                    } catch (std::exception &e) {
+                        std::cerr << "Exception in processMessages: " << e.what() << std::endl;
+                        break;
+                    }
+                    ecs::Entity &e = this->_world.getEntityById(this->_world.getCurrentScene(), id);
+
+                    auto &velocity = this->_world.get<ecs::Velocity>(e);
+
+                    if (direction == "left") {
+                        velocity.dx = -4;
+                    } else if (direction == "right") {
+                        velocity.dx = 4;
+                    } else if (direction == "up") {
+                        velocity.dy = -4;
+                    } else if (direction == "down") {
+                        velocity.dy = 4;
+                    } else if (direction == "stopx") {
+                        velocity.dx = 0;
+                    } else if (direction == "stopy") {
+                        velocity.dy = 0;
+                    }
+                }
