@@ -109,7 +109,7 @@ namespace rtype {
         this->m_world.assign(myPlayer, ecs::Collision{false, {}, false});
         this->m_world.assign(myPlayer, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 8, 0, 150, std::chrono::steady_clock::now()});
         this->m_world.assign(myPlayer, ecs::Name{this->m_playerName, ecs::Position{-20, -20}});
-
+        this->m_world.assign(myPlayer, ecs::Shooter{std::chrono::milliseconds(500), std::chrono::steady_clock::now()});
         this->m_players.push_back(Player(myPlayer, this->m_playerName));
 
         ecs::Entity &SoundPlayer = this->m_world.createEntity(scene);
