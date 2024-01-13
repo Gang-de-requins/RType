@@ -43,7 +43,6 @@ namespace server {
 
             std::vector<Player> getPlayers() const { return _players; }
 
-
         private:
             std::shared_ptr<asio::ip::udp::socket> _socket;
             asio::ip::udp::endpoint _endpoint;
