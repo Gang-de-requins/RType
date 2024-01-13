@@ -31,9 +31,20 @@ namespace server {
                 return this->_msg;
             }
 
+            void setEndpoint(asio::ip::udp::endpoint endpoint)
+            {
+                this->_endpoint = endpoint;
+            }
+
+            asio::ip::udp::endpoint getEndpoint()
+            {
+                return this->_endpoint;
+            }
+
         private:
             MessageType _messageType;
             std::string _msg;
+            asio::ip::udp::endpoint _endpoint;
     };
 }
 
