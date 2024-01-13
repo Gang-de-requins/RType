@@ -12,7 +12,6 @@
 #include <mutex>
 #include "Server.hpp"
 #include "Player.hpp"
-#include "Message.hpp"
 #include "EntityServer.hpp"
 #include "GameEngine.hpp"
 
@@ -27,9 +26,9 @@ namespace serverGame
         //void addPlayer(serverGame::Message msg);
         void addDefault(std::string name);
         void addPlayer(std::string name, boost::asio::ip::udp::endpoint endpoint);
-        void addMissile(serverGame::Message msg);
-        void GoDirection(serverGame::Message msg, Network::MessageType dir);
-        void StopDirection(serverGame::Message msg, Network::MessageType dir);
+        // void addMissile(serverGame::Message msg);
+        // void GoDirection(serverGame::Message msg, Network::MessageType dir);
+        // void StopDirection(serverGame::Message msg, Network::MessageType dir);
         void processMessages(void);
         void sendGameState();
         void newEntity(std::string name);
@@ -37,20 +36,21 @@ namespace serverGame
         {
             return this->players;
         }
-        std::vector<serverGame::Entity> &getEntities()
+        std::vector<serverGame::EntityServer> &getEntities()
         {
             return this->entities;
         }
+        void move();
         
         Server server;
-        std::vector<ecs::Buffer> bufferList;
+        std::vector<ecs::Message> messageList;
         std::mutex mutex;
         std::string name;
 
 
     private:
         std::vector<Player> players;
-        std::vector<serverGame::Entity> entities;
+        std::vector<serverGame::EntityServer> entities;
         ecs::World world;
         ecs::Scene scene;
         int id;
