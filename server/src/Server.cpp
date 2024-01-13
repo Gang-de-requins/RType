@@ -165,4 +165,11 @@ namespace server {
                     } else if (direction == "stopy") {
                         velocity.dy = 0;
                     }
+
+                    for (auto &player : _players) {
+                        if (player.getEndpoint() != buffer.getEndpoint()) {
+                            send(buffer, player.getEndpoint());
+                        }
+                    }
+                    break;
                 }
