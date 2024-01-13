@@ -32,6 +32,8 @@ namespace server {
             Server(short port);
             ~Server();
 
+            void setup(short port);
+            void run();
         private:
             std::shared_ptr<asio::ip::udp::socket> _socket;
             asio::io_context _io_context;
