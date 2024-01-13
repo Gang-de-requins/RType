@@ -31,12 +31,14 @@ namespace serverGame
         // void StopDirection(serverGame::Message msg, Network::MessageType dir);
         void processMessages(void);
         void sendGameState();
+
         void newEntity(std::string name);
+        void addMissile(std::string name);
         std::vector<Player> getPlayers()
         {
             return this->players;
         }
-        std::vector<serverGame::EntityServer> &getEntities()
+        std::vector<std::shared_ptr<serverGame::EntityServer>> &getEntities()
         {
             return this->entities;
         }
@@ -46,11 +48,12 @@ namespace serverGame
         std::vector<ecs::Message> messageList;
         std::mutex mutex;
         std::string name;
+        int test;
 
 
     private:
         std::vector<Player> players;
-        std::vector<serverGame::EntityServer> entities;
+        std::vector<std::shared_ptr<serverGame::EntityServer>> entities;
         ecs::World world;
         ecs::Scene scene;
         int id;
