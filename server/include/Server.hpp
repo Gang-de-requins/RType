@@ -41,8 +41,12 @@ namespace server {
             std::vector<ecs::Buffer> bufferList;
             std::mutex mutex;
 
+            std::vector<Player> getPlayers() const { return _players; }
+
+
         private:
             std::shared_ptr<asio::ip::udp::socket> _socket;
+            asio::ip::udp::endpoint _endpoint;
             asio::io_context _io_context;
 
             std::vector<Player> _players;
