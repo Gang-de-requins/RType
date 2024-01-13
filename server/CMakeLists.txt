@@ -5,9 +5,9 @@ message("Configuring ${PROJECT_NAME}...")
 message("Looking for raylib...")
 find_package(raylib CONFIG REQUIRED)
 message("Found raylib")
-message("Looking for boost...")
-find_package(Boost REQUIRED COMPONENTS system)
-message("Boost found!")
+message("Looking for Asio...")
+find_package(asio CONFIG REQUIRED)
+message("Found Asio")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -15,11 +15,9 @@ set(ECS_LIBRARY ecs)
 
 set(SRC_SERVER
     src/Main.cpp
-    src/Player.cpp
-    src/Rtype.cpp
-    src/Entity.cpp
     src/Server.cpp
-    src/ServerRooms.cpp
+    src/EntityTemplate.cpp
+    src/systems/Movement.cpp
 )
 
 set(SRC
@@ -29,7 +27,7 @@ set(SRC
 if (WIN32)
 	add_compile_options(/W4 /WX /std:c++17)
 else()
-	add_compile_options(-Wall -Wextra -std=c++17)
+	add_compile_options(-Wall -Wextra -Werror -std=c++17)
 endif()
 
 message("Compiling ${PROJECT_NAME}...")
@@ -39,7 +37,7 @@ add_executable(${PROJECT_NAME} ${SRC})
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_include_directories(${PROJECT_NAME} PUBLIC ../ecs/include)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Boost::system)
+target_link_libraries(${PROJECT_NAME} PRIVATE asio::asio)
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${ECS_LIBRARY})
 
