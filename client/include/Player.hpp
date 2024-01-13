@@ -31,7 +31,7 @@ namespace rtype {
             ~Player();
             ecs::Entity &getSpaceshipEntity();
             const std::string &getName() const;
-            void move(Game &game, ecs::MessageType direction);
+            void move(Game &game, std::pair<float, float> pos);
             void shoot(Game &game);
         
         private:
