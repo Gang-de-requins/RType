@@ -38,18 +38,26 @@ namespace rtype {
                 ecs::Move msg = {ecs::MessageType::GoRight};
                 this->m_network.send(msg, ecs::MessageType::Move);
             }
-            // if (IsKeyPressed(KEY_SPACE)) {
-            //     ecs::SceneManager &sceneManager = this->m_world.getSceneManager();
-            //     auto entities = sceneManager.view<ecs::Controllable>(sceneManager.getCurrentScene());
-            
-            //     for (auto &entity : entities) {
-            //         ecs::Controllable &controllable = sceneManager.get<ecs::Controllable>(*entity);
-            //         if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - controllable.shootUpdate).count() >= controllable.timeOut) {
-            //             this->m_network.send(::Network::MessageType::NewMissile, this->m_playerName);
-            //         }
-            //     }
-
-            // }
+            if (IsKeyReleased(KEY_UP)) {
+                ecs::Move emptyStruct2 = {ecs::MessageType::StopTop};
+                this->m_network.send(emptyStruct2, ecs::MessageType::Move);
+            }
+            if (IsKeyReleased(KEY_DOWN)) {
+                ecs::Move msg = {ecs::MessageType::StopBottom};
+                this->m_network.send(msg, ecs::MessageType::Move);
+            }
+            if (IsKeyReleased(KEY_LEFT)) {
+                ecs::Move msg = {ecs::MessageType::StopLeft};
+                this->m_network.send(msg, ecs::MessageType::Move);
+            }
+            if (IsKeyReleased(KEY_RIGHT)) {
+                ecs::Move msg = {ecs::MessageType::StopRight};
+                this->m_network.send(msg, ecs::MessageType::Move);
+            }
+            if (IsKeyPressed(KEY_SPACE)) {
+                ecs::Move emptyStruct2 = {ecs::MessageType::GoTop};
+                this->m_network.send(emptyStruct2, ecs::MessageType::NewMissile);
+            }
 
             BeginDrawing();
             ClearBackground(BLACK);
@@ -91,47 +99,47 @@ namespace rtype {
 
         /* ------------------------- Scene InMenu --------------------------------*/
 
-        ecs::Scene &inMenu = this->m_world.createScene();
+        // ecs::Scene &inMenu = this->m_world.createScene();
 
-         this->m_world.registerSystems<
-            ecs::MusicSystem,
-            ecs::ControllableSystem,
-            ecs::MovementSystem,
-            ecs::CollisionSystem,
-            ecs::LifeSystem,
-            ecs::ParallaxSystem,
-            ecs::RenderSystem,
-            ecs::ClickableSystem
-        >(inMenu);
+        //  this->m_world.registerSystems<
+        //     ecs::MusicSystem,
+        //     ecs::ControllableSystem,
+        //     // ecs::MovementSystem,
+        //     ecs::CollisionSystem,
+        //     ecs::LifeSystem,
+        //     ecs::ParallaxSystem,
+        //     ecs::RenderSystem,
+        //     ecs::ClickableSystem
+        // >(inMenu);
 
 
-        ecs::Entity &ButtonPlay = this->m_world.createEntity(inMenu);
-        this->m_world.assign(ButtonPlay, ecs::Position{500, 500});
-        this->m_world.assign(ButtonPlay, ecs::Sprite{"assets/buttonPlay.png", ecs::Rectangle{0, 0, 300, 153}, ecs::Vector2{0, 0}});
-        this->m_world.assign(ButtonPlay, ecs::Scale{1, 1});
-        this->m_world.assign(ButtonPlay, ecs::Rotation{0});
-        this->m_world.assign(ButtonPlay, ecs::Clickable{false, [this](ecs::Clickable&) {
-            std::cout << "ButtonPlay clicked" << std::endl;
-            this->m_world.switchToScene(1);
-        }});
+        // ecs::Entity &ButtonPlay = this->m_world.createEntity(inMenu);
+        // this->m_world.assign(ButtonPlay, ecs::Position{500, 500});
+        // this->m_world.assign(ButtonPlay, ecs::Sprite{"assets/buttonPlay.png", ecs::Rectangle{0, 0, 300, 153}, ecs::Vector2{0, 0}});
+        // this->m_world.assign(ButtonPlay, ecs::Scale{1, 1});
+        // this->m_world.assign(ButtonPlay, ecs::Rotation{0});
+        // this->m_world.assign(ButtonPlay, ecs::Clickable{false, [this](ecs::Clickable&) {
+        //     std::cout << "ButtonPlay clicked" << std::endl;
+        //     this->m_world.switchToScene(1);
+        // }});
 
-        ecs::Entity &PlayerTextInput = this->m_world.createEntity(inMenu);
-        this->m_world.assign(PlayerTextInput, ecs::Position{500, 300});
-        this->m_world.assign(PlayerTextInput, ecs::Rectangle{0, 0, 300, 100});
-        this->m_world.assign(PlayerTextInput, ecs::TextInput{10, ecs::Position{500, 325}});
-        this->m_world.assign(PlayerTextInput, ecs::Scale{1, 1});
-        this->m_world.assign(PlayerTextInput, ecs::Rotation{0});
-        this->m_world.assign(PlayerTextInput, ecs::Clickable{false, [this](ecs::Clickable&) {
-            std::cout << "PlayerTextInput clicked" << std::endl;
-            ecs::Entity &PlayerTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 1);
-            ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(PlayerTextInput);
+        // ecs::Entity &PlayerTextInput = this->m_world.createEntity(inMenu);
+        // this->m_world.assign(PlayerTextInput, ecs::Position{500, 300});
+        // this->m_world.assign(PlayerTextInput, ecs::Rectangle{0, 0, 300, 100});
+        // this->m_world.assign(PlayerTextInput, ecs::TextInput{10, ecs::Position{500, 325}});
+        // this->m_world.assign(PlayerTextInput, ecs::Scale{1, 1});
+        // this->m_world.assign(PlayerTextInput, ecs::Rotation{0});
+        // this->m_world.assign(PlayerTextInput, ecs::Clickable{false, [this](ecs::Clickable&) {
+        //     std::cout << "PlayerTextInput clicked" << std::endl;
+        //     ecs::Entity &PlayerTextInput = this->m_world.getEntityById(this->m_world.getCurrentScene(), 1);
+        //     ecs::TextInput &textInput = this->m_world.get<ecs::TextInput>(PlayerTextInput);
 
-            this->m_playerName = textInput.content;
-            textInput.isFocused = true;
-        }});
-        this->m_world.assign(PlayerTextInput, ecs::Color{200, 200, 200, 255});
-        this->m_world.assign(PlayerTextInput, ecs::FontSize{50});
-        this->m_world.assign(PlayerTextInput, ecs::TextColor{0, 0, 0, 255});
+        //     this->m_playerName = textInput.content;
+        //     textInput.isFocused = true;
+        // }});
+        // this->m_world.assign(PlayerTextInput, ecs::Color{200, 200, 200, 255});
+        // this->m_world.assign(PlayerTextInput, ecs::FontSize{50});
+        // this->m_world.assign(PlayerTextInput, ecs::TextColor{0, 0, 0, 255});
 
         /* ------------------------- Scene InGame --------------------------------*/
         ecs::Scene &inGame = this->m_world.createScene();
@@ -141,7 +149,7 @@ namespace rtype {
             ecs::SoundSystem,
             ecs::ControllableSystem,
             ecs::AnimationSystem,
-            ecs::MovementSystem,
+            // ecs::MovementSystem,
             ecs::SpriteSystem,
             ecs::NameSystem,
             ecs::TextSystem,

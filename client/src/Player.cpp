@@ -8,7 +8,8 @@ namespace rtype {
     m_isMovingTop(false),
     m_isMovingBottom(false),
     m_isMovingLeft(false),
-    m_isMovingRight(false)
+    m_isMovingRight(false),
+    id(Entityspaceship.id)
     {
     }
 
@@ -28,57 +29,23 @@ namespace rtype {
 
     void Player::move(Game &game, std::pair<float, float> pos)
     {
+        static_cast<void>(pos);
+        // static_cast<void>(game);
         ecs::World &world = game.getWorld();
-        ecs::Position &posSpaceship = world.get<ecs::Position>(this->m_spaceship); /// ça crash
+        //ecs::Entity &entity = world.getEntityById(world.getCurrentScene(), this->id);
+        // ecs::Position &posSpaceship = world.get<ecs::Position>(world.getCurrentScene().entities.front());
 
-        // switch (direction) {
-        //     case ecs::MessageType::GoTop:
-        //         this->m_isMovingTop = true;
-        //         accSpaceship.ddx = 0;
-        //         accSpaceship.ddy = -0.3f;
-        //         accSpaceship.maxSpeed = 4.0f;
-        //         break;
-        //     case ecs::MessageType::GoBottom:
-        //         this->m_isMovingBottom = true;
-        //         accSpaceship.ddx = 0;
-        //         accSpaceship.ddy = 0.3f;
-        //         accSpaceship.maxSpeed = 4.0f;
-        //         break;
-        //     case ecs::MessageType::GoLeft:
-        //         this->m_isMovingLeft = true;
-        //         accSpaceship.ddx = -0.3f;
-        //         accSpaceship.ddy = 0;
-        //         accSpaceship.maxSpeed = 4.0f;
-        //         break;
-        //     case ecs::MessageType::GoRight:
-        //         this->m_isMovingRight = true;
-        //         accSpaceship.ddx = 0.3f;
-        //         accSpaceship.ddy = 0;
-        //         accSpaceship.maxSpeed = 4.0f;
-        //         break;
-        //     case ecs::MessageType::StopTop:
-        //         this->m_isMovingTop = false;
-        //         stopThread = std::thread(&Player::stopMoving, this, std::ref(accSpaceship));
-        //         stopThread.detach();
-        //         break;
-        //     case ecs::MessageType::StopBottom:
-        //         this->m_isMovingBottom = false;
-        //         stopThread = std::thread(&Player::stopMoving, this, std::ref(accSpaceship));
-        //         stopThread.detach();
-        //         break;
-        //     case ecs::MessageType::StopLeft:
-        //         this->m_isMovingLeft = false;
-        //         stopThread = std::thread(&Player::stopMoving, this, std::ref(accSpaceship));
-        //         stopThread.detach();
-        //         break;
-        //     case ecs::MessageType::StopRight:
-        //         this->m_isMovingRight = false;
-        //         stopThread = std::thread(&Player::stopMoving, this, std::ref(accSpaceship));
-        //         stopThread.detach();
-        //         break;
-        //     default:
-        //         break;
-        // }
+        for (auto &entity : world.getCurrentScene().entities) {
+            if (entity.id == this->id) {
+                ecs::Position &posSpaceship = world.get<ecs::Position>(entity);
+                   posSpaceship.x = pos.first;
+                    posSpaceship.y = pos.second;
+                    std::cout << posSpaceship.x << " " << posSpaceship.y << std::endl;
+            }
+        }
+        
+     
+        // world.assign(eneity, posSpaceship);
     }
 
     void Player::shoot(Game &game)
