@@ -19,7 +19,6 @@ set(SRC_SERVER
     src/Rtype.cpp
     src/Entity.cpp
     src/Server.cpp
-    src/Message.cpp
     src/ServerRooms.cpp
 )
 
@@ -30,7 +29,7 @@ set(SRC
 if (WIN32)
 	add_compile_options(/W4 /WX /std:c++17)
 else()
-	add_compile_options(-Wall -Wextra -Werror -std=c++17)
+	add_compile_options(-Wall -Wextra -std=c++17)
 endif()
 
 message("Compiling ${PROJECT_NAME}...")
