@@ -5,7 +5,8 @@ namespace server {
     enum class MessageType : char {
         PLAYER_CONNECTED = 0x01,
         PLAYER_DISCONNECTED = 0x02,
-
+        PLAYER_MOVE = 0x03,
+        PLAYER_SHOOT = 0x04,
     };
 }
 
