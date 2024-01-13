@@ -83,3 +83,19 @@ namespace server {
             }
         }
     }
+    
+    void Server::processMessages()
+    {
+        EntityTemplate entityTemplate = EntityTemplate();
+
+        while (!this->bufferList.empty()) {
+            this->mutex.lock();
+            ecs::Buffer buffer = this->bufferList.front();
+            this->bufferList.erase(this->bufferList.begin());
+            this->mutex.unlock();
+
+            ecs::MessageType messageType = buffer.readMessageType();
+            std::string messageString = buffer.readString();
+
+            std::cout << "Message received: " << messageString << std::endl;
+
