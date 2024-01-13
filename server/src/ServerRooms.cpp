@@ -64,7 +64,7 @@ void receiveMessageThread(std::shared_ptr<serverGame::Rtype> rtype)
 void sendGameStateThread(std::shared_ptr<serverGame::Rtype> rtype) {
     while (true) {
         rtype->sendGameState();
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 32));
     }
 }
 
@@ -83,8 +83,8 @@ void serverGame::ServerRooms::createRoom(std::string roomName) {
 
         rooms.push_back({roomName, this->port, 3});
         
-        this->port += 2;
         this->threadPool.push_back(std::thread(rtypeThread, rtype));
+        this->port += 2;
 		this->roomsMutex.unlock();
 
         std::cout << "New Room Created :" << roomName << std::endl;
@@ -93,17 +93,16 @@ void serverGame::ServerRooms::createRoom(std::string roomName) {
 
 void serverGame::ServerRooms::getRooms(boost::asio::ip::udp::endpoint endpoint)
 {
-		// this->roomsMutex.lock();
-        // ecs::Buffer buffer;
-        // buffer.writeMessageType(ecs::MessageType::GetRooms);
+	this->roomsMutex.lock();
+    ecs::RoomList roomList;
 
-        // for (const auto& room : rooms) {
-        //     buffer.writeString(room.name);
-        //     buffer.writeInt(room.port);
-        //     buffer.writeInt(room.availableSlots);
-        //     server.sendMessage(buffer, endpoint);
-        // }
-		// this->roomsMutex.unlock();
-
-
+    for (const auto& room : rooms) {
+        ecs::RoomInfo roomInfo;
+        roomInfo.name = room.name;
+        roomInfo.port = room.port;
+        roomInfo.availableSlots = room.availableSlots;
+        roomList.roomList.push_back(roomInfo);
+    }
+    this->server.send(roomList, ecs::MessageType::GetRooms, endpoint);
+	this->roomsMutex.unlock();
 }
