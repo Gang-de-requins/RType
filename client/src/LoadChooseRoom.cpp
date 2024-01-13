@@ -35,14 +35,14 @@ namespace rtype {
 
         ecs::Entity &ButtonCreateRoom = this->m_world.createEntity(scene);
         this->m_world.assign(ButtonCreateRoom, ecs::Position{810, 900});
-        this->m_world.assign(ButtonCreateRoom, ecs::Sprite{"assets/Menu/buttonSettings.png", ecs::Rectangle{0, 0, 300, 153}, ecs::Vector2{0, 0}});
+        this->m_world.assign(ButtonCreateRoom, ecs::Sprite{"assets/CreateRoom/buttonSettings.png", ecs::Rectangle{0, 0, 300, 153}, ecs::Vector2{0, 0}});
         this->m_world.assign(ButtonCreateRoom, ecs::Scale{1, 1});
         this->m_world.assign(ButtonCreateRoom, ecs::Rotation{0});
         this->m_world.assign(ButtonCreateRoom, ecs::Clickable{false, [this](ecs::Clickable&) {
             std::cout << "-> ButtonPlay clicked" << std::endl;
-            std::cout << "Switch scene settings" << std::endl;
-            loadSettings(this->m_world.getSceneById(SCENE_SETTINGS));
-            this->m_world.switchToScene(SCENE_SETTINGS);
+            std::cout << "Switch scene create room" << std::endl;
+            loadCreateRoom(this->m_world.getSceneById(SCENE_CREATEROOM));
+            this->m_world.switchToScene(SCENE_CREATEROOM);
         }});
     }
 }

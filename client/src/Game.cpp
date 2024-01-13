@@ -75,6 +75,10 @@ namespace rtype {
 
         this->m_world.createScene();
 
+        /* ------------------------- Scene CreateRoom--------------------------------*/
+
+        this->m_world.createScene();
+
         /* ------------------------- Scene ChooseName --------------------------------*/
 
         this->m_world.createScene();

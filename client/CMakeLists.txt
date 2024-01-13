@@ -20,6 +20,7 @@ set(SRC
     src/LoadSettings.cpp
     src/LoadChooseName.cpp
     src/LoadChooseRoom.cpp
+    src/LoadCreateRoom.cpp
     src/LoadGame.cpp
     src/Network.cpp
     src/Player.cpp

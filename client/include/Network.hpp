@@ -80,6 +80,7 @@ namespace rtype {
 
         public:
             std::string m_ip;
+            std::string test;
             unsigned short m_port;
             Network();
             ~Network();

@@ -43,8 +43,8 @@ namespace rtype {
         this->m_world.assign(ButtonBackward, ecs::Scale{0.4f, 0.4f});
         this->m_world.assign(ButtonBackward, ecs::Rotation{0});
         this->m_world.assign(ButtonBackward, ecs::Clickable{false, [this](ecs::Clickable&) {
-            std::cout << "-> ButtonPlay clicked" << std::endl;
-            std::cout << "Switch scene Menu" << std::endl;
+            std::cout << "-> ButtonBackward clicked" << std::endl;
+            std::cout << "Switch to scene Menu" << std::endl;
             loadMenu(this->m_world.getSceneById(SCENE_MENU));
             this->m_world.switchToScene(SCENE_MENU);
         }});
