@@ -149,7 +149,6 @@ namespace server {
                         break;
                     }
                     ecs::Entity &e = this->_world.getEntityById(this->_world.getCurrentScene(), id);
-
                     auto &velocity = this->_world.get<ecs::Velocity>(e);
 
                     if (direction == "left") {
@@ -226,8 +225,8 @@ namespace server {
         try {
             asio::ip::udp::endpoint senderEndpoint;
             std::array<char, 1024> receiveBuffer;
-
             std::size_t bytes_transferred = this->_socket->receive_from(asio::buffer(receiveBuffer), senderEndpoint);
+
             if (bytes_transferred > 0) {
                 buffer.setData(std::vector<char>(receiveBuffer.begin(), receiveBuffer.begin() + bytes_transferred));
                 buffer.setEndpoint(senderEndpoint);
