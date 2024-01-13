@@ -194,3 +194,16 @@ namespace server {
                         send(buffer, player.getEndpoint());
                     }
                     break;
+                }
+                case ecs::MessageType::PLAYER_DISCONNECTED:
+                {
+                    for (auto &player : _players) {
+                        if (player.getEndpoint() != buffer.getEndpoint()) {
+                            ecs::Buffer newBuffer;
+                            newBuffer.writeMessageType(ecs::MessageType::PLAYER_DISCONNECTED);
+                            newBuffer.writeString(messageString);
+                            send(newBuffer, player.getEndpoint());
+                        }
+                    }
+                
+                }
