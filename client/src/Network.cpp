@@ -114,7 +114,8 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
                                     << ", " << entityInfo.pos.second << ")" << std::endl;
                             this->moveEntity(game, entityInfo.playername, entityInfo.pos);
                         }
-                    } 
+                    }
+                
                 //     if(bytes_transferred >= sizeof(::Network::MessageType)) {
                 //         //::Network::MessageType messageType = *reinterpret_cast<::Network::MessageType*>(&receiveBuffer[0]);
                 //         //std::string msg(receiveBuffer.data() + sizeof(::Network::MessageType), bytes_transferred - sizeof(::Network::MessageType));
@@ -159,12 +160,11 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
 
         ecs::Scene &inGame = world.getCurrentScene();
         ecs::Entity &player = world.createEntity(inGame);
-        ///world.assign(player, ecs::Position{pos.first, pos.second});
-        world.assign(player, ecs::Position{30, 30});
+        world.assign(player, ecs::Position{pos.first, pos.second});
         world.assign(player, ecs::Velocity{0, 0});
         world.assign(player, ecs::Sprite{"assets/characters2.gif", ecs::Rectangle{0, offset, 32, 16}, ecs::Vector2{0, 0}});
         world.assign(player, ecs::Acceleration{0, 0, 4});
-        world.assign(player, ecs::Scale{1, 1});
+        world.assign(player, ecs::Scale{2, 2});
         world.assign(player, ecs::Rotation{0});
         world.assign(player, ecs::Name{name, ecs::Position{-20, -20}});
 
@@ -177,7 +177,7 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
     {
         for (auto &player : game.getPlayers()) {
             if (player.getName() == name) {
-                ///player.move(game, pos);
+                player.move(game, pos);
                 return;
             }
         }
