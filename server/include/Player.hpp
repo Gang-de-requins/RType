@@ -8,7 +8,7 @@ namespace server {
     class Player {
         public:
             Player(std::string name, asio::ip::udp::endpoint endpoint) : _name(name), _endpoint(endpoint) {}
-
+            ~Player() {}
 
         private:
             std::string _name;
