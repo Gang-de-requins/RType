@@ -12,9 +12,9 @@ namespace ecs {
                 case Event::PlaySound:
                     for (auto &entity : event.entities) {
                         Sound &sound = sceneManager.get<Sound>(*entity);
-                        ::Sound &soundData = sceneManager.getSound(sound.path);
+                        sf::Sound &soundData = sceneManager.getSound(sound.path);
 
-                        ::PlaySound(soundData);
+                        soundData.play();
                     }
                     eventsToRemove.push_back(index);
                     break;

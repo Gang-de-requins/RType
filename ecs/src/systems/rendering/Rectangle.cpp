@@ -12,12 +12,19 @@ namespace ecs {
             auto &rotation = sceneManager.get<Rotation>(*entity);
             auto &color = sceneManager.get<Color>(*entity);
 
-            DrawRectanglePro(
-                ::Rectangle{ position.x, position.y, rectangle.width * scale.x, rectangle.height * scale.y },
-                ::Vector2{ 0, 0 },
-                rotation.angle,
-                ::Color{ color.r, color.g, color.b, color.a }
-            );
+            // DrawRectanglePro(
+            //     ::Rectangle{ position.x, position.y, rectangle.width * scale.x, rectangle.height * scale.y },
+            //     ::Vector2{ 0, 0 },
+            //     rotation.angle,
+            //     ::Color{ color.r, color.g, color.b, color.a }
+            // );
+
+            sf::RectangleShape rectangleShape;
+
+            rectangleShape.setPosition(position.x, position.y);
+            rectangleShape.setSize(sf::Vector2f(rectangle.width * scale.x, rectangle.height * scale.y));
+            rectangleShape.setFillColor(sf::Color(color.r, color.g, color.b, color.a));
+            rectangleShape.setRotation(rotation.angle);
         }
     }
 }

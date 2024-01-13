@@ -2,7 +2,8 @@
 #define SPRITE_SYSTEM_HPP
 
 #include <vector>
-#include "raylib.h"
+// #include "raylib.h"
+#include <SFML/Graphics.hpp>
 #include "components/Position.hpp"
 #include "components/Sprite.hpp"
 #include "components/Scale.hpp"

@@ -2,7 +2,8 @@
 #define NAME_SYSTEM_HPP
 
 #include <vector>
-#include "raylib.h"
+// #include "raylib.h"
+#include <SFML/Graphics.hpp>
 #include "components/Name.hpp"
 #include "components/Position.hpp"
 #include "systems/ISystem.hpp"

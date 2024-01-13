@@ -2,7 +2,8 @@
 #define TEXT_SYSTEM_HPP
 
 #include <vector>
-#include "raylib.h"
+// #include "raylib.h"
+#include <SFML/Graphics.hpp>
 #include "components/Position.hpp"
 #include "components/Text.hpp"
 #include "components/Color.hpp"

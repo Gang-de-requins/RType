@@ -8,7 +8,7 @@ namespace ecs {
 
         for (auto &entity : entities) {
             Submit &submit = sceneManager.get<Submit>(*entity);
-            if (IsKeyPressed(submit.activationKey)) {
+            if (sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(submit.activationKey))) {
                 submit.onSubmit(sceneManager, entity);
             }
         }

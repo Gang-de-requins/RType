@@ -72,20 +72,22 @@ namespace ecs {
     /* ------------------------- PRIVATE FUCNTIONS -------------------------- */
 
     bool CollisionSystem::isColliding(const CollisionInfo &collisionInfo) {
-        ::Rectangle rectangle1 = {
+        sf::FloatRect rectangle1 = {
             collisionInfo.position1.x,
             collisionInfo.position1.y,
             collisionInfo.sprite1.source.width * collisionInfo.scale1.x,
             collisionInfo.sprite1.source.height * collisionInfo.scale1.y
         };
-        ::Rectangle rectangle2 = {
+        sf::FloatRect rectangle2 = {
             collisionInfo.position2.x,
             collisionInfo.position2.y,
             collisionInfo.sprite2.source.width * collisionInfo.scale2.x,
             collisionInfo.sprite2.source.height * collisionInfo.scale2.y
         };
 
-        return CheckCollisionRecs(rectangle1, rectangle2);
+        // return CheckCollisionRecs(rectangle1, rectangle2);
+
+        return rectangle1.intersects(rectangle2);
     }
 
     bool CollisionSystem::isDamageCollision(SceneManager &sceneManager, Scene &scene, Entity *&entity1, Entity *&entity2, bool alreadyColliding) {

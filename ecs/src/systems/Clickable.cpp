@@ -2,10 +2,10 @@
 #include "SceneManager.hpp"
 
 namespace ecs {
-    bool ClickableSystem::mouseInSprite(::Vector2 mousePosition, Entity &entity, SceneManager &sceneManager) {
+    bool ClickableSystem::mouseInSprite(sf::Vector2f mousePosition, Entity &entity, SceneManager &sceneManager) {
         Position &position = sceneManager.get<Position>(entity);
         Scale &scale = sceneManager.get<Scale>(entity) ;
-        ::Rectangle rec = {position.x, position.y, 0, 0};
+        sf::FloatRect rec = {position.x, position.y, 0, 0};
         bool hasSprite = sceneManager.has<Sprite>(entity);
         bool hasRectangle = sceneManager.has<Rectangle>(entity);
 
@@ -19,12 +19,14 @@ namespace ecs {
             rec.height = rectangle.height * scale.y;
         }
 
-        return (CheckCollisionPointRec(mousePosition, rec));
+        // return (CheckCollisionPointRec(mousePosition, rec));
+
+        return rec.contains(mousePosition.x, mousePosition.y);
     }
 
     void ClickableSystem::update(SceneManager &sceneManager) {
         std::vector<Entity*> entities = sceneManager.view<Position, Scale, Clickable>(sceneManager.getCurrentScene());
-        ::Vector2 mousePosition = GetMousePosition();
+        sf::Vector2f mousePosition = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
         ecs::Scene &scene = sceneManager.getCurrentScene();
 
         for (auto &entity : entities) {
@@ -33,7 +35,7 @@ namespace ecs {
 
             Clickable &clickable = sceneManager.get<Clickable>(*entity);
 
-            if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && mouseInSprite(mousePosition, *entity, sceneManager)) {
+            if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && mouseInSprite(mousePosition, *entity, sceneManager)) {
                 clickable.onClick(clickable);
             }
         }

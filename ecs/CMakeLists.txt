@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.8)
 project(ecs)
 
 message("Building ECS Library...")
-message("Looking for raylib...")
-find_package(raylib CONFIG REQUIRED)
-message("Found raylib!")
+message("Looking for sfml...")
+find_package(SFML CONFIG REQUIRED COMPONENTS graphics window system audio)
+message("Found sfml!")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -37,7 +37,7 @@ add_library(${PROJECT_NAME} STATIC ${SRC})
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC raylib)
+target_link_libraries(${PROJECT_NAME} PUBLIC sfml-graphics sfml-window sfml-system sfml-audio)
 
 message("ECS Library built successfully!")
 

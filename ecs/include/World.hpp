@@ -48,6 +48,11 @@ namespace ecs {
              */
             ~World() {
             }
+
+            void initWindow(std::string title, int width, int height) {
+                this->m_sceneManager.initWindow(title, width, height);
+            }
+
             /**
              * @fn World::createScene
              * @brief Create a scene

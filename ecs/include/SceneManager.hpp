@@ -3,7 +3,12 @@
 
 #include <vector>
 #include <algorithm>
-#include "raylib.h"
+// #include "raylib.h"
+#include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
+#include <unordered_map>
 #include "Scene.hpp"
 #include "ParserJson.hpp"
 #include "systems/ISystem.hpp"
@@ -39,9 +44,11 @@ namespace ecs {
         std::vector<Scene> m_scenes; // Scenes
         std::size_t m_nextSceneId; // Next scene id
         std::size_t m_currentSceneId; // Current scene id
-        std::unordered_map<std::string, Texture2D> m_textures; // Textures
-        std::unordered_map<std::string, ::Music> m_musics; // Musics
-        std::unordered_map<std::string, ::Sound> m_sounds; // Sounds
+        sf::Window m_window; // Window
+        std::unordered_map<std::string, sf::Texture> m_textures; // Textures
+        std::unordered_map<std::string, sf::Music> m_musics; // Musics
+        std::unordered_map<std::string, sf::Sound> m_sounds; // Sounds
+        std::unordered_map<std::string, sf::SoundBuffer> m_soundBuffers; // Sound buffers
 
         public:
             /**
@@ -60,6 +67,10 @@ namespace ecs {
              */
             ~SceneManager() {
                 this->m_scenes.clear();
+            }
+
+            void initWindow(std::string title, int width, int height) {
+                this->m_window.create(sf::VideoMode(width, height), title);
             }
 
             /**
@@ -266,16 +277,16 @@ namespace ecs {
              * @param path The path to the texture.
              * @return The texture.
              */
-            Texture2D &getTexture(std::string path);
+            sf::Texture &getTexture(std::string path);
 
-            /**
-             * @fn SceneManager::getMusic
-             * @brief Get a music
-             * 
-             * @param paths The path to the music.
-             * @return The music.
-             */
-            ::Music &getMusic(std::string path);
+            // /**
+            //  * @fn SceneManager::getMusic
+            //  * @brief Get a music
+            //  * 
+            //  * @param paths The path to the music.
+            //  * @return The music.
+            //  */
+            // sf::Music &getMusic(std::string path);
 
             /**
              * @fn SceneManager::getSound
@@ -284,7 +295,16 @@ namespace ecs {
              * @param path The path to the sound.
              * @return The sound.
              */
-            ::Sound &getSound(std::string path);
+            sf::Sound &getSound(std::string path);
+
+            /**
+             * @fn SceneManager::getSoundBuffer
+             * @brief Get a sound buffer
+             * 
+             * @param path The path to the sound buffer.
+             * @return The sound buffer.
+             */
+            sf::SoundBuffer &getSoundBuffer(std::string path);
 
         private:
             /**

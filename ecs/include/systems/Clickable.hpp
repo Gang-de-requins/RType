@@ -3,7 +3,8 @@
 
 #include <vector>
 #include <algorithm>
-#include "raylib.h"
+// #include "raylib.h"
+#include <SFML/Graphics.hpp>
 #include "components/Clickable.hpp"
 #include "ISystem.hpp"
 #include "Entity.hpp"
@@ -40,7 +41,7 @@ namespace ecs {
          * @return bool True if the mouse is over the sprite of the entity, false otherwise.
          * 
          */
-        bool mouseInSprite(::Vector2 mousePosition, Entity &entitie, SceneManager &sceneManager);
+        bool mouseInSprite(sf::Vector2f mousePosition, Entity &entitie, SceneManager &sceneManager);
     };
 }
 

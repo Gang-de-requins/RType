@@ -2,7 +2,8 @@
 #define TEXTINPUT_SYSTEM_HPP
 
 #include <vector>
-#include "raylib.h"
+// #include "raylib.h"
+#include <SFML/Graphics.hpp>
 #include "Entity.hpp"
 #include "components/Position.hpp"
 #include "components/Rectangle.hpp"
@@ -33,7 +34,7 @@ namespace ecs {
             void update(SceneManager &sceneManager) override;
         
         private:
-            bool isMouseOver(::Vector2 mousePosition, Entity &entity, SceneManager &sceneManager);
+            bool isMouseOver(sf::Vector2f mousePosition, Entity &entity, SceneManager &sceneManager);
     };
 }
 
