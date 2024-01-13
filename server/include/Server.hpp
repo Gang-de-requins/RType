@@ -36,6 +36,10 @@ namespace server {
             void run();
             void processMessages();
             void receive(ecs::Buffer &buffer);
+            void send(ecs::Buffer &buffer, const asio::ip::udp::endpoint &endpoint);
+
+            std::vector<ecs::Buffer> bufferList;
+            std::mutex mutex;
 
         private:
             std::shared_ptr<asio::ip::udp::socket> _socket;
