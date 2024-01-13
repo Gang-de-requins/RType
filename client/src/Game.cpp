@@ -22,26 +22,34 @@ namespace rtype {
 
         while (!WindowShouldClose())
         {
-            if (IsKeyPressed(KEY_UP))
-                this->m_network.send(ecs::MessageType::GoTop, this->m_playerName);
-            if (IsKeyPressed(KEY_DOWN))
-                this->m_network.send(ecs::MessageType::GoBottom, this->m_playerName);
-            if (IsKeyPressed(KEY_LEFT))
-                this->m_network.send(ecs::MessageType::GoLeft, this->m_playerName);
-            if (IsKeyPressed(KEY_RIGHT))
-                this->m_network.send(ecs::MessageType::GoRight, this->m_playerName);
-            if (IsKeyPressed(KEY_SPACE)) {
-                ecs::SceneManager &sceneManager = this->m_world.getSceneManager();
-                auto entities = sceneManager.view<ecs::Controllable>(sceneManager.getCurrentScene());
-            
-                // for (auto &entity : entities) {
-                //     ecs::Controllable &controllable = sceneManager.get<ecs::Controllable>(*entity);
-                //     if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - controllable.shootUpdate).count() >= controllable.timeOut) {
-                //         this->m_network.send(::Network::MessageType::NewMissile, this->m_playerName);
-                //     }
-                // }
-
+            if (IsKeyPressed(KEY_UP)) {
+                ecs::Move emptyStruct2 = {ecs::MessageType::GoTop};
+                this->m_network.send(emptyStruct2, ecs::MessageType::Move);
             }
+            if (IsKeyPressed(KEY_DOWN)) {
+                ecs::Move msg = {ecs::MessageType::GoBottom};
+                this->m_network.send(msg, ecs::MessageType::Move);
+            }
+            if (IsKeyPressed(KEY_LEFT)) {
+                ecs::Move msg = {ecs::MessageType::GoLeft};
+                this->m_network.send(msg, ecs::MessageType::Move);
+            }
+            if (IsKeyPressed(KEY_RIGHT)) {
+                ecs::Move msg = {ecs::MessageType::GoRight};
+                this->m_network.send(msg, ecs::MessageType::Move);
+            }
+            // if (IsKeyPressed(KEY_SPACE)) {
+            //     ecs::SceneManager &sceneManager = this->m_world.getSceneManager();
+            //     auto entities = sceneManager.view<ecs::Controllable>(sceneManager.getCurrentScene());
+            
+            //     for (auto &entity : entities) {
+            //         ecs::Controllable &controllable = sceneManager.get<ecs::Controllable>(*entity);
+            //         if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - controllable.shootUpdate).count() >= controllable.timeOut) {
+            //             this->m_network.send(::Network::MessageType::NewMissile, this->m_playerName);
+            //         }
+            //     }
+
+            // }
 
             BeginDrawing();
             ClearBackground(BLACK);
