@@ -25,14 +25,13 @@ namespace rtype {
         bool m_isMovingBottom;
         bool m_isMovingLeft;
         bool m_isMovingRight;
-        std::size_t id;
 
         public:
             Player(ecs::Entity &Entityspaceship, const std::string &name);
             ~Player();
             ecs::Entity &getSpaceshipEntity();
             const std::string &getName() const;
-            void move(Game &game, std::pair<float, float> pos);
+            void move(Game &game, ecs::MessageType direction);
             void shoot(Game &game);
         
         private:
