@@ -190,3 +190,7 @@ namespace server {
                     auto &scale = this->_world.get<ecs::Scale>(e);
 
                     entityTemplate.playerBullet(this->_world, "", static_cast<int>(position.x + sprite.source.width * scale.x), static_cast<int>(position.y + (sprite.source.height * scale.y) / 2));
+                    for (auto &player : _players) {
+                        send(buffer, player.getEndpoint());
+                    }
+                    break;
