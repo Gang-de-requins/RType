@@ -65,7 +65,6 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
         ecs::MessageType::StopTop,
         ecs::MessageType::StopBottom,
         };
-
         while (this->m_running) {
             try {
                 std::array<char, 1024> receiveBuffer;
@@ -107,7 +106,6 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
                         receivedStruct.deserialize(message.getMessageData());
 
                         std::cout << "Entity List Received:" << std::endl;
-
                         for (const auto& entityInfo : receivedStruct.entityList) {
                             std::cout << "Entity Name: " << entityInfo.playername
                                     << "Entity ID: " << entityInfo.id 
@@ -179,7 +177,7 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
     {
         for (auto &player : game.getPlayers()) {
             if (player.getName() == name) {
-                player.move(game, pos);
+                ///player.move(game, pos);
                 return;
             }
         }
