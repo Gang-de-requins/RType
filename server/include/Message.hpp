@@ -11,6 +11,11 @@ namespace server {
             Message() {}
             ~Message() {}
 
+            void setMessage(std::string msg)
+            {
+                this->_msg = msg;
+            }
+
         private:
             MessageType _messageType;
             std::string _msg;
