@@ -235,3 +235,16 @@ namespace server {
             std::cerr << "Exception in receiveMessage: " << e.what() << std::endl;
         }
     }
+
+
+    void Server::send(ecs::Buffer &buffer, const asio::ip::udp::endpoint &endpoint)
+    {
+        try {
+            const std::vector<char> &sendBuffer = buffer.getData();
+
+            _socket->send_to(asio::buffer(sendBuffer), endpoint);
+        } catch (std::exception &e) {
+            std::cerr << "Exception in sendMessage: " << e.what() << std::endl;
+        }
+    }
+}
