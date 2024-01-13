@@ -215,3 +215,21 @@ namespace server {
                     }
                     break;
                 }
+                default:
+                    break;
+            }
+        }
+    }
+
+    void Server::receive(ecs::Buffer &buffer)
+    {
+        try {
+            asio::ip::udp::endpoint senderEndpoint;
+            std::array<char, 1024> receiveBuffer;
+
+            std::size_t bytes_transferred = this->_socket->receive_from(asio::buffer(receiveBuffer), senderEndpoint);
+
+        } catch (std::exception &e) {
+            std::cerr << "Exception in receiveMessage: " << e.what() << std::endl;
+        }
+    }
