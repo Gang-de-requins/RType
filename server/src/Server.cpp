@@ -228,7 +228,10 @@ namespace server {
             std::array<char, 1024> receiveBuffer;
 
             std::size_t bytes_transferred = this->_socket->receive_from(asio::buffer(receiveBuffer), senderEndpoint);
-
+            if (bytes_transferred > 0) {
+                buffer.setData(std::vector<char>(receiveBuffer.begin(), receiveBuffer.begin() + bytes_transferred));
+                buffer.setEndpoint(senderEndpoint);
+            }
         } catch (std::exception &e) {
             std::cerr << "Exception in receiveMessage: " << e.what() << std::endl;
         }
