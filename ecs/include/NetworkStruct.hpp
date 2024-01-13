@@ -26,6 +26,7 @@ namespace ecs {
         Ping = 16,
         GetRooms = 17,
         CreateRoom = 18,
+        NewMissile = 19,
     };
 
 
@@ -152,7 +153,7 @@ struct EntityList {
 
 struct NewPlayer {
     std::string playername;
-    int id;
+    std::size_t id;
     std::pair<float, float> pos;
     int hp;
 
@@ -172,6 +173,49 @@ struct NewPlayer {
         iss >> std::quoted(playername) >> id >> pos.first >> pos.second >> hp;
     }
 };
+
+struct RoomInfo {
+            std::string name;
+            int port;
+            int availableSlots;
+};
+
+struct RoomList {
+    std::vector<ecs::RoomInfo> roomList;
+
+    std::vector<char> serialize() const {
+        std::ostringstream oss;
+        oss << roomList.size() << " ";
+
+        for (const ecs::RoomInfo& roomInfo : roomList) {
+            oss << std::quoted(roomInfo.name) << " ";
+            oss << roomInfo.port << " ";
+            oss << roomInfo.availableSlots << " ";
+        }
+
+        std::string serializedData = oss.str();
+        return std::vector<char>(serializedData.begin(), serializedData.end());
+    }
+
+    void deserialize(const std::vector<char>& data) {
+        std::string serializedData(data.begin(), data.end());
+        std::istringstream iss(serializedData);
+
+        roomList.clear();
+
+        size_t numRooms;
+        iss >> numRooms;
+
+        for (size_t i = 0; i < numRooms; ++i) {
+            ecs::RoomInfo roomInfo;
+            iss >> std::quoted(roomInfo.name);
+            iss >> roomInfo.port;
+            iss >> roomInfo.availableSlots;
+            roomList.push_back(roomInfo);
+        }
+    }
+};
+
 
 };
 
