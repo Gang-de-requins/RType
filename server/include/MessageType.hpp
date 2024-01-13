@@ -7,6 +7,7 @@ namespace server {
         PLAYER_DISCONNECTED = 0x02,
         PLAYER_MOVE = 0x03,
         PLAYER_SHOOT = 0x04,
+        ENEMY_SPAWN = 0x05,
     };
 }
 
