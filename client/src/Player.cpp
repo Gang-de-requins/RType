@@ -29,7 +29,7 @@ namespace rtype {
     void Player::move(Game &game, std::pair<float, float> pos)
     {
         ecs::World &world = game.getWorld();
-        //ecs::Position &posSpaceship = world.get<ecs::Position>(this->m_spaceship); /// ça crash
+        ecs::Position &posSpaceship = world.get<ecs::Position>(this->m_spaceship); /// ça crash
 
         // switch (direction) {
         //     case ecs::MessageType::GoTop:
