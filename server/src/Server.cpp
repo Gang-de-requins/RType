@@ -183,7 +183,7 @@ namespace server {
                         std::cerr << "Exception in processMessages: " << e.what() << std::endl;
                         break;
                     }
-                    
+
                     ecs::Entity &e = this->_world.getEntityById(this->_world.getCurrentScene(), id);
                     auto &position = this->_world.get<ecs::Position>(e);
                     auto &sprite = this->_world.get<ecs::Sprite>(e);
