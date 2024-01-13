@@ -41,7 +41,7 @@ namespace ecs {
                 } else {
                     int key = GetCharPressed();
 
-                    if (key == 0 || textInput.content.size() >= textInput.maxLength) {
+                    if (key == KEY_NULL || textInput.content.size() >= textInput.maxLength) {
                         continue;
                     }
 

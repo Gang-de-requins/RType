@@ -33,6 +33,8 @@ namespace rtype {
         bool m_running;
 
         public:
+            std::string m_ip;
+            unsigned short m_port;
             Network();
             ~Network();
             void connect(std::string ip, int port, Game &game);
