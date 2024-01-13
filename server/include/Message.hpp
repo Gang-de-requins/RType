@@ -10,7 +10,10 @@ namespace server {
         public:
             Message() {}
             ~Message() {}
-
+            void setMessageType(MessageType messageType)
+            {
+                this->_messageType = messageType;
+            }
             void setMessage(std::string msg)
             {
                 this->_msg = msg;
