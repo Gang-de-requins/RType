@@ -69,15 +69,19 @@ namespace serverGame
         }
 
         void move(ecs::MessageType direction, ecs::World &world);
-        void stopMoving(ecs::Acceleration &accSpaceship);
+        void stopMoving();
         void continuousMovement(ecs::Acceleration &accSpaceship, ecs::MessageType direction);
         std::pair<float, float> getPosition(ecs::World &world);
         std::pair<float, float> getAcceleration(ecs::World &world);
         float getHealth(ecs::World &world);
+        void moveEntity(ecs::World &world);
         bool isMovingTop;
         bool isMovingLeft;
         bool isMovingRight;
         bool isMovingBottom;
+        bool isMoving;
+        std::mutex posMutex;
+        std::thread moveThread;
 
     private:
         ecs::Entity &_entity;
