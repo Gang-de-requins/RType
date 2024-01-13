@@ -183,3 +183,10 @@ namespace server {
                         std::cerr << "Exception in processMessages: " << e.what() << std::endl;
                         break;
                     }
+                    
+                    ecs::Entity &e = this->_world.getEntityById(this->_world.getCurrentScene(), id);
+                    auto &position = this->_world.get<ecs::Position>(e);
+                    auto &sprite = this->_world.get<ecs::Sprite>(e);
+                    auto &scale = this->_world.get<ecs::Scale>(e);
+
+                    entityTemplate.playerBullet(this->_world, "", static_cast<int>(position.x + sprite.source.width * scale.x), static_cast<int>(position.y + (sprite.source.height * scale.y) / 2));
