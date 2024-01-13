@@ -22,6 +22,10 @@ namespace server {
             {
                 return this->_messageType;
             }
+            std::string getMessage() const
+            {
+                return this->_msg;
+            }
 
         private:
             MessageType _messageType;
