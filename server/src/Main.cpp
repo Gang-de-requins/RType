@@ -1,38 +1,31 @@
-/*
-** EPITECH PROJECT, 2023
-** r type
-** File description:
-** Server
-*/
+#include <iostream>
 
-#include "../include/ServerRooms.hpp"
-#include "Rtype.hpp"
-#include "Message.hpp"
+#include "Server.hpp"
 
-void receiveMessageThread(std::shared_ptr<serverGame::Rtype> rtype)
+void receiveMessageThread(std::shared_ptr<server::Server> server)
 {
-	while(true)
-	{
-		ecs::Buffer buffer;
-        rtype->server.receiveMessage(buffer);
-		rtype->mutex.lock();
-		rtype->bufferList.push_back(buffer);
-		rtype->mutex.unlock();
-	}
+    while (true)
+    {
+        ecs::Message msg;
+
+        server->receive(msg);
+        server->mutex.lock();
+        server->messageList.push_back(msg);
+        server->mutex.unlock();
+    }
 }
 
-void sendGameStateThread(std::shared_ptr<serverGame::Rtype> rtype) {
+void sendGameStateThread(std::shared_ptr<server::Server> server) {
     while (true) {
-        rtype->sendGameState();
+        server->sendGameState();
         std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 32));
     }
 }
 
-
-int checkArguments(int ac, char const * const *av)
+static int checkArgs(int ac, char const * const *av)
 {
     if (ac != 2) {
-        std::cerr << "Usage: ./rtype_server <port>" << std::endl;
+        std::cerr << "Usage: " << av[0] << " port" << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -40,8 +33,8 @@ int checkArguments(int ac, char const * const *av)
         int port = std::stoi(av[1]);
 
         if (port < 0 || port > 65535)
-            throw std::invalid_argument("Port must be between 0 and 65535");
-    } catch (std::invalid_argument const &e) {
+            throw std::exception();
+    } catch (std::exception &e) {
         std::cerr << "Invalid port: " << e.what() << std::endl;
         return EXIT_FAILURE;
     }
@@ -51,15 +44,19 @@ int checkArguments(int ac, char const * const *av)
 
 int main(int ac, char const * const *av)
 {
-    // serverGame::ServerRooms Rooms;
-    // Rooms.start();
-    
-    if (checkArguments(ac, av) == EXIT_FAILURE)
-        return 84;
+    if (checkArgs(ac, av) == EXIT_FAILURE)
+        return EXIT_FAILURE;
 
-    std::shared_ptr<serverGame::Rtype> rtype = std::make_shared<serverGame::Rtype>(std::stoi(av[1]));
-    std::thread receive(receiveMessageThread, rtype);
-    std::thread send(sendGameStateThread, rtype);
-    rtype->run();
-    return 0;
+    srand(static_cast<unsigned int>(time(nullptr)));
+    try {
+        std::shared_ptr<server::Server> server = std::make_shared<server::Server>(std::stoi(av[1]));
+        std::thread receive(receiveMessageThread, server);
+        std::thread send(sendGameStateThread, server);
+        server->run();
+    }
+    catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
+    }
+
+    return EXIT_SUCCESS;
 }

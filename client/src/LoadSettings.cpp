@@ -72,7 +72,7 @@ namespace rtype {
         ecs::Entity &PortTextInput = this->m_world.createEntity(scene);
         this->m_world.assign(PortTextInput, ecs::Position{1147, 310});
         this->m_world.assign(PortTextInput, ecs::Rectangle{0, 0, 300, 150});
-        this->m_world.assign(PortTextInput, ecs::TextInput{10, ecs::Position{1147, 315}});
+        this->m_world.assign(PortTextInput, ecs::TextInput{5, ecs::Position{1147, 315}});
         this->m_world.assign(PortTextInput, ecs::Scale{1, 1});
         this->m_world.assign(PortTextInput, ecs::Rotation{0});
         this->m_world.assign(PortTextInput, ecs::Clickable{false, [this](ecs::Clickable&) {
@@ -117,7 +117,7 @@ namespace rtype {
         ecs::Entity &IPTextInput = this->m_world.createEntity(scene);
         this->m_world.assign(IPTextInput, ecs::Position{900, 580});
         this->m_world.assign(IPTextInput, ecs::Rectangle{0, 0, 300, 171});
-        this->m_world.assign(IPTextInput, ecs::TextInput{10, ecs::Position{900, 605}});
+        this->m_world.assign(IPTextInput, ecs::TextInput{15, ecs::Position{900, 605}});
         this->m_world.assign(IPTextInput, ecs::Scale{1, 1});
         this->m_world.assign(IPTextInput, ecs::Rotation{0});
         this->m_world.assign(IPTextInput, ecs::Clickable{false, [this](ecs::Clickable&) {

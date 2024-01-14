@@ -19,20 +19,23 @@ namespace rtype {
     class Game;
 
     class Player {
-        ecs::Entity &m_spaceship;
+        std::size_t m_id;
         const std::string c_name;
         bool m_isMovingTop;
         bool m_isMovingBottom;
         bool m_isMovingLeft;
         bool m_isMovingRight;
+        bool m_isAlive;
 
         public:
             Player(ecs::Entity &Entityspaceship, const std::string &name);
             ~Player();
-            ecs::Entity &getSpaceshipEntity();
+            std::size_t getId() const;
+
             const std::string &getName() const;
-            void move(Game &game, ecs::MessageType direction);
+            void move(Game &game, std::string msg);
             void shoot(Game &game);
+            void setAlive(bool alive);
         
         private:
             void stopMoving(ecs::Acceleration &accSpaceship);
