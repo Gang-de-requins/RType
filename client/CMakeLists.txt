@@ -16,10 +16,12 @@ set(ECS_LIBRARY ecs)
 set(SRC
     src/Main.cpp
     src/Game.cpp
-    src/LoadMenu.cpp
-    src/LoadSettings.cpp
-    src/LoadChooseName.cpp
-    src/LoadGame.cpp
+    src/scenes/LoadMenu.cpp
+    src/scenes/LoadSettings.cpp
+    src/scenes/LoadChooseName.cpp
+    src/scenes/LoadGame.cpp
+    src/scenes/LoadGameOver.cpp
+    src/scenes/LoadGameWin.cpp
     src/Network.cpp
     src/Player.cpp
     src/systems/Movement.cpp

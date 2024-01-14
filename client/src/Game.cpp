@@ -111,5 +111,11 @@ namespace rtype {
 
         /* ------------------------- Scene InGame --------------------------------*/
         this->m_world.createScene();
+
+        /* ------------------------- Scene Win --------------------------------*/
+        this->m_world.createScene();
+
+        /* ------------------------- Scene GameOver --------------------------------*/
+        this->m_world.createScene();
     }
 }
