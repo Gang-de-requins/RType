@@ -44,6 +44,19 @@ namespace ecs {
         scene.entities.emplace_back(Entity{scene.nextEntityId++, {}});
         return scene.entities.back();
     }
+
+    Entity& SceneManager::createEntityWithId(Scene& scene, std::size_t id) {
+        scene.entities.erase(std::remove_if(scene.entities.begin(), scene.entities.end(), [&id](const Entity& e) {
+			return e.id == id;
+		}), scene.entities.end());
+
+        if (id >= scene.nextEntityId) {
+			scene.nextEntityId = id + 1;
+		}
+
+        scene.entities.emplace_back(Entity{id, {}});
+		return scene.entities.back();
+    }
     
     void SceneManager::destroyEntity(Scene &scene, Entity &entity) {
         scene.entities.erase(std::remove_if(scene.entities.begin(), scene.entities.end(), [&entity](const Entity &e) {

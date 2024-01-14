@@ -29,7 +29,7 @@ namespace server {
     void EntityTemplate::playerBullet(ecs::World &world, const std::string &tag, int x, int y)
     {
         static_cast<void>(tag);
-        ecs::Entity entity = world.createEntity(world.getCurrentScene());
+        ecs::Entity &entity = world.createEntity(world.getCurrentScene());
 
         world.assign(entity, ecs::Position{static_cast<float>(x), static_cast<float>(y)});
         world.assign(entity, ecs::Sprite{ "assets/28.png", ecs::Rectangle{0, 0, 210, 92}, ecs::Vector2{0, 0} });
