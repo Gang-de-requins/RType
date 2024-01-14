@@ -8,7 +8,7 @@ namespace rtype {
             ecs::ClickableSystem
         >(scene);
 
-        std::cout << "In Win" << std::endl;
+        std::cout << "In Lose" << std::endl;
 
         ecs::Entity &spaceBg = this->m_world.createEntity(scene);
         this->m_world.assign(spaceBg, ecs::Position{0, 0});
