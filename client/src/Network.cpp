@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2024
+** RType [WSL : Ubuntu]
+** File description:
+** Network
+*/
+
 #include "Network.hpp"
 #include "Game.hpp"
 #include <exception>
@@ -68,7 +75,16 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
                                 receiveBuffer.begin() + sizeof(dataSize) + sizeof(messageType) + dataSize);
                         message.setMessageData(messageData);
                     }
-
+                    if (message.getMessageType() == ecs::MessageType::Loose) {
+                        ecs::NewPlayer receivedStruct;
+                        receivedStruct.deserialize(message.getMessageData());
+                        std::cout << "Loose" << std::endl;
+                    }
+                    if (message.getMessageType() == ecs::MessageType::Win) {
+                        ecs::NewPlayer receivedStruct;
+                        receivedStruct.deserialize(message.getMessageData());
+                        std::cout << "win" << std::endl;
+                    }
                     if (message.getMessageType() == ecs::MessageType::PlayerJoinedAccept) {
                         ecs::NewPlayer receivedStruct;
                         receivedStruct.deserialize(message.getMessageData());
