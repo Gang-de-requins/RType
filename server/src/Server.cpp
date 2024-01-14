@@ -107,12 +107,12 @@ namespace server {
                 newPlayer.setId(this->_world.getEntityById(scene, scene.entities.size() - 1).id);
                 _players.push_back(newPlayer);
 
-                ecs::NewPlayer newPlayerstr = {newPlayer.getName(), 0, {0, 0}, 100};
+                ecs::NewPlayer newPlayerstr = {newPlayer.getName(), 0, std::make_pair(0.0f, 0.0f), 100};
                 send(newPlayerstr, ecs::MessageType::PlayerJoinedAccept, message.getEndpoint());
 
                 for (auto& entity : _players) {
                         if (entity.getName() != newPlayer.getName()) {
-                            ecs::NewPlayer existingPlayer = {entity.getName(), 0, {0, 0}, 100};
+                            ecs::NewPlayer existingPlayer = {entity.getName(), 0, std::make_pair(0.0f, 0.0f), 100};
                             send(existingPlayer, ecs::MessageType::NewPlayer, message.getEndpoint());
                             send(newPlayerstr, ecs::MessageType::NewPlayer, entity.getEndpoint());
                         }
@@ -298,7 +298,7 @@ namespace server {
                     entityInfo.entityType = ecs::EntityType::Ennemy;
                     std::cout << "Ennemy" << std::endl;
                 }
-                entityInfo.id = entity.id;
+                entityInfo.id = static_cast<int>(entity.id);
                 entityInfo.hp = 0;
                 entityInfo.pos = {posSpaceship.x, posSpaceship.y};
                 entityList.entityList.push_back(entityInfo);
