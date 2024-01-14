@@ -87,8 +87,8 @@ namespace game
 
         /* Play Button Entity */
         ecs::Entity &ButtonPlay = this->world.createEntity(scene);
-        this->world.assign(ButtonPlay, ecs::Position{870, 700});
-        this->world.assign(ButtonPlay, ecs::Sprite{"../assets/p_play.png", ecs::Rectangle{0, 0, 100, 41}, ecs::Vector2{0, 0}});
+        this->world.assign(ButtonPlay, ecs::Position{725, 700});
+        this->world.assign(ButtonPlay, ecs::Sprite{"../assets/pong_play.png", ecs::Rectangle{0, 0, 245, 60}, ecs::Vector2{0, 0}});
         this->world.assign(ButtonPlay, ecs::Scale{2, 2});
         this->world.assign(ButtonPlay, ecs::Rotation{0});
         this->world.assign(ButtonPlay, ecs::Clickable{false, [this](ecs::Clickable&) {
@@ -100,8 +100,8 @@ namespace game
 
         
         /* Menu Music Entity */
-        ecs::Entity &MenuMusic = this->world.createEntity(scene);
-        this->world.assign(MenuMusic, ecs::Music({"../assets/pong_menu.wav", 0.1f, true}));
+        // ecs::Entity &MenuMusic = this->world.createEntity(scene);
+        // this->world.assign(MenuMusic, ecs::Music({"../assets/pong_menu.wav", 0.1f, true}));
 
     }
 }
