@@ -14,6 +14,8 @@
 #define SCENE_SETTINGS 1
 #define SCENE_CHOOSENAME 2
 #define SCENE_GAME 3
+#define SCENE_GAMEOVER 4
+#define SCENE_GAMEWIN 5
 
 namespace rtype {
     class Game {
@@ -33,8 +35,6 @@ namespace rtype {
             std::vector<Player> &getPlayers();
             void setId(std::size_t id);
             std::string getPlayerName() const;
-
-        private:
             void initScenes();
             void loadMenu(ecs::Scene &scene);
             void loadSettings(ecs::Scene &scene);
