@@ -9,13 +9,11 @@
 #define PONG_HPP__
 
 #include <iostream>
+#include "systems/Controllable.hpp"
+#include "systems/Movement.hpp"
 #include "GameEngine.hpp"
 #include "raylib.h"
-
-#define MENU 0
-#define GAME 1
-#define END 2
-#define SETTINGS 3
+#include "Events.hpp"
 
 namespace game
 {
@@ -25,10 +23,12 @@ namespace game
     ecs::World world;
     std::string name1;
     std::string name2;
+    std::string winner;
     public:
         Pong();
         ~Pong();
         void run();
+        bool CheckBallPos(ecs::SceneManager &sceneManager);
 
     private:
         void GameScenes();
