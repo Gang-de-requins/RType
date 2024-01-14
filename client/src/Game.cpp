@@ -24,21 +24,30 @@ namespace rtype {
         while (!WindowShouldClose()) {
             if (this->m_network.isConnected()) {
                 if (IsKeyDown(KEY_UP)) {
-                    this->m_network.send(ecs::MessageType::PLAYER_MOVE, std::to_string(this->m_id) + ":up");
-                } else if (IsKeyDown(KEY_DOWN)) {
-                    this->m_network.send(ecs::MessageType::PLAYER_MOVE, std::to_string(this->m_id) + ":down");
-                } else if (IsKeyDown(KEY_LEFT)) {
-                    this->m_network.send(ecs::MessageType::PLAYER_MOVE, std::to_string(this->m_id) + ":left");
-                } else if (IsKeyDown(KEY_RIGHT)) {
-                    this->m_network.send(ecs::MessageType::PLAYER_MOVE, std::to_string(this->m_id) + ":right");
-                } else if (IsKeyPressed(KEY_SPACE)) {
-                    this->m_network.send(ecs::MessageType::PLAYER_SHOOT, std::to_string(this->m_id));
+                    ecs::Move msg = {ecs::MessageType::GoTop};
+                    this->m_network.send(msg, ecs::MessageType::Move);
+                }
+                if (IsKeyDown(KEY_DOWN)) {
+                    ecs::Move msg = {ecs::MessageType::GoBottom};
+                    this->m_network.send(msg, ecs::MessageType::Move);
+                } if (IsKeyDown(KEY_LEFT)) {
+                    ecs::Move msg = {ecs::MessageType::GoLeft};
+                    this->m_network.send(msg, ecs::MessageType::Move);
+                } if (IsKeyDown(KEY_RIGHT)) {
+                    ecs::Move msg = {ecs::MessageType::GoRight};
+                    this->m_network.send(msg, ecs::MessageType::Move);
+                }
+                else if (IsKeyPressed(KEY_SPACE)) {
+                    ecs::Move msg = {ecs::MessageType::GoRight};
+                    this->m_network.send(msg, ecs::MessageType::NewMissile);
                 }
 
                 if (IsKeyReleased(KEY_UP) || IsKeyReleased(KEY_DOWN)) {
-                    this->m_network.send(ecs::MessageType::PLAYER_MOVE, std::to_string(this->m_id) + ":stopy");
+                    ecs::Move msg = {ecs::MessageType::StopY};
+                    this->m_network.send(msg, ecs::MessageType::Move);
                 } else if (IsKeyReleased(KEY_LEFT) || IsKeyReleased(KEY_RIGHT)) {
-                    this->m_network.send(ecs::MessageType::PLAYER_MOVE, std::to_string(this->m_id) + ":stopx");
+                    ecs::Move msg = {ecs::MessageType::StopX};
+                    this->m_network.send(msg, ecs::MessageType::Move);
                 }
             }
 
@@ -53,7 +62,7 @@ namespace rtype {
         CloseWindow();
         CloseAudioDevice();
         this->m_network.setRunning(false);
-        this->m_network.send(ecs::MessageType::PLAYER_DISCONNECTED, std::to_string(this->m_id));
+        // this->m_network.send(ecs::MessageType::PLAYER_DISCONNECTED, std::to_string(this->m_id));
     }
 
     ecs::World &Game::getWorld()
