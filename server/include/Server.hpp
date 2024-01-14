@@ -23,6 +23,7 @@
 #include "EntityTemplate.hpp"
 #include "GameEngine.hpp"
 #include "systems/Movement.hpp"
+#include "WaveManager.hpp"
 
 using frame = std::chrono::duration<int32_t, std::ratio<1, 60>>;
 using ms = std::chrono::duration<int32_t, std::milli>;
@@ -60,6 +61,7 @@ namespace server {
             asio::ip::udp::endpoint _endpoint;
             asio::io_context _io_context;
 
+            WaveManager waveManger;
             std::vector<Player> _players;
             ecs::World _world;
     };
