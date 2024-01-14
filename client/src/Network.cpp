@@ -84,6 +84,12 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
                         << " and with the id: " << receivedStruct.id << " has joined the game" << std::endl;
                         this->newPlayerConnected(game, receivedStruct, false);
                     } 
+                    if (message.getMessageType() == ecs::MessageType::NewEnemy) {
+                        ecs::NewPlayer receivedStruct;
+                        receivedStruct.deserialize(message.getMessageData());
+                        std::cout << "New Enemy with the id: " << receivedStruct.id << " has spawned." << std::endl;
+                        this->newEnemy(game, receivedStruct);
+                    } 
                     if (message.getMessageType() == ecs::MessageType::EntityList) {
                         ecs::EntityList receivedStruct;
                         receivedStruct.deserialize(message.getMessageData());
@@ -99,6 +105,8 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
                                         pos.y = entityInfo.pos.second;
                                     } else if (entityInfo.entityType == ecs::EntityType::Missile) {
                                         std::cout << "Missile with "; 
+                                    }   else if (entityInfo.entityType == ecs::EntityType::Ennemy) {
+                                        std::cout << "Ennemy with "; 
                                     }
                             std::cout << "Entity ID: " << entityInfo.id 
                                     << ", HP: " << entityInfo.hp 
@@ -185,65 +193,65 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
         world.assign(player, ecs::Health{static_cast<float>(newPlayer.hp)});
 
         if (isMe) {
-            world.assign(player, ecs::Controllable{
-                std::unordered_map<int, std::tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager & sceneManager, ecs::Scene & scene, ecs::Entity * entity)>>> {
-                    {KEY_UP, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
-                        ecs::ActionTrigger::Hold, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
-                            static_cast<void>(sceneManager);
+            // world.assign(player, ecs::Controllable{
+            //     std::unordered_map<int, std::tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager & sceneManager, ecs::Scene & scene, ecs::Entity * entity)>>> {
+            //         {KEY_UP, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
+            //             ecs::ActionTrigger::Hold, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
+            //                 static_cast<void>(sceneManager);
 
-                            scene.events[ecs::EventType::Input].push_back({
-                                ecs::GameEvent::MoveUp,
-                                {entity}
-                            });
-                        }
-                    )},
-                    {KEY_DOWN, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
-                        ecs::ActionTrigger::Hold, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
-                            static_cast<void>(sceneManager);
+            //                 scene.events[ecs::EventType::Input].push_back({
+            //                     ecs::GameEvent::MoveUp,
+            //                     {entity}
+            //                 });
+            //             }
+            //         )},
+            //         {KEY_DOWN, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
+            //             ecs::ActionTrigger::Hold, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
+            //                 static_cast<void>(sceneManager);
 
-                            scene.events[ecs::EventType::Input].push_back({
-                                ecs::GameEvent::MoveDown,
-                                {entity}
-                            });
-                        }
-                    )},
-                    {KEY_LEFT, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
-                        ecs::ActionTrigger::Hold, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
-                            static_cast<void>(sceneManager);
+            //                 scene.events[ecs::EventType::Input].push_back({
+            //                     ecs::GameEvent::MoveDown,
+            //                     {entity}
+            //                 });
+            //             }
+            //         )},
+            //         {KEY_LEFT, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
+            //             ecs::ActionTrigger::Hold, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
+            //                 static_cast<void>(sceneManager);
 
-                            scene.events[ecs::EventType::Input].push_back({
-                                ecs::GameEvent::MoveLeft,
-                                {entity}
-                            });
-                        }
-                    )},
-                    {KEY_RIGHT, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
-                        ecs::ActionTrigger::Hold, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
-                            static_cast<void>(sceneManager);
+            //                 scene.events[ecs::EventType::Input].push_back({
+            //                     ecs::GameEvent::MoveLeft,
+            //                     {entity}
+            //                 });
+            //             }
+            //         )},
+            //         {KEY_RIGHT, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
+            //             ecs::ActionTrigger::Hold, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
+            //                 static_cast<void>(sceneManager);
 
-                            scene.events[ecs::EventType::Input].push_back({
-                                ecs::GameEvent::MoveRight,
-                                {entity}
-                            });
-                        }
-                    )},
-                    {KEY_SPACE, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
-                        ecs::ActionTrigger::Press, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
-                            if (sceneManager.has<ecs::Shooter>(*entity)) {
-                                ecs::Shooter& shooter = sceneManager.get<ecs::Shooter>(*entity);
+            //                 scene.events[ecs::EventType::Input].push_back({
+            //                     ecs::GameEvent::MoveRight,
+            //                     {entity}
+            //                 });
+            //             }
+            //         )},
+            //         {KEY_SPACE, std::make_tuple<ecs::ActionTrigger, std::function<void(ecs::SceneManager&, ecs::Scene&, ecs::Entity*)>>(
+            //             ecs::ActionTrigger::Press, [](ecs::SceneManager& sceneManager, ecs::Scene& scene, ecs::Entity* entity) {
+            //                 if (sceneManager.has<ecs::Shooter>(*entity)) {
+            //                     ecs::Shooter& shooter = sceneManager.get<ecs::Shooter>(*entity);
 
-                                if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - shooter.lastShotTime) >= shooter.cooldown) {
-                                    shooter.lastShotTime = std::chrono::steady_clock::now();
-                                    scene.events[ecs::EventType::Spawn].push_back({
-                                        ecs::GameEvent::SpawnPlayerBullet,
-                                        {entity}
-                                    });
-                                }
-                            }
-                        }
-                    )},
-                }
-            });
+            //                     if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - shooter.lastShotTime) >= shooter.cooldown) {
+            //                         shooter.lastShotTime = std::chrono::steady_clock::now();
+            //                         scene.events[ecs::EventType::Spawn].push_back({
+            //                             ecs::GameEvent::SpawnPlayerBullet,
+            //                             {entity}
+            //                         });
+            //                     }
+            //                 }
+            //             }
+            //         )},
+            //     }
+            // });
             game.setId(player.id);
         }
 
@@ -312,15 +320,13 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
         }
     }
 
-    void Network::newEnemy(Game &game, std::string name)
+    void Network::newEnemy(Game &game, ecs::NewPlayer& newPlayer)
     {
         auto &world = game.getWorld();
         ecs::Scene &inGame = world.getCurrentScene();
-        std::string rawPos = name.substr(name.find(":") + 1);
-        std::pair<float, float> pos = std::make_pair(std::stof(rawPos.substr(0, rawPos.find(":"))), std::stof(rawPos.substr(rawPos.find(":") + 1)));
 
-        ecs::Entity &enemy = world.createEntity(inGame);
-        world.assign(enemy, ecs::Position{pos.first, pos.second});
+        ecs::Entity &enemy = world.createEntityWithId(inGame, newPlayer.id);
+        world.assign(enemy, ecs::Position{newPlayer.pos.first, newPlayer.pos.second});
         world.assign(enemy, ecs::Velocity{-3, 0});
         world.assign(enemy, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}});
         world.assign(enemy, ecs::Acceleration{0, 0, 4});
