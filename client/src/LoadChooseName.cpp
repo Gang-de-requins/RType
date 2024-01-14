@@ -64,6 +64,7 @@ namespace rtype {
         this->m_world.assign(ButtonPlay, ecs::Clickable{false, [this](ecs::Clickable&) {
             std::cout << "-> ButtonPlay clicked" << std::endl;
             std::cout << "Switch scene to play game" << std::endl;
+            this->m_network.connect(this->m_network.m_ip, this->m_network.m_port, *this, this->m_playerName);
             loadGame(this->m_world.getSceneById(SCENE_GAME));
             this->m_world.switchToScene(SCENE_GAME);
         }});

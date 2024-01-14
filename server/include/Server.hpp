@@ -1,60 +1,56 @@
-/*
-** EPITECH PROJECT, 2023
-** r type
-** File description:
-** Server
-*/
-
-#ifndef SERVER_HPP_
-#define SERVER_HPP_
+#ifndef SERVER_HPP
+#define SERVER_HPP
 
 #include <iostream>
+#include <memory>
+#include <chrono>
+#include <vector>
+#include <mutex>
 #if defined(_WIN32)
     #define NOGDI
     #define NOUSER
 #endif
 
-#include <boost/asio.hpp>
+#include <asio.hpp>
 
 #if defined(_WIN32)
     #undef near
     #undef far
 #endif
+#include "MessageType.hpp"
+#include "Player.hpp"
+#include "EntityTemplate.hpp"
 #include "GameEngine.hpp"
+#include "systems/Movement.hpp"
 
-namespace serverGame
-{
-    class Server
-    {
-    public:
-        Server();
-        ~Server();
-        void setupServer(int port);
-        //void receiveMessage(serverGame::Message &message);
-        void receiveMessage(ecs::Message &message);
-        template <typename T>
-        void send(T &data, ecs::MessageType messageType, const boost::asio::ip::udp::endpoint& recipientEndpoint) {
-            std::vector<char> serializedData = data.serialize();
-            std::size_t dataSize = serializedData.size();
+using frame = std::chrono::duration<int32_t, std::ratio<1, 60>>;
+using ms = std::chrono::duration<int32_t, std::milli>;
 
-            std::vector<char> packet(sizeof(std::size_t) + sizeof(ecs::MessageType) + dataSize);
-            std::memcpy(packet.data(), &dataSize, sizeof(dataSize));
-            std::memcpy(packet.data() + sizeof(dataSize), &messageType, sizeof(messageType));
-            std::memcpy(packet.data() + sizeof(dataSize) + sizeof(ecs::MessageType), serializedData.data(), dataSize);
+namespace server {
+    class Server {
+        public:
+            Server(short port);
+            ~Server();
 
-            this->socket->send_to(boost::asio::buffer(packet), recipientEndpoint);
-        }
-        void processReceivedStruct(ecs::MessageType messageType, const std::vector<char> &receiveBuffer);
-        //void handle_receive(const boost::system::error_code& error, std::size_t bytes_transferred,
-        //            boost::asio::ip::udp::socket &socket, ecs::MessageType messageType);
-        //void sendMessage(ecs::Buffer &buffer, const boost::asio::ip::udp::endpoint &recipientEndpoint);
+            void setup(short port);
+            void run();
+            void processMessages();
+            void receive(ecs::Buffer &buffer);
+            void send(ecs::Buffer &buffer, const asio::ip::udp::endpoint &endpoint);
 
-    private:
-        std::shared_ptr<boost::asio::ip::udp::socket> socket;
-        boost::asio::ip::udp::endpoint endpoint;
-        boost::asio::io_service service;
-        //std::vector<Client> clients;
+            std::vector<ecs::Buffer> bufferList;
+            std::mutex mutex;
+
+            std::vector<Player> getPlayers() const { return _players; }
+
+        private:
+            std::shared_ptr<asio::ip::udp::socket> _socket;
+            asio::ip::udp::endpoint _endpoint;
+            asio::io_context _io_context;
+
+            std::vector<Player> _players;
+            ecs::World _world;
     };
 }
 
-#endif /* !SERVER_HPP_ */
+#endif /* SERVER_HPP */

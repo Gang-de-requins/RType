@@ -8,7 +8,7 @@ echo "Cleaning up..."
 echo "Deleting build directory..."
 rm -rf $BUILD_DIR
 echo "Deleting executables..."
-rm RTYPE_CLIENT
-rm RTYPE_SERVER
+rm $RTYPE_CLIENT
+rm $RTYPE_SERVER
 
 echo "Cleanup complete."

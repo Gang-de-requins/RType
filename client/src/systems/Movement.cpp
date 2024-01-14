@@ -11,52 +11,41 @@ namespace ecs {
             switch (event.event) {
             case GameEvent::MoveUp:
                 for (auto& entity : event.entities) {
-                    Acceleration& acceleration = sceneManager.get<Acceleration>(*entity);
-                    acceleration.ddx = 0;
-                    acceleration.ddy = -0.5f;
-                    acceleration.maxSpeed = 8.0f;
+                    Velocity& velocity = sceneManager.get<Velocity>(*entity);
+                    velocity.dy = -4.0f;
 
                     eventsToRemove.push_back(index);
                 }
                 break;
             case GameEvent::MoveDown:
                 for (auto& entity : event.entities) {
-                    Acceleration& acceleration = sceneManager.get<Acceleration>(*entity);
-                    acceleration.ddx = 0;
-                    acceleration.ddy = 0.5f;
-                    acceleration.maxSpeed = 8.0f;
+                    Velocity& velocity = sceneManager.get<Velocity>(*entity);
+                    velocity.dy = 4.0f;
 
                     eventsToRemove.push_back(index);
                 }
                 break;
             case GameEvent::MoveLeft:
                 for (auto& entity : event.entities) {
-                    Acceleration& acceleration = sceneManager.get<Acceleration>(*entity);
-                    acceleration.ddx = -0.5f;
-                    acceleration.ddy = 0;
-                    acceleration.maxSpeed = 8.0f;
+                    Velocity& velocity = sceneManager.get<Velocity>(*entity);
+                    velocity.dx = -4.0f;
 
                     eventsToRemove.push_back(index);
                 }
                 break;
             case GameEvent::MoveRight:
                 for (auto& entity : event.entities) {
-                    Acceleration& acceleration = sceneManager.get<Acceleration>(*entity);
-                    acceleration.ddx = 0.5f;
-                    acceleration.ddy = 0;
-                    acceleration.maxSpeed = 8.0f;
+                    Velocity& velocity = sceneManager.get<Velocity>(*entity);
+                    velocity.dx = 4.0f;
 
                     eventsToRemove.push_back(index);
                 }
                 break;
             case GameEvent::StopMoving:
                 for (auto& entity : event.entities) {
-                    Acceleration& acceleration = sceneManager.get<Acceleration>(*entity);
-
-                    acceleration.ddx *= -1;
-                    acceleration.ddy *= -1;
-                    acceleration.maxSpeed -= 0.1f;
-                    acceleration.maxSpeed = std::max(acceleration.maxSpeed, 0.0f);
+                    Velocity& velocity = sceneManager.get<Velocity>(*entity);
+                    velocity.dx = 0;
+                    velocity.dy = 0;
 
                     eventsToRemove.push_back(index);
                 }
