@@ -7,11 +7,7 @@
 - [What is an ecs ?](#what-is-an-ecs-)
 - [Components](#components)
 - [Systems](#systems)
-- [How to create a component](#how-to-create-a-component)
-- [How to create a system](#how-to-create-a-system)
-- [How to use the ecs](#how-to-use-the-ecs)
-  - [Normal use](#normal-use)
-  - [Use with JSON files](#use-with-json-files)
+- [How ECS works in client ?](#how-ecs-works-in-client-)
 
 ## What is an ecs ?
 
@@ -25,37 +21,56 @@ The entities are stored in a vector for each scene, and the components are store
 |-----------|
 | Acceleration |
 | Animation |
+| Clickable |
+| Collision |
 | Color |
+| Components |
 | Controllable |
+| Damage |
 | FontSize |
+| Health |
+| Modifier |
 | Music |
+| Name |
+| Parallax |
 | Position |
 | Rectangle |
 | Rotation |
 | Scale |
+| Shooter |
+| Sound |
 | Sprite|
 | Text |
+| TextColor |
+| TextInput |
+| Vector2 |
 | Velocity |
 
 ## Systems
 
-| Main System |
-|-------------|
-| Animation | |
-| Controllable | |
-| Movement | |
-| Text |
-| Sprite |
-| Name |
-| Music | |
+| Main System | Sub System by RenderSystem |
+|-------------|------------|
+| Render  | Aniamation |
+| Clickable  | Name |
+| Collision | Rectangle |
+| Destruction | Sprite |
+| EventManager | Text |
+| KeyboarInput | TextInput |
+| Life  | 
+| Modifier  |
+| Music  |
+| Parallax  |
+| Sound  |
 
-## How ECS works
+## How ECS works in client ?
 
-        Here's a diagram showing how ECS works on the customer side.linux.
+Here's a diagram showing how ECS works on the customer side.linux.
 
 <h1 align="center">
   <img src="../assets/ECSReadme/diagrame_ECS.drawio.png" alt="Depviz" title="Depviz" height="750px">
   <br>
 </h1>
 
-
+Here, in the client, we can find the scene. In the scene we have: entities, components and systems.
+In an entity we find components, which are attributes linked to the entity itself. For example, a human being is an entity and is made up of different components: head, arm, leg, ... .
+Then we have systems, which change the values of the components.
