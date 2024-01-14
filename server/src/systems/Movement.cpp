@@ -4,7 +4,6 @@
 namespace ecs {
 	void MovementSystem::update(SceneManager& sceneManager) {
         ecs::Scene& scene = sceneManager.getCurrentScene();
-
         for (auto& entity : sceneManager.view<Acceleration, Velocity, Position>(scene)) {
             this->move(sceneManager, entity);
 

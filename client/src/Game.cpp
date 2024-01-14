@@ -19,25 +19,25 @@ namespace rtype {
         InitAudioDevice();
         InitWindow(1920, 1080, "rtype");
         SetTargetFPS(60);
-        this->m_world.loadTextures({ "assets/characters.gif" });
+        this->m_world.loadTextures({ "assets/characters.gif", "assets/28.png" });
 
         while (!WindowShouldClose()) {
             if (this->m_network.isConnected()) {
-                if (IsKeyDown(KEY_UP)) {
+                if (IsKeyPressed(KEY_UP)) {
                     ecs::Move msg = {ecs::MessageType::GoTop};
                     this->m_network.send(msg, ecs::MessageType::Move);
                 }
-                if (IsKeyDown(KEY_DOWN)) {
+                if (IsKeyPressed(KEY_DOWN)) {
                     ecs::Move msg = {ecs::MessageType::GoBottom};
                     this->m_network.send(msg, ecs::MessageType::Move);
-                } if (IsKeyDown(KEY_LEFT)) {
+                } if (IsKeyPressed(KEY_LEFT)) {
                     ecs::Move msg = {ecs::MessageType::GoLeft};
                     this->m_network.send(msg, ecs::MessageType::Move);
-                } if (IsKeyDown(KEY_RIGHT)) {
+                } if (IsKeyPressed(KEY_RIGHT)) {
                     ecs::Move msg = {ecs::MessageType::GoRight};
                     this->m_network.send(msg, ecs::MessageType::Move);
                 }
-                else if (IsKeyPressed(KEY_SPACE)) {
+                if (IsKeyPressed(KEY_SPACE)) {
                     ecs::Move msg = {ecs::MessageType::GoRight};
                     this->m_network.send(msg, ecs::MessageType::NewMissile);
                 }
@@ -90,6 +90,11 @@ namespace rtype {
         this->m_id = id;
     }
 
+    std::string Game::getPlayerName() const
+    {
+        return this->m_playerName;
+    }
+
     /* ---------------------------- PRIVATE FUNCTIONS --------------------------- */
 
     void Game::initScenes()
@@ -110,6 +115,12 @@ namespace rtype {
         this->m_world.createScene();
 
         /* ------------------------- Scene InGame --------------------------------*/
+        this->m_world.createScene();
+
+        /* ------------------------- Scene Win --------------------------------*/
+        this->m_world.createScene();
+
+        /* ------------------------- Scene GameOver --------------------------------*/
         this->m_world.createScene();
     }
 }

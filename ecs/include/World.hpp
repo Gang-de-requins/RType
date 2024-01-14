@@ -101,6 +101,16 @@ namespace ecs {
             void destroyEntity(Scene &scene, Entity &entity);
 
             /**
+             * @fn World::hasEntity
+             * @brief Check if an entity exists
+             * 
+             * @param scene The scene in which the entity is.
+             * @param id The id of the entity.
+             * @return true if the entity exists, false otherwise.
+             */
+            bool hasEntity(Scene &scene, std::size_t id);
+
+            /**
              * @fn World::getEntityById
              * @brief Get an entity by its id
              * 

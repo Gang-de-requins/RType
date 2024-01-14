@@ -27,8 +27,9 @@ namespace ecs {
         GetRooms = 17,
         CreateRoom = 18,
         NewMissile = 19,
-        StopX = 19,
-        StopY = 19,
+        StopX = 20,
+        StopY = 21,
+        NewEnemy = 22,
     };
 
     enum class EntityType : char {
