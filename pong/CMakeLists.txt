@@ -13,6 +13,9 @@ set(SRC_PONG
     src/LoadGame.cpp
     src/LoadEnd.cpp
     src/LoadSettings.cpp
+    src/systems/Controllable.cpp
+    src/systems/Movement.cpp
+    src/systems/Collision.cpp
 )
 
 set(SRC
