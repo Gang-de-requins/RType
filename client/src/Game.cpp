@@ -90,6 +90,11 @@ namespace rtype {
         this->m_id = id;
     }
 
+    std::string Game::getPlayerName() const
+    {
+        return this->m_playerName;
+    }
+
     /* ---------------------------- PRIVATE FUNCTIONS --------------------------- */
 
     void Game::initScenes()

@@ -33,6 +33,10 @@ namespace ecs {
         this->m_sceneManager.destroyEntity(scene, entity);
     }
 
+    bool World::hasEntity(Scene &scene, std::size_t id) {
+        return this->m_sceneManager.hasEntity(scene, id);
+    }
+
     Entity &World::getEntityById(Scene &scene, std::size_t id) {
         return this->m_sceneManager.getEntityById(scene, id);
     }

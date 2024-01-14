@@ -93,20 +93,41 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
                     if (message.getMessageType() == ecs::MessageType::EntityList) {
                         ecs::EntityList receivedStruct;
                         receivedStruct.deserialize(message.getMessageData());
+                        ecs::World &world = game.getWorld();
 
                         std::cout << "Entity List Received:" << std::endl;
                         for (const auto& entityInfo : receivedStruct.entityList) {
                                     if (entityInfo.entityType == ecs::EntityType::Player) {
-                                        std::cout << "Player with "; 
-                                        ecs::World &world = game.getWorld();
-                                        ecs::Entity &e = world.getEntityById(world.getCurrentScene(), entityInfo.id);
-                                        ecs::Position &pos = world.get<ecs::Position>(e);
-                                        pos.x = entityInfo.pos.first;
-                                        pos.y = entityInfo.pos.second;
+                                        std::cout << "Player with ";
+
+                                        if (world.hasEntity(world.getCurrentScene(), entityInfo.id)) {
+                                            std::cout << "Entity ID: " << entityInfo.id << " already exists" << std::endl;
+                                            ecs::Entity &e = world.getEntityById(world.getCurrentScene(), entityInfo.id);
+                                            ecs::Position &pos = world.get<ecs::Position>(e);
+                                            pos.x = entityInfo.pos.first;
+                                            pos.y = entityInfo.pos.second;
+                                        } else {
+                                            std::cout << "Entity ID: " << entityInfo.id << " does not exist, creating it" << std::endl;
+                                            ecs::NewPlayer newPlayer = {game.getPlayerName(), static_cast<std::size_t>(entityInfo.id), {entityInfo.pos.first, entityInfo.pos.second}, entityInfo.hp};
+                                            this->newPlayerConnected(game, newPlayer, false);
+                                        }
                                     } else if (entityInfo.entityType == ecs::EntityType::Missile) {
-                                        std::cout << "Missile with "; 
+                                        std::cout << "Missile with ";
                                     }   else if (entityInfo.entityType == ecs::EntityType::Ennemy) {
-                                        std::cout << "Ennemy with "; 
+                                        std::cout << "Ennemy with ";
+
+                                        std::cout << "Entity ID: " << entityInfo.id << std::endl;
+                                        if (world.hasEntity(world.getCurrentScene(), entityInfo.id)) {
+                                            std::cout << "Entity ID: " << entityInfo.id << " already exists" << std::endl;
+                                            ecs::Entity &e = world.getEntityById(world.getCurrentScene(), static_cast<std::size_t>(entityInfo.id));
+                                            ecs::Position &pos = world.get<ecs::Position>(e);
+                                            pos.x = entityInfo.pos.first;
+                                            pos.y = entityInfo.pos.second;
+                                        } else {
+                                            std::cout << "Entity ID: " << entityInfo.id << " does not exist, creating it" << std::endl;
+                                            ecs::NewPlayer newPlayer = {"enemy", static_cast<std::size_t>(entityInfo.id), {entityInfo.pos.first, entityInfo.pos.second}, entityInfo.hp};
+                                            this->newEnemy(game, newPlayer);
+                                        }
                                     }
                             std::cout << "Entity ID: " << entityInfo.id 
                                     << ", HP: " << entityInfo.hp 

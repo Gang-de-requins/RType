@@ -32,6 +32,7 @@ namespace rtype {
             void addPlayer(Player &player);
             std::vector<Player> &getPlayers();
             void setId(std::size_t id);
+            std::string getPlayerName() const;
 
         private:
             void initScenes();
