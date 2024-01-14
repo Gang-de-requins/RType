@@ -39,6 +39,8 @@ namespace rtype {
             void loadSettings(ecs::Scene &scene);
             void loadChooseName(ecs::Scene &scene);
             void loadGame(ecs::Scene &scene);
+            void loadWin(ecs::Scene &scene);
+            void loadGameOver(ecs::Scene &scene);
     };
 }
 
