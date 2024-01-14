@@ -6,12 +6,19 @@ void receiveMessageThread(std::shared_ptr<server::Server> server)
 {
     while (true)
     {
-        ecs::Buffer buffer;
+        ecs::Message msg;
 
-        server->receive(buffer);
+        server->receive(msg);
         server->mutex.lock();
-        server->bufferList.push_back(buffer);
+        server->messageList.push_back(msg);
         server->mutex.unlock();
+    }
+}
+
+void sendGameStateThread(std::shared_ptr<server::Server> server) {
+    while (true) {
+        server->sendGameState();
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 32));
     }
 }
 
@@ -44,7 +51,7 @@ int main(int ac, char const * const *av)
     try {
         std::shared_ptr<server::Server> server = std::make_shared<server::Server>(std::stoi(av[1]));
         std::thread receive(receiveMessageThread, server);
-
+        std::thread send(sendGameStateThread, server);
         server->run();
     }
     catch (std::exception &e) {
