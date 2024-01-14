@@ -12,6 +12,7 @@ namespace server {
             ecs::MovementSystem,
             ecs::CollisionSystem,
             ecs::LifeSystem
+            // ecs::DestructionSystem
         >(scene);
 
         // ecs::Entity &ParallaxBack1 = this->_world.createEntity(scene);
@@ -60,10 +61,12 @@ namespace server {
             if (FPS >= tickDuration) {
                 fpsTimer = std::chrono::steady_clock::now();
                 this->_world.update();
+
+                
             }
 
             processMessages();
-            if (_players.size() >= 2) {
+            if (_players.size() >= 1) {
                 if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - begin).count() > 500) {
                     std::cout << "Spawning enemy" << std::endl;
                     begin = std::chrono::steady_clock::now();
@@ -130,6 +133,10 @@ namespace server {
                         auto &position = this->_world.get<ecs::Position>(e);
                         auto &sprite = this->_world.get<ecs::Sprite>(e);
                         auto &scale = this->_world.get<ecs::Scale>(e);
+                        auto &health = this->_world.get<ecs::Health>(e);
+
+                        if (health.health <= 0)
+                            break;
                         std::cout << "New missile predator" << std::endl;
                         entityTemplate.playerBullet(this->_world, "", static_cast<int>(position.x + sprite.source.width * scale.x), static_cast<int>(position.y + (sprite.source.height * scale.y) / 2));
 
@@ -301,18 +308,24 @@ namespace server {
                 ecs::EntityInfo entityInfo;
                 if (scenemanager.has<ecs::Shooter>(entity)) {
                     entityInfo.entityType = ecs::EntityType::Player;
+                    ecs::Health &health = _world.get<ecs::Health>(entity);
+                    entityInfo.hp = static_cast<int>(health.health);
                 }
-                else if (scenemanager.has<ecs::Damage>(entity) && !scenemanager.has<ecs::Shooter>(entity)) {
+                else if (scenemanager.has<ecs::Damage>(entity) && !scenemanager.has<ecs::Shooter>(entity) && !scenemanager.has<ecs::Name>(entity)) {
                     entityInfo.entityType = ecs::EntityType::Missile;
                     std::cout << "Missile" << std::endl;
+                    entityInfo.hp = 0;
                 }
                 else if (scenemanager.has<ecs::Name>(entity) && !scenemanager.has<ecs::Controllable>(entity)) {
                     entityInfo.entityType = ecs::EntityType::Ennemy;
                     std::cout << "Ennemy" << std::endl;
+                    ecs::Health &health = _world.get<ecs::Health>(entity);
+                    entityInfo.hp = static_cast<int>(health.health);
                 }
                 entityInfo.id = static_cast<int>(entity.id);
-                entityInfo.hp = 0;
+                // entityInfo.hp = 0;
                 entityInfo.pos = {posSpaceship.x, posSpaceship.y};
+                // if (entityInfo.hp > 0 || entityInfo.entityType == ecs::EntityType::Missile)
                 entityList.entityList.push_back(entityInfo);
         }
         
