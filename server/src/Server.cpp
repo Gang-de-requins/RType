@@ -124,12 +124,16 @@ namespace server {
             case ecs::MessageType::NewMissile: {
                 for (auto &player : _players) {
                     if (player.getEndpoint() == message.getEndpoint()) {
-                        ecs::Entity &e = this->_world.getEntityById(this->_world.getCurrentScene(), player.getId());
+                        ecs::Scene &scene = this->_world.getCurrentScene();
+                        ecs::Entity &e = this->_world.getEntityById(scene, player.getId());
                         auto &position = this->_world.get<ecs::Position>(e);
                         auto &sprite = this->_world.get<ecs::Sprite>(e);
                         auto &scale = this->_world.get<ecs::Scale>(e);
                         std::cout << "New missile predator" << std::endl;
                         entityTemplate.playerBullet(this->_world, "", static_cast<int>(position.x + sprite.source.width * scale.x), static_cast<int>(position.y + (sprite.source.height * scale.y) / 2));
+                        ecs::Position &pos = _world.get<ecs::Position>(_world.getEntityById(scene, scene.entities.size() - 1));
+                        ecs::NewPlayer newPlayerstr = {"", _world.getEntityById(scene, scene.entities.size() - 1).id, std::make_pair(pos.x, pos.y), 100};
+                        send(newPlayerstr, ecs::MessageType::NewMissile, player.getEndpoint());
                     }
                 }
                 break;
@@ -298,11 +302,9 @@ namespace server {
                 }
                 else if (scenemanager.has<ecs::Damage>(entity) && !scenemanager.has<ecs::Shooter>(entity)) {
                     entityInfo.entityType = ecs::EntityType::Missile;
-                    std::cout << "Missile" << std::endl;
                 }
                 else if (scenemanager.has<ecs::Name>(entity) && !scenemanager.has<ecs::Controllable>(entity)) {
                     entityInfo.entityType = ecs::EntityType::Ennemy;
-                    std::cout << "Ennemy" << std::endl;
                 }
                 entityInfo.id = static_cast<int>(entity.id);
                 entityInfo.hp = 0;

@@ -71,7 +71,7 @@ namespace rtype {
 
         ecs::Entity &missile = world.createEntity(world.getCurrentScene());
         world.assign(missile, ecs::Position{position.x + sprite.source.width * scale.x, position.y + (sprite.source.height * scale.y) / 2});
-        world.assign(missile, ecs::Velocity{6, 0});
+        world.assign(missile, ecs::Velocity{0, 0});
         world.assign(missile, ecs::Sprite{"assets/28.png", ecs::Rectangle{0, 0, 210, 92}, ecs::Vector2{0, 0}});
         world.assign(missile, ecs::Acceleration{1, 0, 15});
         world.assign(missile, ecs::Scale{0.25, 0.25});

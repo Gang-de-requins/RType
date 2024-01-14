@@ -5,7 +5,7 @@ namespace rtype {
     {
         this->m_world.registerSystems<
             ecs::MusicSystem,
-            ecs::ControllableSystem,
+            // ecs::ControllableSystem,
             ecs::AnimationSystem,
             ecs::MovementSystem,
             ecs::SpriteSystem,

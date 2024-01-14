@@ -89,6 +89,12 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
                         receivedStruct.deserialize(message.getMessageData());
                         std::cout << "New Enemy with the id: " << receivedStruct.id << " has spawned." << std::endl;
                         this->newEnemy(game, receivedStruct);
+                    }
+                    if (message.getMessageType() == ecs::MessageType::NewMissile) {
+                        ecs::NewPlayer receivedStruct;
+                        receivedStruct.deserialize(message.getMessageData());
+                        std::cout << "New Missile with the id: " << receivedStruct.id << " has spawned." << std::endl;
+                        this->newMissile(game, receivedStruct);
                     } 
                     if (message.getMessageType() == ecs::MessageType::EntityList) {
                         ecs::EntityList receivedStruct;
@@ -105,8 +111,18 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
                                         pos.y = entityInfo.pos.second;
                                     } else if (entityInfo.entityType == ecs::EntityType::Missile) {
                                         std::cout << "Missile with "; 
+                                        ecs::World &world = game.getWorld();
+                                        ecs::Entity &e = world.getEntityById(world.getCurrentScene(), entityInfo.id);
+                                        ecs::Position &pos = world.get<ecs::Position>(e);
+                                        pos.x = entityInfo.pos.first;
+                                        pos.y = entityInfo.pos.second;
                                     }   else if (entityInfo.entityType == ecs::EntityType::Ennemy) {
                                         std::cout << "Ennemy with "; 
+                                        ecs::World &world = game.getWorld();
+                                        ecs::Entity &e = world.getEntityById(world.getCurrentScene(), entityInfo.id);
+                                        ecs::Position &pos = world.get<ecs::Position>(e);
+                                        pos.x = entityInfo.pos.first;
+                                        pos.y = entityInfo.pos.second;
                                     }
                             std::cout << "Entity ID: " << entityInfo.id 
                                     << ", HP: " << entityInfo.hp 
@@ -302,22 +318,21 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
         }
     }
 
-    void Network::newMissile(Game &game, std::string name)
+    void Network::newMissile(Game &game, ecs::NewPlayer& newPlayer)
     {
-        std::size_t id = 0;
+        ecs::World &world = game.getWorld();
+        ecs::Scene &inGame = world.getCurrentScene();
 
-        try {
-            id = std::stoi(name);
-        } catch (const std::exception &e) {
-            std::cerr << "Error: " << e.what() << std::endl;
-            return;
-        }
-
-        for (auto &player : game.getPlayers()) {
-            if (player.getId() == id) {
-                player.shoot(game);
-            }
-        }
+        ecs::Entity &missile =  world.createEntityWithId(inGame, newPlayer.id);
+        world.assign(missile, ecs::Position{newPlayer.pos.first, newPlayer.pos.second});
+        world.assign(missile, ecs::Velocity{0, 0});
+        world.assign(missile, ecs::Sprite{"assets/28.png", ecs::Rectangle{0, 0, 210, 92}, ecs::Vector2{0, 0}});
+        world.assign(missile, ecs::Acceleration{0, 0, 0});
+        world.assign(missile, ecs::Scale{0.25, 0.25});
+        world.assign(missile, ecs::Rotation{0});
+        world.assign(missile, ecs::Collision{false, {}, true});
+        // world.assign(missile, ecs::Sound{"assets/weird.wav"});
+        // world.assign(missile, ecs::Damage{10});
     }
 
     void Network::newEnemy(Game &game, ecs::NewPlayer& newPlayer)
@@ -327,7 +342,7 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
 
         ecs::Entity &enemy = world.createEntityWithId(inGame, newPlayer.id);
         world.assign(enemy, ecs::Position{newPlayer.pos.first, newPlayer.pos.second});
-        world.assign(enemy, ecs::Velocity{-3, 0});
+        world.assign(enemy, ecs::Velocity{0, 0});
         world.assign(enemy, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}});
         world.assign(enemy, ecs::Acceleration{0, 0, 4});
         world.assign(enemy, ecs::Scale{1, 1});
