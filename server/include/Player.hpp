@@ -12,8 +12,11 @@ namespace server {
 
             std::string getName() const { return _name; }
             asio::ip::udp::endpoint getEndpoint() const { return _endpoint; }
+            std::size_t getId() const { return _id; }
+            void setId(std::size_t id) { _id = id; }
 
         private:
+            std::size_t _id;
             std::string _name;
             asio::ip::udp::endpoint _endpoint;
     };

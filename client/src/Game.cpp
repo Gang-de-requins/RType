@@ -21,8 +21,27 @@ namespace rtype {
         SetTargetFPS(60);
         this->m_world.loadTextures({ "assets/characters.gif" });
 
-        while (!WindowShouldClose())
-        {
+        while (!WindowShouldClose()) {
+            if (this->m_network.isConnected()) {
+                if (IsKeyDown(KEY_UP)) {
+                    this->m_network.send(ecs::MessageType::PLAYER_MOVE, std::to_string(this->m_id) + ":up");
+                } else if (IsKeyDown(KEY_DOWN)) {
+                    this->m_network.send(ecs::MessageType::PLAYER_MOVE, std::to_string(this->m_id) + ":down");
+                } else if (IsKeyDown(KEY_LEFT)) {
+                    this->m_network.send(ecs::MessageType::PLAYER_MOVE, std::to_string(this->m_id) + ":left");
+                } else if (IsKeyDown(KEY_RIGHT)) {
+                    this->m_network.send(ecs::MessageType::PLAYER_MOVE, std::to_string(this->m_id) + ":right");
+                } else if (IsKeyPressed(KEY_SPACE)) {
+                    this->m_network.send(ecs::MessageType::PLAYER_SHOOT, std::to_string(this->m_id));
+                }
+
+                if (IsKeyReleased(KEY_UP) || IsKeyReleased(KEY_DOWN)) {
+                    this->m_network.send(ecs::MessageType::PLAYER_MOVE, std::to_string(this->m_id) + ":stopy");
+                } else if (IsKeyReleased(KEY_LEFT) || IsKeyReleased(KEY_RIGHT)) {
+                    this->m_network.send(ecs::MessageType::PLAYER_MOVE, std::to_string(this->m_id) + ":stopx");
+                }
+            }
+
             BeginDrawing();
             ClearBackground(BLACK);
 
@@ -34,6 +53,7 @@ namespace rtype {
         CloseWindow();
         CloseAudioDevice();
         this->m_network.setRunning(false);
+        this->m_network.send(ecs::MessageType::PLAYER_DISCONNECTED, std::to_string(this->m_id));
     }
 
     ecs::World &Game::getWorld()
@@ -54,6 +74,11 @@ namespace rtype {
     std::vector<Player> &Game::getPlayers()
     {
         return this->m_players;
+    }
+
+    void Game::setId(std::size_t id)
+    {
+        this->m_id = id;
     }
 
     /* ---------------------------- PRIVATE FUNCTIONS --------------------------- */

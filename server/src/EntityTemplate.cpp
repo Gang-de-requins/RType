@@ -22,7 +22,7 @@ namespace server {
         world.assign(entity, ecs::Acceleration{0, 0, 4});
         world.assign(entity, ecs::Scale{2, 2});
         world.assign(entity, ecs::Rotation{0});
-        world.assign(entity, ecs::Collision{false, {}, false});
+        world.assign(entity, ecs::Collision{false, {}, true });
         world.assign(entity, ecs::Shooter{std::chrono::milliseconds(500), std::chrono::steady_clock::now()});
     }
 
@@ -53,7 +53,7 @@ namespace server {
         world.assign(entity, ecs::Acceleration{0, 0, 4});
         world.assign(entity, ecs::Scale{2, 2});
         world.assign(entity, ecs::Rotation{0});
-        world.assign(entity, ecs::Collision{false, {}, true});
+        world.assign(entity, ecs::Collision{ false, {}, true });
     }
 
     void EntityTemplate::enemyBullet(ecs::World &world, const std::string &tag, int x, int y)

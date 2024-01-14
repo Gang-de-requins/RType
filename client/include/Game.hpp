@@ -21,6 +21,7 @@ namespace rtype {
         Network m_network;
         std::vector<Player> m_players;
         std::string m_playerName;
+        std::size_t m_id = 0;
 
         public:
             Game();
@@ -30,6 +31,7 @@ namespace rtype {
             float getOffsetColorSpaceship() const;
             void addPlayer(Player &player);
             std::vector<Player> &getPlayers();
+            void setId(std::size_t id);
 
         private:
             void initScenes();

@@ -9,7 +9,7 @@
     #define NOUSER
 #endif
 
-#include <boost/asio.hpp>
+#include <asio.hpp>
 #include <GameEngine.hpp>
 
 #if defined(_WIN32)
@@ -71,12 +71,13 @@ namespace rtype {
     class Game;
 
     class Network {
-        boost::asio::io_context m_ioContext;
-        boost::asio::ip::udp::socket m_socket;
-        boost::asio::ip::udp::endpoint m_endpoint;
+        asio::io_context m_ioContext;
+        asio::ip::udp::socket m_socket;
+        asio::ip::udp::endpoint m_endpoint;
         std::vector<std::thread> m_threads;
 
         bool m_running;
+        bool m_connected;
 
         public:
             std::string m_ip;
@@ -87,14 +88,15 @@ namespace rtype {
             void connect(const std::string &ip, const unsigned short port, Game &game, const std::string &playerName);
             void receive(Game &game);
             void setRunning(bool running);
+            bool isConnected() const;
         
         private:
             void newPlayerConnected(Game &game, std::string name);
+            void playerDisconnected(Game &game, std::string msg);
             //void moveEntity(Game &game, std::string name, ::Network::MessageType type);
-            void moveEntity(Game &game, std::string name, ecs::MessageType direction);
-            void moveEntity(Game &game, std::string name, ::Network::MessageType type);
-            void newMissile(Game &game, std::string name);
-            void newEnemy(Game &game, std::string name);
+            void moveEntity(Game &game, std::string msg);
+            void newMissile(Game &game, std::string msg);
+            void newEnemy(Game &game, std::string msg);
     };
 }
 
