@@ -25,32 +25,28 @@ namespace rtype {
         this->m_threads.emplace_back(std::thread(&Network::receive, this, std::ref(game)));
 
         std::cout << "Sending player name: " << playerName << std::endl;
-        this->send(ecs::MessageType::PLAYER_CONNECTED, playerName);
+        ecs::PlayerJoined myStruct1ToSend = {playerName};
+        this->send(myStruct1ToSend, ecs::MessageType::PlayerJoined);
         this->m_connected = true;
     }
 
-    void Network::send(ecs::MessageType type, std::string message)
-    {
-        ecs::Buffer buffer;
+    template <typename T>
+    void Network::send(T& data, ecs::MessageType messageType) {
+        std::vector<char> serializedData = data.serialize();
+        std::size_t dataSize = serializedData.size();
 
-        buffer.writeMessageType(type);
-        buffer.writeString(message);
-        // std::cout << "Received MessageType: " << static_cast<int>(buffer.readMessageType()) << std::endl;
-        this->m_socket.send_to(asio::buffer(buffer.getData()), this->m_endpoint);
+        std::vector<char> packet(sizeof(std::size_t) + sizeof(ecs::MessageType) + dataSize);
+        std::memcpy(packet.data(), &dataSize, sizeof(dataSize));
+        std::memcpy(packet.data() + sizeof(dataSize), &messageType, sizeof(messageType));
+        std::memcpy(packet.data() + sizeof(dataSize) + sizeof(ecs::MessageType), serializedData.data(), dataSize);
+
+        this->m_socket.send_to(asio::buffer(packet), this->m_endpoint);
     }
+
+template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
 
     void Network::receive(Game &game)
     {
-        std::vector<ecs::MessageType> commands = {
-            ecs::MessageType::PLAYER_CONNECTED,
-            ecs::MessageType::PLAYER_DISCONNECTED,
-            ecs::MessageType::PLAYER_MOVE,
-            ecs::MessageType::PLAYER_SHOOT,
-            ecs::MessageType::ENEMY_SPAWN,
-            ecs::MessageType::ENEMY_SHOOT,
-            ecs::MessageType::ENTITY_DESTROYED
-        };
-
         while (this->m_running) {
             try {
                 std::array<char, 1024> receiveBuffer;
@@ -58,57 +54,104 @@ namespace rtype {
 
                 std::size_t bytes_transferred = this->m_socket.receive_from(asio::buffer(receiveBuffer), senderEndpoint);
 
-                if (bytes_transferred > 0) {
-                    if(bytes_transferred >= sizeof(::Network::MessageType)) {
-                        ecs::Buffer buffer;
-                        buffer.getData() = std::vector<char>(receiveBuffer.begin(), receiveBuffer.begin() + bytes_transferred);
+                if (bytes_transferred >= sizeof(std::size_t) + sizeof(ecs::MessageType)) {
+                    ecs::Message message;
+                    std::size_t dataSize;
+                    ecs::MessageType messageType;
+                    std::memcpy(&dataSize, receiveBuffer.data(), sizeof(dataSize));
+                    std::memcpy(&messageType, receiveBuffer.data() + sizeof(dataSize), sizeof(messageType));
 
-                        ecs::MessageType messageType = buffer.readMessageType();
-                        std::string msg = buffer.readString();
+                    message.setMessageType(messageType);
 
-                        // std::cout << msg << std::endl;
+                    if (bytes_transferred >= sizeof(dataSize) + sizeof(messageType)) {
+                        std::vector<char> messageData(receiveBuffer.begin() + sizeof(dataSize) + sizeof(messageType), 
+                                receiveBuffer.begin() + sizeof(dataSize) + sizeof(messageType) + dataSize);
+                        message.setMessageData(messageData);
+                    }
 
-                        // if (messageType == ecs::MessageType::PLAYER_CONNECTED) {
-                        //     this->newPlayerConnected(game, msg);
-                        // }
+                    if (message.getMessageType() == ecs::MessageType::PlayerJoinedAccept) {
+                        ecs::NewPlayer receivedStruct;
+                        receivedStruct.deserialize(message.getMessageData());
+                        std::cout << "You have joined the game with the name :" << receivedStruct.playername
+                        << " and with the id: " << receivedStruct.id <<std::endl;
+                        this->newPlayerConnected(game, receivedStruct.playername, true);
+                    }
 
-                        switch (messageType) {
-                            case ecs::MessageType::PLAYER_CONNECTED:
-                                std::cout << "New player connected: " << msg << std::endl;
-                                this->newPlayerConnected(game, msg);
-                                break;
-                            case ecs::MessageType::PLAYER_DISCONNECTED:
-                                std::cout << "Player disconnected: " << msg << std::endl;
-                                this->playerDisconnected(game, msg);
-                                break;
-                            case ecs::MessageType::PLAYER_MOVE:
-                                std::cout << "Player move: " << msg << std::endl;
-                                this->moveEntity(game, msg);
-                                break;
-                            case ecs::MessageType::PLAYER_SHOOT:
-                                std::cout << "Player shoot: " << msg << std::endl;
-                                this->newMissile(game, msg);
-                                break;
-                            case ecs::MessageType::ENEMY_SPAWN:
-                                std::cout << "Enemy spawn: " << msg << std::endl;
-                                this->newEnemy(game, msg);
-                                break;
-                            case ecs::MessageType::ENEMY_SHOOT:
-                                break;
-                            case ecs::MessageType::ENTITY_DESTROYED:
-                                this->playerDisconnected(game, msg);
-                                break;
-                            default:
-                                break;
+                    if (message.getMessageType() == ecs::MessageType::NewPlayer) {
+                        ecs::NewPlayer receivedStruct;
+                        receivedStruct.deserialize(message.getMessageData());
+                        std::cout << "New player with name :" << receivedStruct.playername
+                        << " and with the id: " << receivedStruct.id << " has joined the game" << std::endl;
+                        this->newPlayerConnected(game, receivedStruct.playername, false);
+                    } 
+                    if (message.getMessageType() == ecs::MessageType::EntityList) {
+                        ecs::EntityList receivedStruct;
+                        receivedStruct.deserialize(message.getMessageData());
+
+                        std::cout << "Entity List Received:" << std::endl;
+                        for (const auto& entityInfo : receivedStruct.entityList) {
+                                    if (entityInfo.entityType == ecs::EntityType::Player) {
+                                        std::cout << "Player with "; 
+                                        ecs::World &world = game.getWorld();
+                                        ecs::Entity &e = world.getEntityById(world.getCurrentScene(), entityInfo.id);
+                                        ecs::Position &pos = world.get<ecs::Position>(e);
+                                        pos.x = entityInfo.pos.first;
+                                        pos.y = entityInfo.pos.second;
+                                    } else if (entityInfo.entityType == ecs::EntityType::Missile) {
+                                        std::cout << "Missile with "; 
+                                    }
+                            std::cout << "Entity ID: " << entityInfo.id 
+                                    << ", HP: " << entityInfo.hp 
+                                    << ", Position: (" << entityInfo.pos.first 
+                                    << ", " << entityInfo.pos.second << ")" << std::endl;
                         }
                     }
                 }
             } catch (const std::exception &e) {
                 std::cerr << "Error: " << e.what() << std::endl;
+                exit(84);
             }
         }
         std::cout << "Stopped receiving messages" << std::endl;
     }
+
+    //                     switch (messageType) {
+    //                         case ecs::MessageType::PLAYER_CONNECTED:
+    //                             std::cout << "New player connected: " << msg << std::endl;
+    //                             this->newPlayerConnected(game, msg);
+    //                             break;
+    //                         case ecs::MessageType::PLAYER_DISCONNECTED:
+    //                             std::cout << "Player disconnected: " << msg << std::endl;
+    //                             this->playerDisconnected(game, msg);
+    //                             break;
+    //                         case ecs::MessageType::PLAYER_MOVE:
+    //                             std::cout << "Player move: " << msg << std::endl;
+    //                             this->moveEntity(game, msg);
+    //                             break;
+    //                         case ecs::MessageType::PLAYER_SHOOT:
+    //                             std::cout << "Player shoot: " << msg << std::endl;
+    //                             this->newMissile(game, msg);
+    //                             break;
+    //                         case ecs::MessageType::ENEMY_SPAWN:
+    //                             std::cout << "Enemy spawn: " << msg << std::endl;
+    //                             this->newEnemy(game, msg);
+    //                             break;
+    //                         case ecs::MessageType::ENEMY_SHOOT:
+    //                             break;
+    //                         case ecs::MessageType::ENTITY_DESTROYED:
+    //                             this->playerDisconnected(game, msg);
+    //                             break;
+    //                         default:
+    //                             break;
+    //                     }
+    //                 }
+    //             }
+    //         } catch (const std::exception &e) {
+    //             std::cerr << "Error: " << e.what() << std::endl;
+    //         }
+    //     }
+    //     std::cout << "Stopped receiving messages" << std::endl;
+    // }
 
     void Network::setRunning(bool running)
     {
@@ -122,27 +165,21 @@ namespace rtype {
 
     /* ---------------------------- PRIVATE FUNCTIONS --------------------------- */
 
-    void Network::newPlayerConnected(Game &game, std::string name)
+    void Network::newPlayerConnected(Game &game, std::string name, bool isMe)
     {
         std::cout << "New player connected: " << name << std::endl;
         auto &world = game.getWorld();
 
-        std::string playerName = name.substr(0, name.find(":"));
-        bool isMe = name.substr(name.find(":") + 1, name.substr(name.find(":") + 1).find(":")) == "1";
-        std::string rawPos = name.substr(name.find(":") + 1);
-        rawPos = rawPos.substr(rawPos.find(":") + 1);
-        std::pair<float, float> pos = std::make_pair(std::stof(rawPos.substr(0, rawPos.find(":"))), std::stof(rawPos.substr(rawPos.find(":") + 1)));
-
         ecs::Scene &inGame = game.getWorld().getCurrentScene();
         ecs::Entity &player = game.getWorld().createEntity(inGame);
 
-        world.assign(player, ecs::Position{pos.first, pos.second});
+        world.assign(player, ecs::Position{200, 200});
         world.assign(player, ecs::Velocity{0, 0});
         world.assign(player, ecs::Sprite{"assets/characters2.gif", ecs::Rectangle{0, 0, 32, 32}, ecs::Vector2{0, 0}});
         world.assign(player, ecs::Acceleration{0, 0, 4});
         world.assign(player, ecs::Scale{1, 1});
         world.assign(player, ecs::Rotation{0});
-        world.assign(player, ecs::Name{playerName, ecs::Position{-20, -20}});
+        world.assign(player, ecs::Name{name, ecs::Position{-20, -20}});
         world.assign(player, ecs::Collision{false, {}, true});
         world.assign(player, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 8, 0, 150, std::chrono::steady_clock::now()});
 
@@ -209,7 +246,7 @@ namespace rtype {
             game.setId(player.id);
         }
 
-        Player newPlayer(player, playerName);
+        Player newPlayer(player, name);
 
         game.addPlayer(newPlayer);
     }
