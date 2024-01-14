@@ -42,7 +42,7 @@
 
 ### History of the game
 
-R-Type is an emblematic series of video games of the shoot them up with horizontal scrolling, developed by Irem and begun in 1987 on terminal of arcade. It is probably inspired by the Konami Gradius series, whose first episode was released two years earlier.
+R-Type is an iconic series of horizontal-scrolling shoot'em up video games, developed by Irem and begun in 1987 on terminal of arcade. It is probably inspired by the Konami Gradius series, whose first episode was released two years earlier.
 
 ### Goal of the project
 
@@ -132,7 +132,7 @@ After running the script you will have two executable: "./r-type_client" and "./
   ./r-type_client.exe
   ```
 
-  > *You can change the [PORT] and the [ADRESSE] on the settings of the game.*
+  > *You can change the [PORT] and the [ADDRESS] on the settings of the game.*
 
 ## :brain: How to play :brain:
 
@@ -201,9 +201,6 @@ You have 3 hp if an enemy shoots at you you lose 1, so if you have no more hp yo
 
 [Check server documentation](server/README.md)
 
-### Client documentation
-
-[Check client documentation](client/README.md)
 
 ## Contributors
 

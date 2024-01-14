@@ -48,19 +48,37 @@ The entities are stored in a vector for each scene, and the components are store
 
 ## Systems
 
-| Main System | Sub System by RenderSystem |
-|-------------|------------|
-| Render  | Aniamation |
-| Clickable  | Name |
-| Collision | Rectangle |
-| Destruction | Sprite |
-| EventManager | Text |
-| KeyboarInput | TextInput |
-| Life  | 
+| Systems |
+|-------------|
+| Animation |
+| Name |
+| Rectangle |
+| Render  |
+| Sprite |
+| Text |
+| TextInput |
+| Clickable  |
+| Collision |
+| Destruction |
+| EventManager |
+| KeyboarInput |
+| Life  |
 | Modifier  |
 | Music  |
 | Parallax  |
 | Sound  |
+| Submit |
+
+| Main System | Sub Systems |
+|-------------|-------------|
+| Render | Animation |
+|| Name |
+|| Rectangle |
+|| Render |
+|| Sprite |
+|| Text |
+|| TextInput |
+
 
 ## How ECS works in client ?
 
