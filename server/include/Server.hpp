@@ -64,6 +64,8 @@ namespace server {
             WaveManager waveManger;
             std::vector<Player> _players;
             ecs::World _world;
+            int _maxEnemies = 45;
+            int _nbEnemiesSpawned = 0;
     };
 }
 

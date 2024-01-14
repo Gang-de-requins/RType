@@ -66,8 +66,8 @@ namespace server {
             }
 
             processMessages();
-            if (_players.size() >= 1) {
-                if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - begin).count() > 500) {
+            if (_players.size() >= 2) {
+                if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - begin).count() > 500 && _nbEnemiesSpawned < _maxEnemies) {
                     std::cout << "Spawning enemy" << std::endl;
                     begin = std::chrono::steady_clock::now();
 
@@ -83,6 +83,7 @@ namespace server {
                         player.getEndpoint();
                         send(newPlayerstr, ecs::MessageType::NewEnemy, player.getEndpoint());
                     }
+                    _nbEnemiesSpawned++;
                 }
             }
          
@@ -301,6 +302,43 @@ namespace server {
     {
         this->mutex.lock();
         ecs::EntityList entityList;
+
+        if (_nbEnemiesSpawned >= _maxEnemies) {
+            auto &sceneManager = _world.getSceneManager();
+            auto entities = sceneManager.view<ecs::Health>(sceneManager.getCurrentScene());
+
+            int enemiesDead = 0;
+            for (auto &entity : entities) {
+                ecs::Health &health = _world.get<ecs::Health>(*entity);
+                if (sceneManager.has<ecs::Damage>(*entity) && health.health <= 0) {
+                    enemiesDead++;
+                }
+            }
+
+            if (enemiesDead >= _maxEnemies) {
+                std::cout << "Game won" << std::endl;
+                for (auto &player : _players) {
+                    this->send(entityList, ecs::MessageType::Win, player.getEndpoint());
+                }
+            }
+        }
+
+        std::size_t nbPlayersDead = 0;
+
+        for (auto &player : _players) {
+            ecs::Health &health = _world.get<ecs::Health>(_world.getEntityById(_world.getCurrentScene(), player.getId()));
+
+            if (health.health <= 0) {
+                nbPlayersDead++;
+            }
+        }
+
+        if (nbPlayersDead >= _players.size() && _players.size() > 0) {
+            std::cout << "Game lost" << std::endl;
+            for (auto &player : _players) {
+                this->send(entityList, ecs::MessageType::Loose, player.getEndpoint());
+            }
+        }
 
         for (auto &entity : _world.getCurrentScene().entities) {
                 ecs::Position &posSpaceship = _world.get<ecs::Position>(entity);
