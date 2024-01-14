@@ -6,7 +6,7 @@ namespace server {
         setup(port);
         this->_world = ecs::World();
 
-        ecs::Scene scene = this->_world.createScene();
+        ecs::Scene &scene = this->_world.createScene();
 
         this->_world.registerSystems<
             ecs::MovementSystem,
@@ -49,7 +49,7 @@ namespace server {
     {
         const frame tickDuration(1);
 
-        // std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
         std::chrono::time_point<std::chrono::steady_clock> fpsTimer = std::chrono::steady_clock::now();
         frame FPS{};
@@ -58,31 +58,33 @@ namespace server {
             FPS = std::chrono::duration_cast<frame>(std::chrono::steady_clock::now() - fpsTimer);
 
             if (FPS >= tickDuration) {
+                fpsTimer = std::chrono::steady_clock::now();
                 this->_world.update();
             }
 
             processMessages();
+            if (_players.size() >= 2) {
+                if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - begin).count() > 500) {
+                    std::cout << "Spawning enemy" << std::endl;
+                    begin = std::chrono::steady_clock::now();
 
-            // if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - begin).count() > 2000 && _players.size() > 1) {
-            //     std::cout << "Spawning enemy" << std::endl;
+                    std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
-            //     begin = std::chrono::steady_clock::now();
+                    int randomValue = std::rand() % 701 + 100;
 
-            //     std::string tag = "enemy" + std::to_string(rand() % 1000);
-
-            //     EntityTemplate entityTemplate = EntityTemplate();
-            //     entityTemplate.enemy(this->_world, tag, 900, 100);
-
-            //     for (auto &player : _players) {
-            //         ecs::Buffer buffer;
-            //         buffer.writeMessageType(ecs::MessageType::ENEMY_SPAWN);
-            //         std::string response = tag + ":900:100";
-            //         buffer.writeString(response);
-            //         send(buffer, player.getEndpoint());
-            //     }
-            // }
-        }
+                    EntityTemplate entityTemplate = EntityTemplate();
+                    entityTemplate.enemy(_world, 2000, randomValue);
+                    auto &scene = _world.getCurrentScene();
+                    ecs::NewPlayer newPlayerstr = {"", _world.getEntityById(scene, scene.entities.size() - 1).id, std::make_pair(0.0f, 0.0f), 100};
+                    for (auto &player : _players) {
+                        player.getEndpoint();
+                        send(newPlayerstr, ecs::MessageType::NewEnemy, player.getEndpoint());
+                    }
+                }
+            }
+         
     }
+}
 
     void Server::processMessages()
     {
@@ -139,16 +141,20 @@ namespace server {
                     if (player.getEndpoint() == message.getEndpoint()) {
                         std::cout << player.getId() << std::endl;
                         ecs::Entity &e = this->_world.getEntityById(this->_world.getCurrentScene(), player.getId());
-                        auto &pos = this->_world.get<ecs::Position>(e);
+                        auto &vel = this->_world.get<ecs::Velocity>(e);
 
                         if (receivedStruct.direction == ecs::MessageType::GoLeft)
-                            pos.x -= 4;
+                            vel.dx = -4.0f;
                         if (receivedStruct.direction == ecs::MessageType::GoRight)
-                            pos.x += 4;
+                            vel.dx = 4.0f;
                         if (receivedStruct.direction == ecs::MessageType::GoTop)
-                            pos.y -= 4;
+                            vel.dy = -4.0f;
                         if (receivedStruct.direction == ecs::MessageType::GoBottom)
-                            pos.y += 4;
+                            vel.dy = 4.0f;
+                        if (receivedStruct.direction == ecs::MessageType::StopX)
+                            vel.dx = 0.0f;
+                        if (receivedStruct.direction == ecs::MessageType::StopY)
+                            vel.dy = 0.0f;
                     }
                 }
                 break;
@@ -289,12 +295,12 @@ namespace server {
                 ecs::EntityInfo entityInfo;
                 if (scenemanager.has<ecs::Shooter>(entity)) {
                     entityInfo.entityType = ecs::EntityType::Player;
-                    std::cout << "player" << std::endl;
                 }
                 else if (scenemanager.has<ecs::Damage>(entity) && !scenemanager.has<ecs::Shooter>(entity)) {
                     entityInfo.entityType = ecs::EntityType::Missile;
                     std::cout << "Missile" << std::endl;
-                } else if (scenemanager.has<ecs::Name>(entity) && !scenemanager.has<ecs::Controllable>(entity)) {
+                }
+                else if (scenemanager.has<ecs::Name>(entity) && !scenemanager.has<ecs::Controllable>(entity)) {
                     entityInfo.entityType = ecs::EntityType::Ennemy;
                     std::cout << "Ennemy" << std::endl;
                 }
