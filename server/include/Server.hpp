@@ -35,10 +35,21 @@ namespace server {
             void setup(short port);
             void run();
             void processMessages();
-            void receive(ecs::Buffer &buffer);
-            void send(ecs::Buffer &buffer, const asio::ip::udp::endpoint &endpoint);
+            void receive(ecs::Message &message);
+            void sendGameState();
 
-            std::vector<ecs::Buffer> bufferList;
+            template <typename T>
+            void send(T &data, ecs::MessageType messageType, const asio::ip::udp::endpoint& recipientEndpoint) {
+                std::vector<char> serializedData = data.serialize();
+                std::size_t dataSize = serializedData.size();
+                std::vector<char> packet(sizeof(std::size_t) + sizeof(ecs::MessageType) + dataSize);
+                std::memcpy(packet.data(), &dataSize, sizeof(dataSize));
+                std::memcpy(packet.data() + sizeof(dataSize), &messageType, sizeof(messageType));
+                std::memcpy(packet.data() + sizeof(dataSize) + sizeof(ecs::MessageType), serializedData.data(), dataSize);
+                this->_socket->send_to(asio::buffer(packet), recipientEndpoint);
+            }
+
+            std::vector<ecs::Message> messageList;
             std::mutex mutex;
 
             std::vector<Player> getPlayers() const { return _players; }
