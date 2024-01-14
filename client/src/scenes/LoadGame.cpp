@@ -4,17 +4,17 @@ namespace rtype {
     void Game::loadGame(ecs::Scene &scene)
     {
         this->m_world.registerSystems<
-            ecs::MusicSystem,
-            ecs::ControllableSystem,
+            // ecs::MusicSystem,
+            // ecs::ControllableSystem,
             ecs::AnimationSystem,
             ecs::MovementSystem,
             ecs::SpriteSystem,
             ecs::NameSystem,
-            ecs::TextSystem,
-            ecs::CollisionSystem,
-            ecs::LifeSystem,
-            ecs::ParallaxSystem,
-            ecs::ModifierSystem
+            // ecs::TextSystem,
+            // ecs::CollisionSystem,
+            // ecs::LifeSystem,
+            ecs::ParallaxSystem
+            // ecs::ModifierSystem
         >(scene);
 
         std::cout << "In Game" << std::endl;

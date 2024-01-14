@@ -64,6 +64,12 @@ namespace ecs {
         }), scene.entities.end());
     }
 
+    bool SceneManager::hasEntity(Scene &scene, std::size_t id) {
+        return std::find_if(scene.entities.begin(), scene.entities.end(), [&id](const Entity &e) {
+            return e.id == id;
+        }) != scene.entities.end();
+    }
+
     Entity &SceneManager::getEntityById(Scene &scene, std::size_t id) {
         return *std::find_if(scene.entities.begin(), scene.entities.end(), [&id](const Entity &e) {
             return e.id == id;
