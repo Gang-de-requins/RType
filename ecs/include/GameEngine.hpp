@@ -12,5 +12,6 @@
 
 #include "Entity.hpp"
 #include "World.hpp"
+#include "Message.hpp"
 
 #endif /* GAME_ENGINE_HPP */
