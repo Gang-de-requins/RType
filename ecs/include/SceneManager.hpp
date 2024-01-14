@@ -8,6 +8,7 @@
 #include "ParserJson.hpp"
 #include "systems/ISystem.hpp"
 #include "Macros.hpp"
+#include "AssetManager.hpp"
 
 namespace ecs {
     /**
@@ -39,9 +40,10 @@ namespace ecs {
         std::vector<Scene> m_scenes; // Scenes
         std::size_t m_nextSceneId; // Next scene id
         std::size_t m_currentSceneId; // Current scene id
-        std::unordered_map<std::string, Texture2D> m_textures; // Textures
-        std::unordered_map<std::string, ::Music> m_musics; // Musics
-        std::unordered_map<std::string, ::Sound> m_sounds; // Sounds
+        // std::unordered_map<std::string, Texture2D> m_textures; // Textures
+        // std::unordered_map<std::string, ::Music> m_musics; // Musics
+        // std::unordered_map<std::string, ::Sound> m_sounds; // Sounds
+        assetsManager m_assetManager;
 
         public:
             /**
@@ -49,7 +51,7 @@ namespace ecs {
              * @brief Construct a new Scene Manager object
              * 
              */
-            SceneManager() : m_scenes(), m_nextSceneId(0), m_currentSceneId(0) {
+            SceneManager() : m_scenes(), m_nextSceneId(0), m_currentSceneId(0), m_assetManager() {
                 this->m_scenes.reserve(DEFAULT_NB_SCENES);
             }
 
@@ -244,7 +246,9 @@ namespace ecs {
              * 
              * @param path The path to the textures.
              */
-            void loadTextures(std::vector<std::string> &paths);
+            void loadTextures(std::vector<std::string> &paths) {
+                return m_assetManager.loadTextures(paths);
+            }
 
             /**
              * @fn SceneManager::loadMusics
@@ -252,7 +256,9 @@ namespace ecs {
              * 
              * @param paths The paths to the musics.
              */
-            void loadMusics(std::vector<std::string> &paths);
+            void loadMusics(std::vector<std::string> &paths) {
+                return m_assetManager.loadMusics(paths);
+            }
 
             /**
              * @fn SceneManager::loadSounds
@@ -260,7 +266,9 @@ namespace ecs {
              * 
              * @param paths The paths to the sounds.
              */
-            void loadSounds(std::vector<std::string> &paths);
+            void loadSounds(std::vector<std::string> &paths) {
+                return m_assetManager.loadSounds(paths);
+            }
 
             /**
              * @fn SceneManager::getTexture
@@ -269,7 +277,9 @@ namespace ecs {
              * @param path The path to the texture.
              * @return The texture.
              */
-            Texture2D &getTexture(std::string path);
+            Texture2D &getTexture(std::string path) {
+                return m_assetManager.getTexture(path);
+            }
 
             /**
              * @fn SceneManager::getMusic
@@ -278,7 +288,9 @@ namespace ecs {
              * @param paths The path to the music.
              * @return The music.
              */
-            ::Music &getMusic(std::string path);
+            ::Music &getMusic(std::string path) {
+                return m_assetManager.getMusic(path);
+            }
 
             /**
              * @fn SceneManager::getSound
@@ -287,7 +299,9 @@ namespace ecs {
              * @param path The path to the sound.
              * @return The sound.
              */
-            ::Sound &getSound(std::string path);
+            ::Sound &getSound(std::string path) {
+                return m_assetManager.getSound(path);
+            }
 
         private:
             /**
@@ -322,6 +336,7 @@ namespace ecs {
              * @param scene The scene in which the entities will be loaded.
              */
             void loadEntitiesFromJson(Scene &scene);
+
     };
 }
 
