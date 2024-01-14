@@ -10,10 +10,11 @@ namespace rtype {
             ecs::MovementSystem,
             ecs::SpriteSystem,
             ecs::NameSystem,
-            // ecs::TextSystem,
+            ecs::TextSystem,
             // ecs::CollisionSystem,
             // ecs::LifeSystem,
             ecs::ParallaxSystem
+            // ecs::DestructionSystem
             // ecs::ModifierSystem
         >(scene);
 

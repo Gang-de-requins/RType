@@ -48,12 +48,14 @@ namespace server {
 
         world.assign(entity, ecs::Position{static_cast<float>(x), static_cast<float>(y)});
         world.assign(entity, ecs::Velocity{-2, 0});
-        world.assign(entity, ecs::Health{100});
+        world.assign(entity, ecs::Health{1.0f});
         world.assign(entity, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 32}, ecs::Vector2{0, 0}});
         world.assign(entity, ecs::Acceleration{0, 0, 4});
         world.assign(entity, ecs::Scale{2, 2});
         world.assign(entity, ecs::Rotation{0});
         world.assign(entity, ecs::Collision{ false, {}, true });
+        world.assign(entity, ecs::Damage{ 50 });
+        world.assign(entity, ecs::Name{ "enemy" , ecs::Position{static_cast<float>(x), static_cast<float>(y)}});
     }
 
     void EntityTemplate::enemyBullet(ecs::World &world, const std::string &tag, int x, int y)

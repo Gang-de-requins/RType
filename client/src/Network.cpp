@@ -100,13 +100,16 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
                                     if (entityInfo.entityType == ecs::EntityType::Player) {
                                         std::cout << "Player with ";
 
-                                        if (world.hasEntity(world.getCurrentScene(), entityInfo.id)) {
+                                        if (world.hasEntity(world.getCurrentScene(), entityInfo.id) && entityInfo.hp > 0) {
                                             std::cout << "Entity ID: " << entityInfo.id << " already exists" << std::endl;
                                             ecs::Entity &e = world.getEntityById(world.getCurrentScene(), entityInfo.id);
                                             ecs::Position &pos = world.get<ecs::Position>(e);
                                             pos.x = entityInfo.pos.first;
                                             pos.y = entityInfo.pos.second;
-                                        } else {
+                                        } else if (world.hasEntity(world.getCurrentScene(), entityInfo.id)) {
+                                            std::cout << "Entity ID: " << entityInfo.id << " is dead, destroying it" << std::endl;
+                                            world.destroyEntity(world.getCurrentScene(), world.getEntityById(world.getCurrentScene(), entityInfo.id));
+                                        } else if (!world.hasEntity(world.getCurrentScene(), entityInfo.id) && entityInfo.hp > 0) {
                                             std::cout << "Entity ID: " << entityInfo.id << " does not exist, creating it" << std::endl;
                                             ecs::NewPlayer newPlayer = {game.getPlayerName(), static_cast<std::size_t>(entityInfo.id), {entityInfo.pos.first, entityInfo.pos.second}, entityInfo.hp};
                                             this->newPlayerConnected(game, newPlayer, false);
@@ -129,13 +132,17 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
                                         std::cout << "Ennemy with ";
 
                                         std::cout << "Entity ID: " << entityInfo.id << std::endl;
-                                        if (world.hasEntity(world.getCurrentScene(), entityInfo.id)) {
+
+                                        if (world.hasEntity(world.getCurrentScene(), entityInfo.id) && entityInfo.hp > 0) {
                                             std::cout << "Entity ID: " << entityInfo.id << " already exists" << std::endl;
-                                            ecs::Entity &e = world.getEntityById(world.getCurrentScene(), static_cast<std::size_t>(entityInfo.id));
+                                            ecs::Entity &e = world.getEntityById(world.getCurrentScene(), entityInfo.id);
                                             ecs::Position &pos = world.get<ecs::Position>(e);
                                             pos.x = entityInfo.pos.first;
                                             pos.y = entityInfo.pos.second;
-                                        } else {
+                                        } else if (world.hasEntity(world.getCurrentScene(), entityInfo.id)) {
+                                            std::cout << "Entity ID: " << entityInfo.id << " already exists, destroying it" << std::endl;
+                                            world.destroyEntity(world.getCurrentScene(), world.getEntityById(world.getCurrentScene(), entityInfo.id));
+                                        } else if (!world.hasEntity(world.getCurrentScene(), entityInfo.id) && entityInfo.hp > 0) {
                                             std::cout << "Entity ID: " << entityInfo.id << " does not exist, creating it" << std::endl;
                                             ecs::NewPlayer newPlayer = {"enemy", static_cast<std::size_t>(entityInfo.id), {entityInfo.pos.first, entityInfo.pos.second}, entityInfo.hp};
                                             this->newEnemy(game, newPlayer);
@@ -343,6 +350,7 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
         ecs::Entity &missile = world.createEntityWithId(inGame, entityInfo.id);
         world.assign(missile, ecs::Position{entityInfo.pos.first, entityInfo.pos.second});
         // world.assign(missile, ecs::Velocity{0, 0});
+        // world.assign(missile, ecs::Acceleration{0, 0, 15});
         world.assign(missile, ecs::Sprite{"assets/28.png", ecs::Rectangle{0, 0, 210, 92}, ecs::Vector2{0, 0}});
         world.assign(missile, ecs::Scale{0.25, 0.25});
         world.assign(missile, ecs::Rotation{0});
@@ -358,7 +366,7 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
 
         ecs::Entity &enemy = world.createEntityWithId(inGame, newPlayer.id);
         world.assign(enemy, ecs::Position{newPlayer.pos.first, newPlayer.pos.second});
-        world.assign(enemy, ecs::Velocity{-3, 0});
+        // world.assign(enemy, ecs::Velocity{-2, 0});
         world.assign(enemy, ecs::Sprite{"assets/characters.gif", ecs::Rectangle{0, 0, 32, 16}, ecs::Vector2{0, 0}});
         world.assign(enemy, ecs::Acceleration{0, 0, 4});
         world.assign(enemy, ecs::Scale{1, 1});
