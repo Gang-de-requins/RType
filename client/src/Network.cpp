@@ -69,6 +69,23 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
                         message.setMessageData(messageData);
                     }
 
+                    if (message.getMessageType() == ecs::MessageType::Loose) {
+                        ecs::NewPlayer receivedStruct;
+                        receivedStruct.deserialize(message.getMessageData());
+                        std::cout << "Loose" << std::endl;
+                        game.loadGameOver(game.getWorld().getSceneById(SCENE_LOSE));
+                        game.getWorld().switchToScene(SCENE_LOSE);
+                        break;
+                    }
+                    if (message.getMessageType() == ecs::MessageType::Win) {
+                        ecs::NewPlayer receivedStruct;
+                        receivedStruct.deserialize(message.getMessageData());
+                        std::cout << "win" << std::endl;
+                        game.loadWin(game.getWorld().getSceneById(SCENE_WIN));
+                        game.getWorld().switchToScene(SCENE_WIN);
+                        break;
+                    }
+
                     if (message.getMessageType() == ecs::MessageType::PlayerJoinedAccept) {
                         ecs::NewPlayer receivedStruct;
                         receivedStruct.deserialize(message.getMessageData());
