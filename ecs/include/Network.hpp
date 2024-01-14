@@ -30,6 +30,8 @@ namespace ecs {
         StopX = 20,
         StopY = 21,
         NewEnemy = 22,
+        Win,
+        Loose,
     };
 
     enum class EntityType : char {
