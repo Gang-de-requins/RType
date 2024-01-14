@@ -89,7 +89,7 @@ namespace game
         });
 
         ecs::Entity &ball = this->world.createEntity(scene);
-        this->world.assign(ball, ecs::Position{850, 450});
+        this->world.assign(ball, ecs::Position{70, 465});
         this->world.assign(ball, ecs::Sprite{"../assets/pong_ball.png", ecs::Rectangle{0, 0, 75, 75}, ecs::Vector2{0, 0}});
         this->world.assign(ball, ecs::Scale{1, 1});
         this->world.assign(ball, ecs::Rotation{0});
