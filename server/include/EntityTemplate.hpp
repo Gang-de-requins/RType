@@ -11,7 +11,7 @@ namespace server {
 
             void player(ecs::World &world, const std::string &tag, int x, int y);
             void playerBullet(ecs::World &world, const std::string &tag, int x, int y);
-            void enemy(ecs::World &world, const std::string &tag, int x, int y);
+            void enemy(ecs::World &world, int x, int y);
             void enemyBullet(ecs::World &world, const std::string &tag, int x, int y);
 
         private:

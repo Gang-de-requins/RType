@@ -17,6 +17,7 @@ set(SRC_SERVER
     src/Main.cpp
     src/Server.cpp
     src/EntityTemplate.cpp
+    src/WaveManager.cpp
     src/systems/Movement.cpp
 )
 
