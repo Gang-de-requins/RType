@@ -100,8 +100,8 @@ namespace game
 
         
         /* Menu Music Entity */
-        // ecs::Entity &MenuMusic = this->world.createEntity(scene);
-        // this->world.assign(MenuMusic, ecs::Music({"../assets/pong_menu.wav", 0.1f, true}));
+        ecs::Entity &MenuMusic = this->world.createEntity(scene);
+        this->world.assign(MenuMusic, ecs::Music({"../assets/pong_menu.wav", 0.1f, true}));
 
     }
 }

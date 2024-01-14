@@ -14,6 +14,7 @@ namespace game
         /* Game Systems */
         this->world.registerSystems<
             ecs::MusicSystem,
+            ecs::RenderSystem,
             ecs::ControllableSystem,
             ecs::AnimationSystem,
             ecs::SpriteSystem,
@@ -105,5 +106,8 @@ namespace game
                 )}
             }
         });
+    
+        ecs::Entity &GameMusic = this->world.createEntity(scene);
+        this->world.assign(GameMusic, ecs::Music({"../assets/pong_menu.wav", 0.5f, true}));
     }
 }
