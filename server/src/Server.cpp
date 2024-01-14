@@ -47,12 +47,14 @@ namespace server {
 
     void Server::run()
     {
+        bool win = true;
         const frame tickDuration(1);
 
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
         std::chrono::time_point<std::chrono::steady_clock> fpsTimer = std::chrono::steady_clock::now();
         frame FPS{};
+        std::chrono::steady_clock::time_point thirtySecondTimer = std::chrono::steady_clock::now();
 
         while (true) {
             FPS = std::chrono::duration_cast<frame>(std::chrono::steady_clock::now() - fpsTimer);
@@ -63,8 +65,29 @@ namespace server {
             }
 
             processMessages();
-            if (_players.size() >= 2) {
-                if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - begin).count() > 500) {
+            if (_players.size() >= 1) {
+                if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - thirtySecondTimer).count() >= 35) {
+                if (_world.getCurrentScene().entities.size() >= 5) { // Here check after 20 second
+                    ecs::SceneManager &scenemanager = _world.getSceneManager();
+                    for (auto &entity : _world.getCurrentScene().entities) {
+                        if (!scenemanager.has<ecs::Damage>(entity) && !scenemanager.has<ecs::Shooter>(entity)) {
+                            auto &position = this->_world.get<ecs::Position>(entity);
+                            std::cout << "Ennemy " << position.x << " " << position.y <<std::endl;
+                            if (position.x > 0 && position.x < 1920 && position.y > 0 && position.y < 1080)
+                                win = false;
+                        }
+                    }
+                    ecs::Move emptyStruct {ecs::MessageType::GoLeft};
+                    for (auto &player : _players) {
+                        if (win) {
+                            send(emptyStruct, ecs::MessageType::Win, player.getEndpoint());
+                        } else {
+                            send(emptyStruct, ecs::MessageType::Loose, player.getEndpoint());
+                        }
+                    }
+                }
+                }
+                if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - begin).count() > 500 && _world.getCurrentScene().entities.size() < 5) {
                     std::cout << "Spawning enemy" << std::endl;
                     begin = std::chrono::steady_clock::now();
 
@@ -306,7 +329,7 @@ namespace server {
                     entityInfo.entityType = ecs::EntityType::Missile;
                     std::cout << "Missile" << std::endl;
                 }
-                else if (scenemanager.has<ecs::Name>(entity) && !scenemanager.has<ecs::Controllable>(entity)) {
+                else if (!scenemanager.has<ecs::Damage>(entity) && !scenemanager.has<ecs::Shooter>(entity)) {
                     entityInfo.entityType = ecs::EntityType::Ennemy;
                     std::cout << "Ennemy" << std::endl;
                 }
