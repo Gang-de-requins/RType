@@ -94,21 +94,46 @@ namespace ecs {
         if (!alreadyColliding) {
             bool entity1Damage = sceneManager.has<Damage>(*entity1);
             bool entity2Damage = sceneManager.has<Damage>(*entity2);
+            bool entity1Shooter = sceneManager.has<Shooter>(*entity1);
+            bool entity2Shooter = sceneManager.has<Shooter>(*entity2);
             bool entity1Health = sceneManager.has<Health>(*entity1);
             bool entity2Health = sceneManager.has<Health>(*entity2);
 
-            if (entity1Damage && entity2Health) {
+            if (entity1Damage && entity2Health && entity2Shooter) {
+                if (entity1Health) {
+                    ecs::Health &health = sceneManager.get<Health>(*entity1);
+
+                    if (health.health <= 0) {
+                        return false;
+                    }
+                }
+
                 modification = true;
                 scene.events[EventType::Collisionnnnnn].push_back({
                     Event::DealDamage,
                     {entity1, entity2}
                 });
             }
-            if (entity2Damage && entity1Health) {
+            if (entity2Damage && entity1Health && entity1Shooter) {
+                if (entity2Health) {
+                    ecs::Health &health = sceneManager.get<Health>(*entity2);
+
+                    if (health.health <= 0) {
+                        return false;
+                    }
+                }
+
                 modification = true;
                 scene.events[EventType::Collisionnnnnn].push_back({
                     Event::DealDamage,
                     {entity2, entity1}
+                });
+            }
+            if (entity1Damage && !entity1Health && !entity1Shooter && entity2Health && entity2Damage) {
+                modification = true;
+                scene.events[EventType::Collisionnnnnn].push_back({
+                    Event::DealDamage,
+                    {entity1, entity2}
                 });
             }
         }
