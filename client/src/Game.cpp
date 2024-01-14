@@ -23,21 +23,21 @@ namespace rtype {
 
         while (!WindowShouldClose()) {
             if (this->m_network.isConnected()) {
-                if (IsKeyDown(KEY_UP)) {
+                if (IsKeyPressed(KEY_UP)) {
                     ecs::Move msg = {ecs::MessageType::GoTop};
                     this->m_network.send(msg, ecs::MessageType::Move);
                 }
-                if (IsKeyDown(KEY_DOWN)) {
+                if (IsKeyPressed(KEY_DOWN)) {
                     ecs::Move msg = {ecs::MessageType::GoBottom};
                     this->m_network.send(msg, ecs::MessageType::Move);
-                } if (IsKeyDown(KEY_LEFT)) {
+                } if (IsKeyPressed(KEY_LEFT)) {
                     ecs::Move msg = {ecs::MessageType::GoLeft};
                     this->m_network.send(msg, ecs::MessageType::Move);
-                } if (IsKeyDown(KEY_RIGHT)) {
+                } if (IsKeyPressed(KEY_RIGHT)) {
                     ecs::Move msg = {ecs::MessageType::GoRight};
                     this->m_network.send(msg, ecs::MessageType::Move);
                 }
-                else if (IsKeyPressed(KEY_SPACE)) {
+                if (IsKeyPressed(KEY_SPACE)) {
                     ecs::Move msg = {ecs::MessageType::GoRight};
                     this->m_network.send(msg, ecs::MessageType::NewMissile);
                 }
