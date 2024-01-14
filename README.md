@@ -6,6 +6,7 @@
   <br>
 </h1>
 
+
 ## Table of contents
 - [Description](#description)
   - [History of the game](#history-of-the-game)
@@ -112,7 +113,7 @@ After running the script you will have two executable: "./r-type_client" and "./
 
   In an another terminal launched
   ```bash
-  ./r-type_client [ADDRESS] [PORT] [NAME]
+  ./r-type_client
   ```
 
 ### Windows
@@ -128,24 +129,40 @@ After running the script you will have two executable: "./r-type_client" and "./
 
   Go to bin directory and run this command :
   ```powershell
-  ./r-type_client.exe [ADDRESS] [PORT] [NAME]
+  ./r-type_client.exe
   ```
 
   > *You can change the [PORT] and the [ADRESSE] on the settings of the game.*
 
 ## :brain: How to play :brain:
 
+### Menu
+
+    In the menu, you can click on "Settings" or "Play" to connect to the server, as shown in the image below.
+<h1 align="center">
+  <img src="assets/Readme/Menu.png" alt="Depviz" title="Depviz" height="350px">
+  <br>
+</h1>
+
 ### Settings
 
     In the seetings you can change:
-      - your name,
       - setup the volume of the game and the sound effect
-      - fullscreen option
+      - port
+      - Ip
 
-### Lobby
-    Before the lobby you can add a room or join it.
-    Then you are in the lobby you can choose your map and the level you want to play
-    Once they have done so you can press start to begin the game.
+<h1 align="center">
+  <img src="assets/Readme/Settings.png" alt="Depviz" title="Depviz" height="350px">
+  <br>
+</h1>
+
+### Choose your name of the game
+
+    In this scene, you can choose your name in the game. Then click on play to start the game.
+<h1 align="center">
+  <img src="assets/Readme/choose_ur_name.png" alt="Depviz" title="Depviz" height="350px">
+  <br>
+</h1>
 
 ### Move the player
 
@@ -158,28 +175,11 @@ After running the script you will have two executable: "./r-type_client" and "./
   | Arrow Left | Left     |
   | Arrow Right | Right   |
 
-#### Controller
-
-  | Button    | Direction |
-  | --------- | --------- |
-  |joystick(left) Up  | Top       |
-  |joystick(left) Down | Down     |
-  |joystick(left) Left | Left     |
-  |joystick(left) Right | Right   |
-
 ### Attack
 
   | Button    | Action    |
   | --------- | --------- |
-  | Space  Or button X(controller)   | Shoot     |
-
-### Pause Game
-
-In the pause game you can quit the game or start. The pause don't stop the game !
-
-  | Button    | Action    |
-  | --------- | --------- |
-  | P         | Pause     |
+  | Space     | Shoot     |
 
 ### Lose condition
 
