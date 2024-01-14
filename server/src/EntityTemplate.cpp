@@ -41,10 +41,9 @@ namespace server {
         world.assign(entity, ecs::Damage{ 10 });
     }
 
-    void EntityTemplate::enemy(ecs::World &world, const std::string &tag, int x, int y)
+    void EntityTemplate::enemy(ecs::World &world, int x, int y)
     {
-        static_cast<void>(tag);
-        ecs::Entity entity = world.createEntity(world.getCurrentScene());
+        ecs::Entity &entity = world.createEntity(world.getCurrentScene());
 
         world.assign(entity, ecs::Position{static_cast<float>(x), static_cast<float>(y)});
         world.assign(entity, ecs::Velocity{-2, 0});
