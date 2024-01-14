@@ -47,7 +47,7 @@ namespace rtype {
             bool isConnected() const;
         
         private:
-            void newPlayerConnected(Game &game, std::string name, bool isMe);
+            void newPlayerConnected(Game &game, ecs::NewPlayer &newPlayer, bool isMe);
             void playerDisconnected(Game &game, std::string msg);
             //void moveEntity(Game &game, std::string name, ::Network::MessageType type);
             void moveEntity(Game &game, std::string msg);

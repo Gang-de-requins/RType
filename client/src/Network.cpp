@@ -72,9 +72,9 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
                     if (message.getMessageType() == ecs::MessageType::PlayerJoinedAccept) {
                         ecs::NewPlayer receivedStruct;
                         receivedStruct.deserialize(message.getMessageData());
-                        std::cout << "You have joined the game with the name :" << receivedStruct.playername
+                        std::cout << "You have joined the game with the name: " << receivedStruct.playername
                         << " and with the id: " << receivedStruct.id <<std::endl;
-                        this->newPlayerConnected(game, receivedStruct.playername, true);
+                        this->newPlayerConnected(game, receivedStruct, true);
                     }
 
                     if (message.getMessageType() == ecs::MessageType::NewPlayer) {
@@ -82,7 +82,7 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
                         receivedStruct.deserialize(message.getMessageData());
                         std::cout << "New player with name :" << receivedStruct.playername
                         << " and with the id: " << receivedStruct.id << " has joined the game" << std::endl;
-                        this->newPlayerConnected(game, receivedStruct.playername, false);
+                        this->newPlayerConnected(game, receivedStruct, false);
                     } 
                     if (message.getMessageType() == ecs::MessageType::EntityList) {
                         ecs::EntityList receivedStruct;
@@ -165,23 +165,24 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
 
     /* ---------------------------- PRIVATE FUNCTIONS --------------------------- */
 
-    void Network::newPlayerConnected(Game &game, std::string name, bool isMe)
+    void Network::newPlayerConnected(Game &game, ecs::NewPlayer& newPlayer, bool isMe)
     {
-        std::cout << "New player connected: " << name << std::endl;
+        std::cout << "New player connected: " << newPlayer.playername << std::endl;
         auto &world = game.getWorld();
 
         ecs::Scene &inGame = game.getWorld().getCurrentScene();
-        ecs::Entity &player = game.getWorld().createEntity(inGame);
+        ecs::Entity &player = game.getWorld().createEntityWithId(inGame, newPlayer.id);
 
-        world.assign(player, ecs::Position{200, 200});
+        world.assign(player, ecs::Position{newPlayer.pos.first, newPlayer.pos.second});
         world.assign(player, ecs::Velocity{0, 0});
         world.assign(player, ecs::Sprite{"assets/characters2.gif", ecs::Rectangle{0, 0, 32, 32}, ecs::Vector2{0, 0}});
         world.assign(player, ecs::Acceleration{0, 0, 4});
         world.assign(player, ecs::Scale{1, 1});
         world.assign(player, ecs::Rotation{0});
-        world.assign(player, ecs::Name{name, ecs::Position{-20, -20}});
+        world.assign(player, ecs::Name{newPlayer.playername, ecs::Position{-20, -20}});
         world.assign(player, ecs::Collision{false, {}, true});
         world.assign(player, ecs::Animation{ecs::Rectangle{0, 0, 32, 0}, 8, 0, 150, std::chrono::steady_clock::now()});
+        world.assign(player, ecs::Health{static_cast<float>(newPlayer.hp)});
 
         if (isMe) {
             world.assign(player, ecs::Controllable{
@@ -246,9 +247,9 @@ template void Network::send<ecs::Move>(ecs::Move&, ecs::MessageType);
             game.setId(player.id);
         }
 
-        Player newPlayer(player, name);
+        Player nPlayer(player, newPlayer.playername);
 
-        game.addPlayer(newPlayer);
+        game.addPlayer(nPlayer);
     }
 
     void Network::playerDisconnected(Game &game, std::string msg)

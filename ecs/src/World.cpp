@@ -25,6 +25,10 @@ namespace ecs {
         return this->m_sceneManager.createEntity(scene);
     }
 
+    Entity& World::createEntityWithId(Scene& scene, std::size_t id) {
+		return this->m_sceneManager.createEntityWithId(scene, id);
+	}
+
     void World::destroyEntity(Scene &scene, Entity &entity) {
         this->m_sceneManager.destroyEntity(scene, entity);
     }
