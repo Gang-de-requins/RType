@@ -43,7 +43,6 @@ namespace ecs {
 
                     for (auto &collisionFunction : collisionFunctions) {
                         if (collisionFunction(sceneManager, scene, entity1, entity2, alreadyColliding)) {
-                            std::cout << "COllision between " << entity1->id << " and " << entity2->id << std::endl;
                             break;
                         }
                     }                    
@@ -101,6 +100,14 @@ namespace ecs {
             bool entity2Health = sceneManager.has<Health>(*entity2);
 
             if (entity1Damage && entity2Health && entity2Shooter) {
+                if (entity1Health) {
+                    ecs::Health &health = sceneManager.get<Health>(*entity1);
+
+                    if (health.health <= 0) {
+                        return false;
+                    }
+                }
+
                 modification = true;
                 scene.events[EventType::Collisionnnnnn].push_back({
                     Event::DealDamage,
@@ -108,6 +115,14 @@ namespace ecs {
                 });
             }
             if (entity2Damage && entity1Health && entity1Shooter) {
+                if (entity2Health) {
+                    ecs::Health &health = sceneManager.get<Health>(*entity2);
+
+                    if (health.health <= 0) {
+                        return false;
+                    }
+                }
+
                 modification = true;
                 scene.events[EventType::Collisionnnnnn].push_back({
                     Event::DealDamage,

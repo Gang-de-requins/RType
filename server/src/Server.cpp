@@ -133,6 +133,10 @@ namespace server {
                         auto &position = this->_world.get<ecs::Position>(e);
                         auto &sprite = this->_world.get<ecs::Sprite>(e);
                         auto &scale = this->_world.get<ecs::Scale>(e);
+                        auto &health = this->_world.get<ecs::Health>(e);
+
+                        if (health.health <= 0)
+                            break;
                         std::cout << "New missile predator" << std::endl;
                         entityTemplate.playerBullet(this->_world, "", static_cast<int>(position.x + sprite.source.width * scale.x), static_cast<int>(position.y + (sprite.source.height * scale.y) / 2));
 
