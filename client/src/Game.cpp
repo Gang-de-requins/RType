@@ -19,7 +19,7 @@ namespace rtype {
         InitAudioDevice();
         InitWindow(1920, 1080, "rtype");
         SetTargetFPS(60);
-        this->m_world.loadTextures({ "assets/characters.gif" });
+        this->m_world.loadTextures({ "assets/characters.gif", "assets/28.png" });
 
         while (!WindowShouldClose()) {
             if (this->m_network.isConnected()) {

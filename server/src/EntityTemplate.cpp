@@ -34,6 +34,7 @@ namespace server {
         world.assign(entity, ecs::Position{static_cast<float>(x), static_cast<float>(y)});
         world.assign(entity, ecs::Sprite{ "assets/28.png", ecs::Rectangle{0, 0, 210, 92}, ecs::Vector2{0, 0} });
         world.assign(entity, ecs::Acceleration{ 1, 0, 15 });
+        world.assign(entity, ecs::Velocity{ 6, 0 });
         world.assign(entity, ecs::Scale{ 0.25, 0.25 });
         world.assign(entity, ecs::Rotation{ 0 });
         world.assign(entity, ecs::Collision{ false, {}, true });

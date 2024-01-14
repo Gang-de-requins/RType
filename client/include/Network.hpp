@@ -51,7 +51,7 @@ namespace rtype {
             void playerDisconnected(Game &game, std::string msg);
             //void moveEntity(Game &game, std::string name, ::Network::MessageType type);
             void moveEntity(Game &game, std::string msg);
-            void newMissile(Game &game, std::string msg);
+            void newMissile(Game &game, ecs::EntityInfo &entityInfo);
             void newEnemy(Game &game, ecs::NewPlayer& newPlayer);
     };
 }
