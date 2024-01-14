@@ -88,6 +88,9 @@ namespace ecs {
              * @return The created entity.
              */
             Entity &createEntity(Scene &scene);
+
+            Entity &createEntityWithId(Scene &scene, std::size_t id);
+
             /**
              * @fn World::destroyEntity
              * @brief Destroy an entity

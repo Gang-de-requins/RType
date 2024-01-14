@@ -13,7 +13,8 @@
 #define NOUSER
 #endif
 
-#include <boost/asio.hpp>
+// #include <boost/asio.hpp>
+#include <asio.hpp>
 
 #if defined(_WIN32)
 #undef near
@@ -38,10 +39,10 @@ namespace ecs {
             int readInt();
             void writeSize(size_t size);
             size_t readSize();
-            void setEndpoint(boost::asio::ip::udp::endpoint endpoint) {
+            void setEndpoint(asio::ip::udp::endpoint endpoint) {
                 _fromEndpoint = endpoint;
             }
-            boost::asio::ip::udp::endpoint getEndpoint()
+            asio::ip::udp::endpoint getEndpoint()
             {
                 return _fromEndpoint;
             }
@@ -55,7 +56,7 @@ namespace ecs {
         private:
             std::vector<char> data_;
             size_t currentIndex_;
-            boost::asio::ip::udp::endpoint _fromEndpoint;
+            asio::ip::udp::endpoint _fromEndpoint;
     };
 };
 

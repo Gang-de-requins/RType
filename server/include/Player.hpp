@@ -1,66 +1,25 @@
-/*
-** EPITECH PROJECT, 2023
-** r type
-** File description:
-** Server
-*/
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
 
-#ifndef PLAYER_HPP_
-#define PLAYER_HPP_
+#include <string>
+#include <asio.hpp>
 
-#include <iostream>
-#if defined(_WIN32)           
-    #define NOGDI
-    #define NOUSER
-#endif
+namespace server {
+    class Player {
+        public:
+            Player(std::string name, asio::ip::udp::endpoint endpoint) : _name(name), _endpoint(endpoint) {}
+            ~Player() {}
 
-#include <boost/asio.hpp>
+            std::string getName() const { return _name; }
+            asio::ip::udp::endpoint getEndpoint() const { return _endpoint; }
+            std::size_t getId() const { return _id; }
+            void setId(std::size_t id) { _id = id; }
 
-#if defined(_WIN32)
-    #undef near
-    #undef far
-#endif
-#include "GameEngine.hpp"
-
-namespace serverGame
-{
-    class Player : public ecs::Entity
-    {
-    public:
-        Player(std::string name, int id, ecs::World &world);
-        ~Player();
-        void setName(std::string name)
-        {
-            this->_name = name;
-        }
-
-        std::string getName() const
-        {
-            return this->_name;
-        }
-
-        int getId() const
-        {
-            return this->_id;
-        }
-
-        void setEndpoint(boost::asio::ip::udp::endpoint endpoint)
-        {
-            this->_endpoint = endpoint;
-        }
-
-        boost::asio::ip::udp::endpoint getEndpoint() const
-        {
-            return this->_endpoint;
-        }
-
-
-    private:
-        ecs::Entity entity;
-        int _id;
-        std::string _name;
-        boost::asio::ip::udp::endpoint _endpoint;
+        private:
+            std::size_t _id;
+            std::string _name;
+            asio::ip::udp::endpoint _endpoint;
     };
 }
 
-#endif /* !PLAYER_HPP_ */
+#endif /* PLAYER_HPP */

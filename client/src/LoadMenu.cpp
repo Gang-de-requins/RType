@@ -40,7 +40,6 @@ namespace rtype {
         this->m_world.assign(ButtonConnect, ecs::Scale{ 1, 1 });
         this->m_world.assign(ButtonConnect, ecs::Rotation{ 0 });
         this->m_world.assign(ButtonConnect, ecs::Clickable{ false, [this](ecs::Clickable&) {
-            this->m_network.connect(this->m_network.m_ip, this->m_network.m_port, *this, this->m_playerName);
             loadChooseName(this->m_world.getSceneById(SCENE_CHOOSENAME));
             this->m_world.switchToScene(SCENE_CHOOSENAME);
         } });

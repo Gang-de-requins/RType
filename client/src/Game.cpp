@@ -21,8 +21,36 @@ namespace rtype {
         SetTargetFPS(60);
         this->m_world.loadTextures({ "assets/characters.gif" });
 
-        while (!WindowShouldClose())
-        {
+        while (!WindowShouldClose()) {
+            if (this->m_network.isConnected()) {
+                if (IsKeyDown(KEY_UP)) {
+                    ecs::Move msg = {ecs::MessageType::GoTop};
+                    this->m_network.send(msg, ecs::MessageType::Move);
+                }
+                if (IsKeyDown(KEY_DOWN)) {
+                    ecs::Move msg = {ecs::MessageType::GoBottom};
+                    this->m_network.send(msg, ecs::MessageType::Move);
+                } if (IsKeyDown(KEY_LEFT)) {
+                    ecs::Move msg = {ecs::MessageType::GoLeft};
+                    this->m_network.send(msg, ecs::MessageType::Move);
+                } if (IsKeyDown(KEY_RIGHT)) {
+                    ecs::Move msg = {ecs::MessageType::GoRight};
+                    this->m_network.send(msg, ecs::MessageType::Move);
+                }
+                else if (IsKeyPressed(KEY_SPACE)) {
+                    ecs::Move msg = {ecs::MessageType::GoRight};
+                    this->m_network.send(msg, ecs::MessageType::NewMissile);
+                }
+
+                if (IsKeyReleased(KEY_UP) || IsKeyReleased(KEY_DOWN)) {
+                    ecs::Move msg = {ecs::MessageType::StopY};
+                    this->m_network.send(msg, ecs::MessageType::Move);
+                } else if (IsKeyReleased(KEY_LEFT) || IsKeyReleased(KEY_RIGHT)) {
+                    ecs::Move msg = {ecs::MessageType::StopX};
+                    this->m_network.send(msg, ecs::MessageType::Move);
+                }
+            }
+
             BeginDrawing();
             ClearBackground(BLACK);
 
@@ -34,6 +62,7 @@ namespace rtype {
         CloseWindow();
         CloseAudioDevice();
         this->m_network.setRunning(false);
+        // this->m_network.send(ecs::MessageType::PLAYER_DISCONNECTED, std::to_string(this->m_id));
     }
 
     ecs::World &Game::getWorld()
@@ -54,6 +83,11 @@ namespace rtype {
     std::vector<Player> &Game::getPlayers()
     {
         return this->m_players;
+    }
+
+    void Game::setId(std::size_t id)
+    {
+        this->m_id = id;
     }
 
     /* ---------------------------- PRIVATE FUNCTIONS --------------------------- */
